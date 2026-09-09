@@ -1,0 +1,107 @@
+@import "tailwindcss";
+
+@custom-variant dark (&:is(.dark *));
+
+@theme inline {
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --font-sans: var(--font-sans);
+  --font-mono: var(--font-mono);
+  
+  --color-primary-50: #eff6ff;
+  --color-primary-100: #dbeafe;
+  --color-primary-200: #bfdbfe;
+  --color-primary-300: #93c5fd;
+  --color-primary-400: #60a5fa;
+  --color-primary-500: #3b82f6;
+  --color-primary-600: #2563eb;
+  --color-primary-700: #1d4ed8;
+  --color-primary-800: #1e40af;
+  --color-primary-900: #1e3a8a;
+  
+  --color-card: var(--card);
+  --color-card-foreground: var(--card-foreground);
+  --color-border: var(--border);
+  
+  --animate-fade-in: fade-in 0.5s ease-out;
+  --animate-fade-up: fade-up 0.5s ease-out forwards;
+  --animate-marquee: marquee 30s linear infinite;
+  --animate-marquee-reverse: marquee-reverse 30s linear infinite;
+  
+  @keyframes fade-in {
+    from { opacity: 0; }
+    to { opacity: 1; }
+  }
+  
+  @keyframes fade-up {
+    from { opacity: 0; transform: translateY(20px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  @keyframes marquee {
+    from { transform: translateX(0%); }
+    to { transform: translateX(-50%); }
+  }
+
+  @keyframes marquee-reverse {
+    from { transform: translateX(-50%); }
+    to { transform: translateX(0%); }
+  }
+}
+
+:root {
+  --background: #050505;
+  --foreground: #f8fafc;
+  --card: #111111;
+  --card-foreground: #f8fafc;
+  --border: #262626;
+}
+
+.dark {
+  --background: #050505;
+  --foreground: #f8fafc;
+  --card: #111111;
+  --card-foreground: #f8fafc;
+  --border: #262626;
+}
+
+body {
+  background-color: var(--background);
+  color: var(--foreground);
+  font-family: var(--font-sans), Arial, Helvetica, sans-serif;
+  -webkit-font-smoothing: antialiased;
+}
+
+/* Custom UI Utilities */
+.glass-card {
+  @apply bg-[#111111]/70 backdrop-blur-md border border-[#262626] shadow-xl transition-all duration-300;
+}
+
+.glass-card:hover {
+  @apply shadow-2xl border-blue-900/50;
+}
+
+.text-gradient {
+  @apply bg-clip-text text-transparent bg-gradient-to-r from-primary-500 to-blue-400;
+}
+
+.btn-primary {
+  @apply inline-flex items-center justify-center rounded-full bg-primary-600 px-6 py-3 text-sm font-medium text-white shadow-lg shadow-primary-600/30 transition-all hover:scale-105 hover:shadow-primary-600/50 hover:bg-primary-500 focus:outline-none focus:ring-2 focus:ring-primary-500 focus:ring-offset-2 focus:ring-offset-black;
+}
+
+.btn-secondary {
+  @apply inline-flex items-center justify-center rounded-full bg-[#111111] px-6 py-3 text-sm font-medium text-white border border-[#262626] shadow-sm transition-all hover:bg-[#1a1a1a] hover:scale-105 hover:border-primary-600/50 focus:outline-none focus:ring-2 focus:ring-[#262626] focus:ring-offset-2 focus:ring-offset-black;
+}
+
+/* Hide Next.js Dev Indicator Badge */
+nextjs-portal,
+[data-nextjs-toast],
+[data-nextjs-dev-tools-indicator],
+[data-nextjs-dev-overlay-indicator],
+#nextjs-dev-tools-indicator,
+div[data-nextjs-dev-overlay] {
+  display: none !important;
+  visibility: hidden !important;
+  opacity: 0 !important;
+  pointer-events: none !important;
+}
