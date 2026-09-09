@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import { Inter } from "next/font/google";
+import Image from "next/image";
 import "./globals.css";
 import { ThemeProvider } from "@/components/theme-provider";
 import { Navbar } from "@/components/layout/navbar";
@@ -35,7 +36,15 @@ export default function RootLayout({
           disableTransitionOnChange
         >
           {/* Global Logo Watermark Background (Fills Screen) */}
-          <div className="fixed inset-0 pointer-events-none z-0 opacity-[0.08] dark:opacity-[0.12] bg-[url('/logo.png')] bg-center bg-cover bg-no-repeat" />
+          <div className="fixed inset-0 pointer-events-none z-0 opacity-[0.08] dark:opacity-[0.12] overflow-hidden">
+            <Image 
+              src="/logo.png" 
+              alt="" 
+              fill 
+              className="object-cover object-center" 
+              priority 
+            />
+          </div>
           
           <div className="relative z-10 flex flex-col min-h-screen">
             <Navbar />
