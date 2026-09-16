@@ -439,14 +439,12 @@ export default function AdminDashboardPage() {
                     >
                       <MessageCircle className="w-3.5 h-3.5 mr-1" /> WhatsApp
                     </Button>
-                    <Button
-                      size="sm"
-                      variant="outline"
-                      onClick={() => openEditModal(proj)}
-                      className="h-7 px-2.5 border-slate-700 text-slate-200 hover:text-white font-bold text-xs"
+                    <Link
+                      href="/admin/projects"
+                      className="h-7 px-2.5 rounded-lg border border-slate-750 bg-slate-800 hover:bg-slate-700 text-slate-200 hover:text-white font-bold text-xs flex items-center justify-center transition-colors"
                     >
-                      Edit
-                    </Button>
+                      Manage
+                    </Link>
                   </div>
                 </div>
               ))}
