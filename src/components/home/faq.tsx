@@ -5,11 +5,9 @@ import { motion, AnimatePresence } from "framer-motion"
 import { SectionHeader } from "@/components/ui/section-header"
 import { 
   ChevronDown, 
-  HelpCircle, 
   MessageSquare, 
   Sparkles,
   PhoneCall,
-  CheckCircle2,
   Layers,
   DollarSign,
   Clock,
@@ -24,18 +22,8 @@ interface FAQItem {
   question: string
   answer: string
   tag: string
-  category: "all" | "services" | "pricing" | "timeline" | "support" | "custom"
   icon: any
 }
-
-const categories = [
-  { id: "all", label: "All Questions" },
-  { id: "services", label: "Services" },
-  { id: "pricing", label: "Pricing & Value" },
-  { id: "timeline", label: "Timeline" },
-  { id: "support", label: "Support & Warranty" },
-  { id: "custom", label: "Customization" }
-]
 
 const faqs: FAQItem[] = [
   {
@@ -43,7 +31,6 @@ const faqs: FAQItem[] = [
     question: "What digital services does Sri Web Squad provide?",
     answer: "We specialize in end-to-end digital engineering: High-Speed Websites (Next.js 16, React, Tailwind CSS), Mobile Apps (Flutter, Android, iOS), and Custom Business Software (Clinical & Hospital Portals, Biometric Gym/Pawn Systems, E-Commerce, and Inventory Portals).",
     tag: "Services",
-    category: "services",
     icon: Layers
   },
   {
@@ -51,7 +38,6 @@ const faqs: FAQItem[] = [
     question: "Why are your prices more affordable compared to traditional agencies?",
     answer: "We operate as a lean, direct squad of core engineers. With zero middlemen, no bloated corporate overhead, and modern automated toolchains, we deliver enterprise-grade performance and custom UI at transparent, pocket-friendly rates.",
     tag: "Pricing & Value",
-    category: "pricing",
     icon: DollarSign
   },
   {
@@ -59,7 +45,6 @@ const faqs: FAQItem[] = [
     question: "How long does it take to build and launch a project?",
     answer: "Standard business websites and landing pages are typically delivered within 3 to 7 business days. Custom full-stack software, mobile apps, and portal systems generally take 2 to 3 weeks depending on the complexity of workflows.",
     tag: "Timeline",
-    category: "timeline",
     icon: Clock
   },
   {
@@ -67,7 +52,6 @@ const faqs: FAQItem[] = [
     question: "Do you provide post-launch support and maintenance?",
     answer: "Yes, 100%! We provide 24/7 dependable developer support, free initial maintenance, server configuration, domain/SSL management, and regular security updates to ensure your application runs without a hitch.",
     tag: "Support & Warranty",
-    category: "support",
     icon: ShieldCheck
   },
   {
@@ -75,7 +59,6 @@ const faqs: FAQItem[] = [
     question: "Can our software be customized to match our exact business workflow?",
     answer: "Absolutely. We build 100% tailored systems rather than rigid off-the-shelf templates. Every UI flow, database model, billing formula, and notification trigger is coded specifically for your business.",
     tag: "Customization",
-    category: "custom",
     icon: Settings
   },
   {
@@ -83,18 +66,12 @@ const faqs: FAQItem[] = [
     question: "How can we start a project with Sri Web Squad?",
     answer: "You can start right away by messaging us directly on WhatsApp (+91 78453 91712), giving us a quick call, or submitting the contact form below. We will provide a free consultation and project roadmap within hours.",
     tag: "Getting Started",
-    category: "services",
     icon: Rocket
   }
 ]
 
 export function FAQ() {
-  const [activeCategory, setActiveCategory] = React.useState<string>("all")
   const [openIndex, setOpenIndex] = React.useState<number | null>(0)
-
-  const filteredFaqs = faqs.filter(
-    (faq) => activeCategory === "all" || faq.category === activeCategory
-  )
 
   const toggleFAQ = (index: number) => {
     setOpenIndex(openIndex === index ? null : index)
@@ -112,32 +89,9 @@ export function FAQ() {
           subtitle="Everything you need to know about working with Sri Web Squad."
         />
 
-        {/* Category Pills Tabs */}
-        <div className="flex flex-wrap items-center justify-center gap-2 mt-8 max-w-3xl mx-auto">
-          {categories.map((cat) => {
-            const isSelected = activeCategory === cat.id
-            return (
-              <button
-                key={cat.id}
-                onClick={() => {
-                  setActiveCategory(cat.id)
-                  setOpenIndex(0)
-                }}
-                className={`px-4 py-1.5 rounded-full text-xs font-semibold transition-all duration-200 cursor-pointer ${
-                  isSelected
-                    ? "bg-gradient-to-r from-blue-600 to-cyan-600 text-white shadow-lg shadow-blue-500/25 scale-105"
-                    : "bg-[#090f20] text-slate-400 border border-slate-800 hover:border-slate-700 hover:text-white"
-                }`}
-              >
-                {cat.label}
-              </button>
-            )
-          })}
-        </div>
-
         {/* FAQ Accordion List */}
-        <div className="max-w-3xl mx-auto mt-8 space-y-3.5 pb-6">
-          {filteredFaqs.map((faq, index) => {
+        <div className="max-w-3xl mx-auto mt-8 sm:mt-10 space-y-3.5 pb-6">
+          {faqs.map((faq, index) => {
             const isOpen = openIndex === index
             const IconComponent = faq.icon
 
@@ -145,7 +99,8 @@ export function FAQ() {
               <motion.div
                 key={faq.id}
                 initial={{ opacity: 0, y: 15 }}
-                animate={{ opacity: 1, y: 0 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true }}
                 transition={{ duration: 0.3, delay: index * 0.04 }}
                 className={`rounded-2xl border transition-all duration-300 backdrop-blur-xl overflow-hidden ${
                   isOpen 
