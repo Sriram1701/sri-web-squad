@@ -42,31 +42,30 @@ export function Hero() {
               </span>
             </h1>
 
-            {/* Brand Accent Sub-heading (Hidden on Mobile) */}
-            <div className="hidden sm:flex flex-wrap items-center gap-2.5 sm:gap-3 mb-6">
-              <div className="inline-flex items-center gap-2 px-3 py-1 rounded-lg bg-primary-950/80 border border-primary-500/40 shadow-sm">
+            {/* Brand Accent with Side Lines */}
+            <div className="flex items-center gap-3 my-5 max-w-xl">
+              <div className="h-[1px] flex-1 bg-gradient-to-r from-transparent via-blue-500/40 to-primary-500/70" />
+              <div className="inline-flex items-center gap-2 px-3.5 py-1 rounded-full bg-primary-950/80 border border-primary-500/40 shadow-[0_0_15px_rgba(59,130,246,0.2)] shrink-0">
                 <span className="w-2 h-2 rounded-full bg-primary-400 animate-pulse" />
                 <span className="text-xs sm:text-sm font-extrabold tracking-widest text-primary-300 uppercase">
-                  Sri Web Squad
+                  SRI WEB SQUAD
                 </span>
               </div>
-              <span className="text-sm sm:text-base md:text-lg font-bold tracking-wide text-slate-200">
-                • For Modern Businesses
-              </span>
+              <div className="h-[1px] flex-1 bg-gradient-to-l from-transparent via-blue-500/40 to-primary-500/70" />
             </div>
 
             {/* Paragraph with Highlighted Keyword Accents */}
             <p className="text-sm sm:text-base md:text-lg text-slate-300/90 mb-8 max-w-xl leading-relaxed font-normal">
               A passionate squad of developers crafting high-performance{" "}
-              <span className="text-white font-semibold underline decoration-blue-500/40 decoration-2 underline-offset-4">
+              <span className="text-white font-semibold">
                 Websites
               </span>
               ,{" "}
-              <span className="text-white font-semibold underline decoration-cyan-500/40 decoration-2 underline-offset-4">
+              <span className="text-white font-semibold">
                 Mobile Apps
               </span>
               , and{" "}
-              <span className="text-white font-semibold underline decoration-primary-500/40 decoration-2 underline-offset-4">
+              <span className="text-white font-semibold">
                 Custom Software
               </span>{" "}
               at budget-friendly pricing — delivering premium quality and the best output to grow your business.
