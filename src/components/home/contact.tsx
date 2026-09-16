@@ -48,7 +48,7 @@ export function Contact() {
   }
 
   return (
-    <section id="contact" className="py-8 sm:py-14 md:py-18 bg-[#030712] border-t border-slate-900 relative overflow-hidden text-white">
+    <section id="contact" className="py-8 sm:py-12 md:py-14 bg-[#030712] border-t border-slate-900 relative overflow-hidden text-white">
       {/* Background ambient lighting */}
       <div className="absolute top-1/3 left-1/4 w-[500px] h-[500px] bg-primary-600/10 rounded-full mix-blend-screen filter blur-[120px] pointer-events-none" />
       <div className="absolute bottom-0 right-1/4 w-[400px] h-[400px] bg-blue-500/10 rounded-full mix-blend-screen filter blur-[100px] pointer-events-none" />

@@ -78,7 +78,7 @@ export function FAQ() {
   }
 
   return (
-    <section id="faq" className="py-10 sm:py-16 md:py-20 bg-[#030712] border-t border-slate-900/80 relative overflow-hidden text-white">
+    <section id="faq" className="py-8 sm:py-12 md:py-14 bg-[#030712] border-t border-slate-900/80 relative overflow-hidden text-white">
       {/* Background ambient lighting */}
       <div className="absolute top-1/4 left-1/3 w-[500px] h-[500px] bg-blue-600/10 rounded-full mix-blend-screen filter blur-[140px] pointer-events-none" />
       <div className="absolute bottom-10 right-1/4 w-[400px] h-[400px] bg-cyan-500/10 rounded-full mix-blend-screen filter blur-[120px] pointer-events-none" />

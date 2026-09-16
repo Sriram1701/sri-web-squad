@@ -64,7 +64,7 @@ const YoutubeIcon = (props: React.SVGProps<SVGSVGElement>) => (
 
 export function Footer() {
   return (
-    <footer className="bg-[#02050c] text-slate-300 pt-16 pb-10 border-t border-slate-900 relative z-20 overflow-hidden">
+    <footer className="bg-[#02050c] text-slate-300 pt-10 sm:pt-14 pb-6 sm:pb-8 border-t border-slate-900 relative z-20 overflow-hidden">
       {/* Ambient background glow */}
       <div className="absolute top-0 left-1/4 w-[400px] h-[300px] bg-primary-600/5 rounded-full filter blur-[120px] pointer-events-none" />
       <div className="absolute bottom-0 right-1/4 w-[350px] h-[300px] bg-blue-500/5 rounded-full filter blur-[100px] pointer-events-none" />
@@ -72,7 +72,7 @@ export function Footer() {
       <div className="container relative z-10 mx-auto px-4 sm:px-6 lg:px-8">
         
         {/* 5-Column Grid */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-12 gap-10 lg:gap-8 pb-14 border-b border-slate-800/80">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-12 gap-8 lg:gap-8 pb-8 sm:pb-10 border-b border-slate-800/80">
           
           {/* Column 1: Brand & About (col-span-3) */}
           <div className="lg:col-span-3 flex flex-col justify-between">
@@ -92,12 +92,12 @@ export function Footer() {
                 </span>
               </Link>
 
-              <p className="text-slate-400 text-xs sm:text-sm leading-relaxed mb-6">
+              <p className="text-slate-400 text-xs sm:text-sm leading-relaxed mb-5">
                 Sri Web Squad is a leading software & web development team in India offering ERP software, CRM solutions, GST billing software, web development, mobile app development, AI solutions, and digital growth services for startups, SMEs, and enterprises.
               </p>
 
               {/* Blue accent line */}
-              <div className="w-12 h-1 bg-primary-500 rounded-full mb-6" />
+              <div className="w-12 h-1 bg-primary-500 rounded-full mb-5" />
 
               {/* Social Follow Us */}
               <div>
@@ -155,7 +155,7 @@ export function Footer() {
             </div>
 
             {/* Trust Badges */}
-            <div className="flex items-center gap-2 mt-6 pt-4 border-t border-slate-900/80">
+            <div className="flex items-center gap-2 mt-5 pt-3 border-t border-slate-900/80">
               <div className="px-2.5 py-1 rounded-md bg-[#0a0f1e] border border-slate-800 text-[10px] font-mono text-slate-400 flex items-center gap-1.5 font-bold">
                 <ShieldCheck className="w-3.5 h-3.5 text-emerald-400" />
                 <span>GST Registered</span>
@@ -169,12 +169,12 @@ export function Footer() {
 
           {/* Column 2: COMPANY (col-span-2) */}
           <div className="lg:col-span-2">
-            <div className="inline-block pb-1.5 border-b-2 border-primary-500 mb-5">
+            <div className="inline-block pb-1.5 border-b-2 border-primary-500 mb-4">
               <h4 className="text-sm font-black text-primary-400 tracking-wider uppercase">
                 COMPANY
               </h4>
             </div>
-            <ul className="space-y-2.5 text-xs sm:text-sm">
+            <ul className="space-y-2 text-xs sm:text-sm">
               {[
                 { name: "Home", href: "/" },
                 { name: "About Us", href: "#about" },
@@ -200,12 +200,12 @@ export function Footer() {
 
           {/* Column 3: OUR SERVICES (col-span-2) */}
           <div className="lg:col-span-2">
-            <div className="inline-block pb-1.5 border-b-2 border-primary-500 mb-5">
+            <div className="inline-block pb-1.5 border-b-2 border-primary-500 mb-4">
               <h4 className="text-sm font-black text-primary-400 tracking-wider uppercase">
                 OUR SERVICES
               </h4>
             </div>
-            <ul className="space-y-2.5 text-xs sm:text-sm">
+            <ul className="space-y-2 text-xs sm:text-sm">
               {[
                 { icon: Code2, name: "Custom Software Dev", href: "#services" },
                 { icon: Globe, name: "Website Development", href: "#services" },
@@ -231,12 +231,12 @@ export function Footer() {
 
           {/* Column 4: OUR PRODUCTS (col-span-2) */}
           <div className="lg:col-span-2">
-            <div className="inline-block pb-1.5 border-b-2 border-primary-500 mb-5">
+            <div className="inline-block pb-1.5 border-b-2 border-primary-500 mb-4">
               <h4 className="text-sm font-black text-primary-400 tracking-wider uppercase">
                 OUR PRODUCTS
               </h4>
             </div>
-            <ul className="space-y-2.5 text-xs sm:text-sm">
+            <ul className="space-y-2 text-xs sm:text-sm">
               {[
                 { icon: Receipt, name: "GST Billing Software", href: "#portfolio" },
                 { icon: Users, name: "Smart CRM Systems", href: "#portfolio" },
@@ -262,12 +262,12 @@ export function Footer() {
 
           {/* Column 5: GET IN TOUCH (col-span-3) */}
           <div className="lg:col-span-3">
-            <div className="inline-block pb-1.5 border-b-2 border-primary-500 mb-5">
+            <div className="inline-block pb-1.5 border-b-2 border-primary-500 mb-4">
               <h4 className="text-sm font-black text-primary-400 tracking-wider uppercase">
                 GET IN TOUCH
               </h4>
             </div>
-            <div className="space-y-3.5 text-xs sm:text-sm">
+            <div className="space-y-3 text-xs sm:text-sm">
               {/* Address */}
               <div className="flex items-start gap-3">
                 <div className="w-7 h-7 rounded-full bg-primary-600/20 flex items-center justify-center text-primary-400 shrink-0 mt-0.5">
@@ -283,7 +283,7 @@ export function Footer() {
                 <div className="w-7 h-7 rounded-full bg-emerald-500/20 flex items-center justify-center text-emerald-400 shrink-0 mt-0.5">
                   <Phone className="w-3.5 h-3.5" />
                 </div>
-                <div className="flex flex-col gap-1 font-mono font-semibold">
+                <div className="flex flex-col gap-0.5 font-mono font-semibold">
                   <a href="tel:+917845391712" className="text-slate-300 hover:text-white transition-colors">
                     +91 78453 91712
                   </a>
@@ -314,14 +314,14 @@ export function Footer() {
               </div>
 
               {/* Google Maps Mini Preview Card Widget */}
-              <div className="pt-2">
+              <div className="pt-1.5">
                 <a
                   href={GOOGLE_MAPS_URL}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="block rounded-2xl bg-gradient-to-br from-[#0c1326] to-[#060b18] border border-blue-500/30 p-3.5 shadow-xl hover:border-primary-500 transition-all hover:scale-[1.02] group"
+                  className="block rounded-2xl bg-gradient-to-br from-[#0c1326] to-[#060b18] border border-blue-500/30 p-3 shadow-xl hover:border-primary-500 transition-all hover:scale-[1.02] group"
                 >
-                  <div className="flex items-center justify-between mb-2">
+                  <div className="flex items-center justify-between mb-1.5">
                     <div className="flex items-center gap-1.5 text-xs font-bold text-white">
                       <MapPin className="w-3.5 h-3.5 text-rose-500 shrink-0" />
                       <span>Sri Web Squad Location</span>
@@ -341,7 +341,7 @@ export function Footer() {
         </div>
 
         {/* Bottom Copyright & Legal */}
-        <div className="pt-8 flex flex-col md:flex-row items-center justify-between gap-4 text-xs text-slate-500 font-mono pb-12 sm:pb-0 pr-0 sm:pr-24">
+        <div className="pt-4 flex flex-col md:flex-row items-center justify-between gap-3 text-xs text-slate-500 font-mono pb-2 sm:pb-0 pr-0 sm:pr-20">
           <div>
             &copy; {new Date().getFullYear()} Sri Web Squad. All Rights Reserved.
           </div>
