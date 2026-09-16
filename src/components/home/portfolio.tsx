@@ -216,23 +216,23 @@ export function Portfolio() {
 
         {/* Dynamic View All Projects Toggle Button */}
         {hasMoreProjects && (
-          <div className="mt-14 text-center">
+          <div className="mt-14 flex justify-center">
             <Button 
               type="button"
               onClick={() => setShowAll(!showAll)}
               size="lg" 
-              className="rounded-full px-8 py-6 text-base font-semibold bg-gradient-to-r from-blue-600 to-primary-600 hover:from-blue-500 hover:to-primary-500 text-white shadow-xl shadow-primary-500/25 transition-all hover:scale-105 cursor-pointer"
+              className="group relative inline-flex items-center gap-2.5 px-8 py-4 rounded-full bg-gradient-to-r from-blue-600 via-primary-600 to-cyan-500 hover:from-blue-500 hover:via-primary-500 hover:to-cyan-400 text-white font-bold text-sm sm:text-base tracking-wide shadow-[0_0_30px_rgba(37,99,235,0.35)] hover:shadow-[0_0_40px_rgba(6,182,212,0.45)] border border-blue-400/30 hover:border-cyan-300/60 transition-all duration-300 hover:scale-105 active:scale-95 cursor-pointer"
             >
               {showAll ? (
                 <>
-                  <ChevronUp className="w-5 h-5 mr-2" />
-                  Show Less Projects
+                  <ChevronUp className="w-4 h-4 transition-transform group-hover:-translate-y-0.5" />
+                  <span>Show Less</span>
                 </>
               ) : (
                 <>
-                  <Sparkles className="w-5 h-5 mr-2" />
-                  View All Projects ({filteredProjects.length} Projects)
-                  <ChevronDown className="w-5 h-5 ml-2" />
+                  <Sparkles className="w-4 h-4 text-cyan-200 animate-pulse" />
+                  <span>Explore All Projects</span>
+                  <ChevronDown className="w-4 h-4 transition-transform group-hover:translate-y-0.5" />
                 </>
               )}
             </Button>
