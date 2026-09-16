@@ -16,20 +16,22 @@ export function Hero() {
       <div className="container relative z-10 mx-auto px-4 sm:px-6 lg:px-8 flex-1 flex flex-col lg:flex-row items-center pt-3 sm:pt-6 lg:pt-8">
         
         {/* Left Content */}
-        <div className="w-full lg:w-1/2 flex flex-col justify-center mb-10 lg:mb-0 pl-2 sm:pl-6 lg:pl-10">
+        <div className="w-full lg:w-1/2 flex flex-col justify-center mb-10 lg:mb-0 px-0 sm:pl-6 lg:pl-10">
           <motion.div
             initial={{ opacity: 0, x: -10 }}
             animate={{ opacity: 1, x: 0 }}
             transition={{ duration: 0.6 }}
           >
             {/* Tech Status Badge */}
-            <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-gradient-to-r from-blue-500/15 via-cyan-500/10 to-blue-500/15 border border-blue-500/30 backdrop-blur-xl text-[10px] sm:text-xs font-semibold tracking-wider text-cyan-300 mb-4 shadow-[0_0_15px_rgba(6,182,212,0.12)]">
-              <Sparkles className="w-3 h-3 text-cyan-400 shrink-0" />
-              <span>AI-POWERED</span>
-              <span className="text-cyan-400/40">•</span>
-              <span>INNOVATIVE</span>
-              <span className="text-cyan-400/40">•</span>
-              <span>RELIABLE</span>
+            <div className="flex justify-center lg:justify-start mb-4">
+              <div className="inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-full bg-gradient-to-r from-blue-500/15 via-cyan-500/10 to-blue-500/15 border border-blue-500/30 backdrop-blur-xl text-[10px] sm:text-xs font-semibold tracking-wider text-cyan-300 shadow-[0_0_15px_rgba(6,182,212,0.12)]">
+                <Sparkles className="w-3 h-3 text-cyan-400 shrink-0" />
+                <span>AI-POWERED</span>
+                <span className="text-cyan-400/40">•</span>
+                <span>INNOVATIVE</span>
+                <span className="text-cyan-400/40">•</span>
+                <span>RELIABLE</span>
+              </div>
             </div>
             
             {/* Main Headline */}
