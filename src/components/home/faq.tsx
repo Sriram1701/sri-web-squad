@@ -3,60 +3,108 @@
 import * as React from "react"
 import { motion, AnimatePresence } from "framer-motion"
 import { SectionHeader } from "@/components/ui/section-header"
-import { ChevronDown, HelpCircle, MessageSquare } from "lucide-react"
+import { 
+  ChevronDown, 
+  HelpCircle, 
+  MessageSquare, 
+  Sparkles,
+  PhoneCall,
+  CheckCircle2,
+  Layers,
+  DollarSign,
+  Clock,
+  ShieldCheck,
+  Settings,
+  Rocket
+} from "lucide-react"
 import Link from "next/link"
 
 interface FAQItem {
+  id: string
   question: string
   answer: string
   tag: string
+  category: "all" | "services" | "pricing" | "timeline" | "support" | "custom"
+  icon: any
 }
+
+const categories = [
+  { id: "all", label: "All Questions" },
+  { id: "services", label: "Services" },
+  { id: "pricing", label: "Pricing & Value" },
+  { id: "timeline", label: "Timeline" },
+  { id: "support", label: "Support & Warranty" },
+  { id: "custom", label: "Customization" }
+]
 
 const faqs: FAQItem[] = [
   {
+    id: "faq-1",
     question: "What digital services does Sri Web Squad provide?",
-    answer: "We specialize in end-to-end digital solutions including High-Speed Websites (Next.js, React), Mobile Apps (Flutter, Android, iOS), and Custom Business Software (Clinical & Hospital Portals, Biometric Gym/Pawn Systems, E-Commerce, and Inventory Portals).",
-    tag: "Services"
+    answer: "We specialize in end-to-end digital engineering: High-Speed Websites (Next.js 16, React, Tailwind CSS), Mobile Apps (Flutter, Android, iOS), and Custom Business Software (Clinical & Hospital Portals, Biometric Gym/Pawn Systems, E-Commerce, and Inventory Portals).",
+    tag: "Services",
+    category: "services",
+    icon: Layers
   },
   {
+    id: "faq-2",
     question: "Why are your prices more affordable compared to traditional agencies?",
-    answer: "We are a close-knit squad of young developers working directly with clients. With zero middlemen, no heavy agency overheads, and efficient modern tech stacks, we deliver high-performance, premium solutions at transparent, budget-friendly pricing.",
-    tag: "Pricing & Value"
+    answer: "We operate as a lean, direct squad of core engineers. With zero middlemen, no bloated corporate overhead, and modern automated toolchains, we deliver enterprise-grade performance and custom UI at transparent, pocket-friendly rates.",
+    tag: "Pricing & Value",
+    category: "pricing",
+    icon: DollarSign
   },
   {
+    id: "faq-3",
     question: "How long does it take to build and launch a project?",
-    answer: "Standard business websites and landing pages are typically delivered within 3 to 7 business days. Custom full-stack software, mobile apps, and portal systems generally take 2 to 3 weeks depending on the complexity of features.",
-    tag: "Timeline"
+    answer: "Standard business websites and landing pages are typically delivered within 3 to 7 business days. Custom full-stack software, mobile apps, and portal systems generally take 2 to 3 weeks depending on the complexity of workflows.",
+    tag: "Timeline",
+    category: "timeline",
+    icon: Clock
   },
   {
+    id: "faq-4",
     question: "Do you provide post-launch support and maintenance?",
-    answer: "Yes, 100%! We provide 24/7 dependable developer support, regular performance updates, server configuration, domain/SSL setup, and free initial maintenance to ensure your platform runs without interruptions.",
-    tag: "Support"
+    answer: "Yes, 100%! We provide 24/7 dependable developer support, free initial maintenance, server configuration, domain/SSL management, and regular security updates to ensure your application runs without a hitch.",
+    tag: "Support & Warranty",
+    category: "support",
+    icon: ShieldCheck
   },
   {
+    id: "faq-5",
     question: "Can our software be customized to match our exact business workflow?",
-    answer: "Absolutely. We don't use rigid templates. Every web portal, mobile app, and backend management tool is tailored from scratch to automate and optimize your exact day-to-day business operations.",
-    tag: "Customization"
+    answer: "Absolutely. We build 100% tailored systems rather than rigid off-the-shelf templates. Every UI flow, database model, billing formula, and notification trigger is coded specifically for your business.",
+    tag: "Customization",
+    category: "custom",
+    icon: Settings
   },
   {
+    id: "faq-6",
     question: "How can we start a project with Sri Web Squad?",
-    answer: "You can start immediately by messaging us directly on WhatsApp (+91 78453 91712), calling us, or submitting your project inquiry via the contact form below. We will provide a free consultation and project roadmap.",
-    tag: "Getting Started"
+    answer: "You can start right away by messaging us directly on WhatsApp (+91 78453 91712), giving us a quick call, or submitting the contact form below. We will provide a free consultation and project roadmap within hours.",
+    tag: "Getting Started",
+    category: "services",
+    icon: Rocket
   }
 ]
 
 export function FAQ() {
+  const [activeCategory, setActiveCategory] = React.useState<string>("all")
   const [openIndex, setOpenIndex] = React.useState<number | null>(0)
+
+  const filteredFaqs = faqs.filter(
+    (faq) => activeCategory === "all" || faq.category === activeCategory
+  )
 
   const toggleFAQ = (index: number) => {
     setOpenIndex(openIndex === index ? null : index)
   }
 
   return (
-    <section id="faq" className="py-8 sm:py-14 md:py-18 bg-[#030712] border-t border-slate-900 relative overflow-hidden text-white">
+    <section id="faq" className="py-10 sm:py-16 md:py-20 bg-[#030712] border-t border-slate-900/80 relative overflow-hidden text-white">
       {/* Background ambient lighting */}
-      <div className="absolute top-1/4 left-1/3 w-[450px] h-[450px] bg-primary-600/10 rounded-full mix-blend-screen filter blur-[120px] pointer-events-none" />
-      <div className="absolute bottom-10 right-1/4 w-[400px] h-[400px] bg-blue-500/10 rounded-full mix-blend-screen filter blur-[100px] pointer-events-none" />
+      <div className="absolute top-1/4 left-1/3 w-[500px] h-[500px] bg-blue-600/10 rounded-full mix-blend-screen filter blur-[140px] pointer-events-none" />
+      <div className="absolute bottom-10 right-1/4 w-[400px] h-[400px] bg-cyan-500/10 rounded-full mix-blend-screen filter blur-[120px] pointer-events-none" />
 
       <div className="container relative z-10 mx-auto px-4 sm:px-6 lg:px-8">
         <SectionHeader 
@@ -64,46 +112,82 @@ export function FAQ() {
           subtitle="Everything you need to know about working with Sri Web Squad."
         />
 
-        <div className="max-w-3xl mx-auto mt-12 space-y-4">
-          {faqs.map((faq, index) => {
+        {/* Category Pills Tabs */}
+        <div className="flex flex-wrap items-center justify-center gap-2 mt-8 max-w-3xl mx-auto">
+          {categories.map((cat) => {
+            const isSelected = activeCategory === cat.id
+            return (
+              <button
+                key={cat.id}
+                onClick={() => {
+                  setActiveCategory(cat.id)
+                  setOpenIndex(0)
+                }}
+                className={`px-4 py-1.5 rounded-full text-xs font-semibold transition-all duration-200 cursor-pointer ${
+                  isSelected
+                    ? "bg-gradient-to-r from-blue-600 to-cyan-600 text-white shadow-lg shadow-blue-500/25 scale-105"
+                    : "bg-[#090f20] text-slate-400 border border-slate-800 hover:border-slate-700 hover:text-white"
+                }`}
+              >
+                {cat.label}
+              </button>
+            )
+          })}
+        </div>
+
+        {/* FAQ Accordion List */}
+        <div className="max-w-3xl mx-auto mt-8 space-y-3.5 pb-6">
+          {filteredFaqs.map((faq, index) => {
             const isOpen = openIndex === index
+            const IconComponent = faq.icon
 
             return (
               <motion.div
-                key={index}
+                key={faq.id}
                 initial={{ opacity: 0, y: 15 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true }}
-                transition={{ duration: 0.4, delay: index * 0.05 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.3, delay: index * 0.04 }}
                 className={`rounded-2xl border transition-all duration-300 backdrop-blur-xl overflow-hidden ${
                   isOpen 
-                    ? "bg-[#0a1022] border-primary-500/50 shadow-[0_8px_30px_rgba(37,99,235,0.15)]" 
-                    : "bg-[#060a14]/80 border-slate-800 hover:border-slate-700 hover:bg-[#080d1a]"
+                    ? "bg-gradient-to-b from-[#0c1630] to-[#070d1d] border-blue-500/50 shadow-[0_4px_30px_rgba(37,99,235,0.15)]" 
+                    : "bg-[#080d1c]/80 border-slate-800/80 hover:border-slate-700/80 hover:bg-[#0b1226]/80"
                 }`}
               >
                 <button
                   onClick={() => toggleFAQ(index)}
-                  className="w-full text-left p-5 sm:p-6 flex items-center justify-between gap-4 focus:outline-none"
+                  className="w-full text-left p-4.5 sm:p-5 md:p-6 flex items-center justify-between gap-3 sm:gap-4 focus:outline-none cursor-pointer"
                   aria-expanded={isOpen}
                 >
-                  <div className="flex items-center gap-3.5">
-                    <div className={`w-8 h-8 rounded-full flex items-center justify-center shrink-0 transition-colors ${
-                      isOpen ? "bg-primary-600 text-white" : "bg-slate-800/80 text-slate-400"
+                  <div className="flex items-center gap-3 sm:gap-4 min-w-0">
+                    <div className={`w-9 h-9 sm:w-10 sm:h-10 rounded-xl flex items-center justify-center shrink-0 transition-all duration-300 ${
+                      isOpen 
+                        ? "bg-gradient-to-br from-blue-500 to-cyan-500 text-white shadow-md shadow-blue-500/30 scale-105" 
+                        : "bg-slate-800/60 text-slate-400 border border-slate-700/50"
                     }`}>
-                      <HelpCircle className="w-4 h-4" />
+                      <IconComponent className="w-4 h-4 sm:w-5 sm:h-5" />
                     </div>
-                    <div>
-                      <span className="text-xs font-mono text-primary-400 uppercase tracking-wider block mb-0.5">
-                        {faq.tag}
-                      </span>
-                      <h3 className="text-base sm:text-lg font-bold text-white leading-snug">
+                    
+                    <div className="min-w-0">
+                      <div className="flex items-center gap-2 mb-1">
+                        <span className={`text-[10px] sm:text-[11px] font-mono font-bold uppercase tracking-wider px-2 py-0.5 rounded-md ${
+                          isOpen 
+                            ? "bg-blue-500/20 text-blue-300 border border-blue-500/30" 
+                            : "bg-slate-800 text-slate-400 border border-slate-700/60"
+                        }`}>
+                          {faq.tag}
+                        </span>
+                      </div>
+                      
+                      <h3 className="text-sm sm:text-base md:text-lg font-bold text-white leading-snug">
                         {faq.question}
                       </h3>
                     </div>
                   </div>
 
-                  <div className={`w-8 h-8 rounded-full flex items-center justify-center shrink-0 border border-slate-700/80 transition-transform duration-300 ${
-                    isOpen ? "rotate-180 bg-primary-600/20 text-primary-400 border-primary-500/40" : "text-slate-400"
+                  <div className={`w-8 h-8 sm:w-9 sm:h-9 rounded-xl flex items-center justify-center shrink-0 border transition-all duration-300 ${
+                    isOpen 
+                      ? "rotate-180 bg-blue-500/20 text-cyan-300 border-blue-500/40" 
+                      : "bg-[#090f20] text-slate-400 border-slate-800"
                   }`}>
                     <ChevronDown className="w-4 h-4" />
                   </div>
@@ -115,10 +199,12 @@ export function FAQ() {
                       initial={{ height: 0, opacity: 0 }}
                       animate={{ height: "auto", opacity: 1 }}
                       exit={{ height: 0, opacity: 0 }}
-                      transition={{ duration: 0.3, ease: "easeInOut" }}
+                      transition={{ duration: 0.25, ease: "easeInOut" }}
                     >
-                      <div className="px-5 sm:px-6 pb-6 pt-1 border-t border-slate-800/60 text-slate-300 text-sm sm:text-base leading-relaxed">
-                        {faq.answer}
+                      <div className="px-4.5 sm:px-5 md:px-6 pb-5 sm:pb-6 pt-2 border-t border-blue-500/20 text-slate-300 text-xs sm:text-sm md:text-base leading-relaxed bg-blue-950/10">
+                        <p className="text-slate-200">
+                          {faq.answer}
+                        </p>
                       </div>
                     </motion.div>
                   )}
@@ -128,18 +214,37 @@ export function FAQ() {
           })}
         </div>
 
-        {/* FAQ Quick CTA */}
-        <div className="text-center mt-12">
-          <p className="text-sm text-slate-400 mb-3">
-            Have a custom question not listed here?
-          </p>
-          <Link
-            href="#contact"
-            className="inline-flex items-center gap-2 px-5 py-2.5 rounded-full bg-[#0a0f1d] border border-slate-700 hover:border-primary-500 hover:bg-primary-600/20 text-white text-xs sm:text-sm font-semibold transition-all shadow-md hover:scale-105"
-          >
-            <MessageSquare className="w-4 h-4 text-primary-400" />
-            <span>Chat With Our Team</span>
-          </Link>
+        {/* FAQ Quick CTA Card with Extra Mobile Clearance */}
+        <div className="max-w-3xl mx-auto mt-4 p-5 sm:p-6 rounded-2xl bg-gradient-to-r from-[#090f22] via-[#070c1a] to-[#0a1226] border border-slate-800/80 text-center flex flex-col sm:flex-row items-center justify-between gap-4 shadow-xl mb-6">
+          <div className="text-left">
+            <h4 className="text-sm sm:text-base font-bold text-white flex items-center gap-2">
+              <Sparkles className="w-4 h-4 text-cyan-400" />
+              <span>Have a specific question not listed here?</span>
+            </h4>
+            <p className="text-xs text-slate-400 mt-0.5">
+              Talk directly to a senior engineer. We reply on WhatsApp in under 15 minutes.
+            </p>
+          </div>
+          
+          <div className="flex items-center gap-2.5 shrink-0 w-full sm:w-auto">
+            <a
+              href="https://wa.me/917845391712"
+              target="_blank"
+              rel="noreferrer"
+              className="flex-1 sm:flex-none inline-flex items-center justify-center gap-2 px-4 py-2.5 rounded-xl bg-emerald-600/20 hover:bg-emerald-600/30 border border-emerald-500/40 text-emerald-300 text-xs font-bold transition-all hover:scale-105"
+            >
+              <MessageSquare className="w-3.5 h-3.5" />
+              <span>WhatsApp Us</span>
+            </a>
+            
+            <Link
+              href="#contact"
+              className="flex-1 sm:flex-none inline-flex items-center justify-center gap-2 px-4 py-2.5 rounded-xl bg-blue-600 hover:bg-blue-500 text-white text-xs font-bold transition-all shadow-md shadow-blue-600/30 hover:scale-105"
+            >
+              <PhoneCall className="w-3.5 h-3.5" />
+              <span>Contact Squad</span>
+            </Link>
+          </div>
         </div>
       </div>
     </section>
