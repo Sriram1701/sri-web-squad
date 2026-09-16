@@ -87,15 +87,15 @@ export function Hero() {
         </div>
 
         {/* Right Content - Ultra-Modern Animated UI Mockup */}
-        <div className="w-full lg:w-1/2 flex justify-center lg:justify-end relative mt-6 lg:mt-0">
+        <div className="w-full lg:w-1/2 flex justify-center lg:justify-end relative">
           <motion.div
             initial={{ opacity: 0, scale: 0.95, y: 20 }}
             animate={{ opacity: 1, scale: 1, y: 0 }}
             transition={{ duration: 0.8, delay: 0.4 }}
-            className="relative w-full max-w-lg lg:max-w-xl"
+            className="relative w-full max-w-xl"
           >
             {/* Desktop Console Mockup Card */}
-            <div className="relative rounded-2xl sm:rounded-3xl bg-gradient-to-br from-[#0c1222] via-[#090d16] to-[#04070e] border border-slate-750/90 shadow-[0_20px_60px_rgba(0,0,0,0.85)] backdrop-blur-xl overflow-hidden p-5 sm:p-7">
+            <div className="relative rounded-2xl bg-gradient-to-br from-[#0c1222] via-[#090d16] to-[#04070e] border border-slate-700/80 shadow-[0_20px_60px_rgba(0,0,0,0.85)] backdrop-blur-xl overflow-hidden p-5 sm:p-7">
               
               {/* Fake Browser Header */}
               <div className="flex items-center justify-between pb-4 mb-5 border-b border-slate-800/80">
@@ -119,8 +119,8 @@ export function Hero() {
               </div>
 
               {/* Internal Content */}
-              <div className="relative z-10 w-full sm:max-w-[280px] lg:max-w-xs">
-                <div className="inline-flex items-center gap-2 px-2.5 py-1 rounded-md bg-blue-500/10 border border-blue-500/20 text-blue-400 text-xs font-semibold mb-3">
+              <div className="relative z-10 max-w-full md:max-w-sm">
+                <div className="inline-flex items-center gap-2 px-2.5 py-1 rounded-md bg-blue-500/10 border border-blue-500/20 text-blue-400 text-xs font-semibold mb-4">
                   <Sparkles className="w-3 h-3" />
                   <span>High-Converting Digital Agency</span>
                 </div>
@@ -132,17 +132,17 @@ export function Hero() {
                   </span>
                 </h3>
 
-                <p className="text-xs sm:text-sm text-slate-400 mb-4 leading-relaxed">
-                  Creative strategies. High-speed performance. Custom digital systems engineered for business growth.
+                <p className="text-xs sm:text-sm text-slate-400 mb-5 leading-relaxed">
+                  Creative strategies. High-speed performance. Custom digital systems engineered for growth.
                 </p>
 
                 {/* Animated Metric Bars */}
-                <div className="space-y-2.5 mb-5 p-3 sm:p-3.5 rounded-xl bg-black/50 border border-slate-800/80">
+                <div className="space-y-3 mb-6 p-3.5 rounded-xl bg-black/40 border border-slate-800/80">
                   <div>
                     <div className="flex justify-between text-[11px] font-medium text-slate-300 mb-1">
                       <span className="flex items-center gap-1.5">
                         <Code2 className="w-3.5 h-3.5 text-blue-400" />
-                        Next.js Platforms
+                        Next.js Web Platforms
                       </span>
                       <span className="font-mono text-emerald-400 font-bold">100% Speed</span>
                     </div>
@@ -160,9 +160,9 @@ export function Hero() {
                     <div className="flex justify-between text-[11px] font-medium text-slate-300 mb-1">
                       <span className="flex items-center gap-1.5">
                         <TrendingUp className="w-3.5 h-3.5 text-indigo-400" />
-                        Custom Software
+                        Mobile & Software Systems
                       </span>
-                      <span className="font-mono text-blue-400 font-bold">+184% Growth</span>
+                      <span className="font-mono text-blue-400 font-bold">+184% Impact</span>
                     </div>
                     <div className="h-1.5 w-full bg-slate-800 rounded-full overflow-hidden">
                       <motion.div 
@@ -175,28 +175,24 @@ export function Hero() {
                   </div>
                 </div>
 
-                {/* Quick Stats Grid (Visible on Mobile) */}
-                <div className="sm:hidden grid grid-cols-2 gap-2 mb-5 p-2.5 rounded-xl bg-slate-900/60 border border-slate-800 text-center">
-                  <div>
-                    <AnimatedCounter from={0} to={50} suffix="+" duration={2} className="text-primary-400 font-black text-sm block" />
-                    <div className="text-[9px] text-slate-400 uppercase font-semibold">Projects Done</div>
-                  </div>
-                  <div>
-                    <AnimatedCounter from={0} to={99} suffix="%" duration={2.2} className="text-emerald-400 font-black text-sm block" />
-                    <div className="text-[9px] text-slate-400 uppercase font-semibold">Client Love</div>
+                <div className="flex items-center justify-between gap-4 flex-wrap">
+                  <Link 
+                    href="#services" 
+                    className="px-5 py-2.5 bg-primary-600 hover:bg-primary-500 rounded-full text-xs sm:text-sm font-semibold text-white transition-all inline-flex items-center gap-2 shadow-lg shadow-primary-600/30 hover:scale-105"
+                  >
+                    Explore Our Services <ArrowRight className="w-4 h-4" />
+                  </Link>
+
+                  {/* Mobile stats preview */}
+                  <div className="flex md:hidden items-center gap-2.5 text-[11px] font-mono font-bold">
+                    <span className="text-primary-400 bg-primary-950/80 px-2 py-0.5 rounded border border-primary-500/30">50+ Projects</span>
+                    <span className="text-emerald-400 bg-emerald-950/80 px-2 py-0.5 rounded border border-emerald-500/30">99% Quality</span>
                   </div>
                 </div>
-
-                <Link 
-                  href="#services" 
-                  className="w-full sm:w-auto px-5 py-2.5 bg-primary-600 hover:bg-primary-500 rounded-full text-xs sm:text-sm font-semibold text-white transition-all inline-flex items-center justify-center gap-2 shadow-lg shadow-primary-600/30 hover:scale-105"
-                >
-                  Explore Our Services <ArrowRight className="w-4 h-4" />
-                </Link>
               </div>
 
-              {/* Orbital Graphic / Spinning Tech Rings on Right (Desktop) */}
-              <div className="hidden lg:flex absolute right-0 top-10 bottom-0 w-1/2 items-center justify-center pointer-events-none">
+              {/* Orbital Graphic / Spinning Tech Rings on Right */}
+              <div className="hidden sm:flex absolute right-0 top-10 bottom-0 w-1/2 items-center justify-center pointer-events-none">
                 <div className="relative w-64 h-64 border border-slate-800/80 rounded-full flex items-center justify-center">
                   <div className="w-52 h-52 border border-primary-900/40 rounded-full flex items-center justify-center animate-[spin_25s_linear_infinite]" />
                   <div className="absolute w-60 h-60 border-t-2 border-primary-500/80 rounded-full animate-[spin_8s_linear_infinite]" />
@@ -206,11 +202,11 @@ export function Hero() {
               </div>
             </div>
 
-            {/* Mobile Phone Mockup Overlay with Levitating Motion (Tablets & Desktop) */}
+            {/* Mobile Phone Mockup Overlay - Hidden on small mobile to avoid text cutoff, visible on tablet/desktop */}
             <motion.div
-              animate={{ y: [0, -10, 0] }}
+              animate={{ y: [0, -12, 0] }}
               transition={{ repeat: Infinity, duration: 5, ease: "easeInOut", delay: 0.5 }}
-              className="hidden sm:block absolute -bottom-8 -right-2 sm:right-2 lg:-right-4 w-44 sm:w-48 lg:w-52 bg-[#0a0f1d] border-4 border-slate-700/80 rounded-[2.2rem] shadow-[0_25px_60px_rgba(0,0,0,0.9)] aspect-[9/18.5] overflow-hidden z-20 backdrop-blur-xl"
+              className="hidden md:block absolute -bottom-8 -right-2 lg:right-6 w-44 sm:w-52 bg-[#0a0f1d] border-4 border-slate-700/80 rounded-[2.2rem] shadow-[0_25px_60px_rgba(0,0,0,0.9)] aspect-[9/18.5] overflow-hidden z-20 backdrop-blur-xl"
             >
               {/* Phone Speaker Notch */}
               <div className="absolute top-0 inset-x-0 h-5 bg-slate-800 rounded-b-xl w-24 mx-auto z-30" />
@@ -225,7 +221,7 @@ export function Hero() {
                   className="mb-3 p-2 rounded-xl bg-blue-950/70 border border-blue-500/30 flex items-center gap-2"
                 >
                   <Sparkles className="w-3.5 h-3.5 text-blue-400 shrink-0" />
-                  <span className="text-[9px] text-blue-200 font-medium leading-tight">Fast delivery & budget price</span>
+                  <span className="text-[9px] text-blue-200 font-medium leading-tight">Fast delivery & low price</span>
                 </motion.div>
 
                 <h4 className="text-xs font-black text-slate-200 leading-snug">
