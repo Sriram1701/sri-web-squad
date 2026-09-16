@@ -419,8 +419,68 @@ export function saveStoredSettings(settings: AdminSettings): void {
       localStorage.setItem("sws_supabase_url", settings.supabaseUrl)
       localStorage.setItem("sws_supabase_anon_key", settings.supabaseAnonKey)
     }
+    // Asynchronously sync to Supabase if configured
+    syncSettingsToSupabase(settings).catch(() => {})
   } catch (e) {
     console.error("Failed to save settings", e)
+  }
+}
+
+export async function syncSettingsToSupabase(settings: AdminSettings): Promise<boolean> {
+  const supabase = getSupabaseClient()
+  if (!supabase) return false
+  try {
+    const row = {
+      id: "global_settings",
+      admin_email: settings.adminEmail,
+      admin_pass: settings.adminPass,
+      admin_pin: settings.adminPin,
+      company_name: settings.companyName,
+      company_phone: settings.companyPhone,
+      company_upi_id: settings.companyUpiId,
+      whatsapp_template: settings.whatsappTemplate,
+      notify_days_before: settings.notifyDaysBefore || 30,
+      updated_at: new Date().toISOString()
+    }
+    const { error } = await supabase.from("settings").upsert([row], { onConflict: "id" })
+    if (error) {
+      console.error("Supabase sync settings error:", error)
+      return false
+    }
+    return true
+  } catch (e) {
+    console.error("Supabase sync settings failed:", e)
+    return false
+  }
+}
+
+export async function fetchSettingsFromSupabase(): Promise<AdminSettings | null> {
+  const supabase = getSupabaseClient()
+  if (!supabase) return null
+  try {
+    const { data, error } = await supabase.from("settings").select("*").eq("id", "global_settings").single()
+    if (error || !data) {
+      return null
+    }
+    const cloudSettings: AdminSettings = {
+      adminEmail: data.admin_email || DEFAULT_SETTINGS.adminEmail,
+      adminPass: data.admin_pass || DEFAULT_SETTINGS.adminPass,
+      adminPin: data.admin_pin || DEFAULT_SETTINGS.adminPin,
+      companyName: data.company_name || DEFAULT_SETTINGS.companyName,
+      companyPhone: data.company_phone || DEFAULT_SETTINGS.companyPhone,
+      companyUpiId: data.company_upi_id || DEFAULT_SETTINGS.companyUpiId,
+      whatsappTemplate: data.whatsapp_template || DEFAULT_SETTINGS.whatsappTemplate,
+      notifyDaysBefore: data.notify_days_before || 30,
+      supabaseUrl: typeof window !== "undefined" ? localStorage.getItem("sws_supabase_url") || "" : "",
+      supabaseAnonKey: typeof window !== "undefined" ? localStorage.getItem("sws_supabase_anon_key") || "" : "",
+    }
+    if (typeof window !== "undefined") {
+      localStorage.setItem(STORAGE_KEY_SETTINGS, JSON.stringify(cloudSettings))
+    }
+    return cloudSettings
+  } catch (e) {
+    console.error("Failed to fetch settings from Supabase:", e)
+    return null
   }
 }
 
@@ -637,6 +697,15 @@ export async function syncAllDataWithSupabase(): Promise<{ projects: ProjectReco
         localStorage.setItem(STORAGE_KEY_LEADS, JSON.stringify(mergedLeads))
       }
     }
+
+    // 3. Sync settings
+    try {
+      const cloudSettings = await fetchSettingsFromSupabase()
+      if (!cloudSettings) {
+        const localSettings = getStoredSettings()
+        await syncSettingsToSupabase(localSettings)
+      }
+    } catch {}
 
     return { projects: mergedProjects, leads: mergedLeads }
   } catch (e) {

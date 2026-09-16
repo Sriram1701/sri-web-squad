@@ -23,6 +23,8 @@ import {
 import { 
   getStoredSettings, 
   saveStoredSettings, 
+  syncSettingsToSupabase,
+  fetchSettingsFromSupabase,
   AdminSettings, 
   DEFAULT_SETTINGS, 
   SEED_PROJECTS, 
@@ -32,21 +34,47 @@ import {
   exportProjectsToCSV,
   printProjectsPDFReport
 } from "@/lib/admin-store"
+import { Eye, EyeOff, Lock, Sparkles } from "lucide-react"
 
 export default function SettingsAdminPage() {
   const [settings, setSettings] = React.useState<AdminSettings>(DEFAULT_SETTINGS)
   const [savedSuccess, setSavedSuccess] = React.useState(false)
+  const [securitySuccess, setSecuritySuccess] = React.useState(false)
+  const [showPass, setShowPass] = React.useState(false)
+  const [showPin, setShowPin] = React.useState(false)
   const fileInputRef = React.useRef<HTMLInputElement>(null)
 
   React.useEffect(() => {
-    setSettings(getStoredSettings())
+    const local = getStoredSettings()
+    setSettings(local)
+    fetchSettingsFromSupabase().then((cloud) => {
+      if (cloud) {
+        setSettings(cloud)
+      }
+    })
   }, [])
 
-  const handleSave = (e: React.FormEvent) => {
+  const handleSave = async (e: React.FormEvent) => {
     e.preventDefault()
     saveStoredSettings(settings)
+    await syncSettingsToSupabase(settings).catch(() => {})
     setSavedSuccess(true)
-    setTimeout(() => setSavedSuccess(false), 2500)
+    setTimeout(() => setSavedSuccess(false), 3000)
+  }
+
+  const handleSaveSecurityOnly = async () => {
+    if (!settings.adminPass.trim()) {
+      alert("Password cannot be empty!")
+      return
+    }
+    if (!settings.adminPin.trim()) {
+      alert("PIN cannot be empty!")
+      return
+    }
+    saveStoredSettings(settings)
+    await syncSettingsToSupabase(settings).catch(() => {})
+    setSecuritySuccess(true)
+    setTimeout(() => setSecuritySuccess(false), 3500)
   }
 
   const handleResetTemplate = () => {
@@ -234,49 +262,96 @@ export default function SettingsAdminPage() {
         </div>
 
         {/* Section 3: Admin Security Credentials */}
-        <div className="p-6 rounded-2xl bg-[#0c1426] border border-slate-800 shadow-md space-y-4">
-          <div className="flex items-center gap-2.5 pb-4 border-b border-slate-800">
-            <div className="w-9 h-9 rounded-xl bg-purple-500/20 text-purple-300 border border-purple-500/30 flex items-center justify-center">
-              <KeyRound className="w-4 h-4" />
+        <div className="p-6 rounded-2xl bg-[#0c1426] border border-purple-500/30 shadow-md space-y-4 relative overflow-hidden">
+          <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 pb-4 border-b border-slate-800">
+            <div className="flex items-center gap-2.5">
+              <div className="w-9 h-9 rounded-xl bg-purple-500/20 text-purple-300 border border-purple-500/30 flex items-center justify-center">
+                <KeyRound className="w-4 h-4" />
+              </div>
+              <div>
+                <h3 className="font-bold text-base text-white">Admin Security Credentials</h3>
+                <p className="text-xs text-slate-400">
+                  Update your Login Email, Master Password, or 4-Digit Quick PIN (synced across browser & cloud).
+                </p>
+              </div>
             </div>
-            <div>
-              <h3 className="font-bold text-base text-white">Admin Security Credentials</h3>
-              <p className="text-xs text-slate-400">
-                Change your login email, master password, or quick login PIN.
-              </p>
-            </div>
+
+            <Button
+              type="button"
+              onClick={handleSaveSecurityOnly}
+              className="bg-purple-600 hover:bg-purple-500 text-white text-xs font-bold px-4 py-2 rounded-xl shadow-lg shadow-purple-600/20"
+            >
+              <ShieldCheck className="w-3.5 h-3.5 mr-1.5" /> Update Password & PIN
+            </Button>
           </div>
 
-          <div className="grid sm:grid-cols-3 gap-4">
+          {securitySuccess && (
+            <motion.div
+              initial={{ opacity: 0, y: -6 }}
+              animate={{ opacity: 1, y: 0 }}
+              className="p-3 rounded-xl bg-purple-500/20 border border-purple-500/40 text-purple-200 text-xs font-bold flex items-center gap-2"
+            >
+              <Check className="w-4 h-4 text-purple-400" />
+              Password & PIN Updated Successfully! Active for next login.
+            </motion.div>
+          )}
+
+          <div className="grid sm:grid-cols-3 gap-4 pt-1">
             <div className="space-y-1.5">
-              <label className="text-xs font-bold text-slate-200">Admin Email</label>
+              <label className="text-xs font-bold text-slate-200">Admin Login Email</label>
               <Input
                 type="email"
                 value={settings.adminEmail}
-                onChange={(e) => setSettings({ ...settings, adminEmail: e.target.value })}
-                className="bg-[#080e1c] border-slate-800 text-white focus:border-blue-500 font-medium"
+                onChange={(e) => setSettings({ ...settings, adminEmail: e.target.value.trim() })}
+                className="bg-[#080e1c] border-slate-800 text-white focus:border-purple-500 font-medium"
               />
             </div>
 
             <div className="space-y-1.5">
-              <label className="text-xs font-bold text-slate-200">Master Password</label>
-              <Input
-                type="text"
-                value={settings.adminPass}
-                onChange={(e) => setSettings({ ...settings, adminPass: e.target.value })}
-                className="bg-[#080e1c] border-slate-800 text-white focus:border-blue-500 font-mono font-medium"
-              />
+              <label className="text-xs font-bold text-slate-200 flex items-center justify-between">
+                <span>Master Password</span>
+                <span className="text-[10px] text-purple-400 font-mono">Current: {showPass ? settings.adminPass : "••••••••"}</span>
+              </label>
+              <div className="relative">
+                <Input
+                  type={showPass ? "text" : "password"}
+                  value={settings.adminPass}
+                  onChange={(e) => setSettings({ ...settings, adminPass: e.target.value })}
+                  className="bg-[#080e1c] border-slate-800 text-white focus:border-purple-500 font-mono font-medium pr-10"
+                />
+                <button
+                  type="button"
+                  onClick={() => setShowPass(!showPass)}
+                  className="absolute right-3 top-1/2 -translate-y-1/2 text-slate-400 hover:text-white"
+                  title={showPass ? "Hide password" : "Show password"}
+                >
+                  {showPass ? <EyeOff className="w-4 h-4" /> : <Eye className="w-4 h-4" />}
+                </button>
+              </div>
             </div>
 
             <div className="space-y-1.5">
-              <label className="text-xs font-bold text-slate-200">4-Digit Quick PIN</label>
-              <Input
-                type="text"
-                maxLength={6}
-                value={settings.adminPin}
-                onChange={(e) => setSettings({ ...settings, adminPin: e.target.value })}
-                className="bg-[#080e1c] border-slate-800 text-white focus:border-blue-500 font-mono font-medium"
-              />
+              <label className="text-xs font-bold text-slate-200 flex items-center justify-between">
+                <span>4-Digit Quick PIN</span>
+                <span className="text-[10px] text-cyan-400 font-mono">PIN: {showPin ? settings.adminPin : "••••"}</span>
+              </label>
+              <div className="relative">
+                <Input
+                  type={showPin ? "text" : "password"}
+                  maxLength={6}
+                  value={settings.adminPin}
+                  onChange={(e) => setSettings({ ...settings, adminPin: e.target.value.trim() })}
+                  className="bg-[#080e1c] border-slate-800 text-white focus:border-cyan-500 font-mono font-medium pr-10"
+                />
+                <button
+                  type="button"
+                  onClick={() => setShowPin(!showPin)}
+                  className="absolute right-3 top-1/2 -translate-y-1/2 text-slate-400 hover:text-white"
+                  title={showPin ? "Hide PIN" : "Show PIN"}
+                >
+                  {showPin ? <EyeOff className="w-4 h-4" /> : <Eye className="w-4 h-4" />}
+                </button>
+              </div>
             </div>
           </div>
         </div>

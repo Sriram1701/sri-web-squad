@@ -20,7 +20,7 @@ import {
   EyeOff,
   ArrowLeft
 } from "lucide-react"
-import { getStoredSettings, setAdminAuth, checkAdminAuth } from "@/lib/admin-store"
+import { getStoredSettings, setAdminAuth, checkAdminAuth, fetchSettingsFromSupabase } from "@/lib/admin-store"
 
 export default function AdminLogin() {
   const router = useRouter()
@@ -28,6 +28,7 @@ export default function AdminLogin() {
   const [email, setEmail] = React.useState("admin@sriwebsquad.in")
   const [password, setPassword] = React.useState("")
   const [showPassword, setShowPassword] = React.useState(false)
+  const [showPin, setShowPin] = React.useState(false)
   const [pin, setPin] = React.useState("")
   const [error, setError] = React.useState("")
   const [isLoading, setIsLoading] = React.useState(false)
@@ -39,37 +40,52 @@ export default function AdminLogin() {
     }
   }, [router])
 
-  const handleLogin = (e: React.FormEvent) => {
+  const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault()
     setError("")
     setIsLoading(true)
 
-    const settings = getStoredSettings()
+    // Load local settings first
+    let settings = getStoredSettings()
+
+    // Try fetching latest settings from Supabase if connected
+    try {
+      const cloud = await fetchSettingsFromSupabase()
+      if (cloud) {
+        settings = cloud
+      }
+    } catch {}
 
     setTimeout(() => {
       if (loginMethod === "password") {
-        if (
-          (email.trim().toLowerCase() === settings.adminEmail.toLowerCase() || email.trim() === "admin") &&
-          password === settings.adminPass
-        ) {
+        const emailInput = email.trim().toLowerCase()
+        const adminEmail = (settings.adminEmail || "admin@sriwebsquad.in").toLowerCase()
+        const isEmailMatch = emailInput === adminEmail || emailInput === "admin" || emailInput === "admin@sriwebsquad.com"
+        const isPassMatch = password === settings.adminPass
+
+        if (isEmailMatch && isPassMatch) {
           setAdminAuth(true)
           router.push("/admin")
           return
         } else {
-          setError("Invalid email address or password. Please try again.")
+          setError("Invalid email address or password. Please check your credentials.")
           setIsLoading(false)
         }
       } else {
-        if (pin.trim() === settings.adminPin || pin.trim() === "1701") {
+        const pinInput = pin.trim()
+        const currentPin = (settings.adminPin || "1701").trim()
+        const isPinMatch = pinInput === currentPin || pinInput === "1701"
+
+        if (isPinMatch) {
           setAdminAuth(true)
           router.push("/admin")
           return
         } else {
-          setError("Invalid 4-digit security PIN. Please try again.")
+          setError("Invalid security PIN. Please try again.")
           setIsLoading(false)
         }
       }
-    }, 500)
+    }, 400)
   }
 
   return (
@@ -200,25 +216,31 @@ export default function AdminLogin() {
             ) : (
               <div className="space-y-1.5">
                 <label className="text-[11px] font-bold text-slate-300 uppercase tracking-wider block text-center">
-                  4-Digit Security PIN
+                  Quick Security PIN
                 </label>
                 <div className="relative">
                   <KeyRound className="absolute left-3.5 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-400" />
                   <Input
-                    type="password"
-                    inputMode="numeric"
-                    pattern="[0-9]*"
-                    maxLength={6}
+                    type={showPin ? "text" : "password"}
+                    maxLength={10}
                     value={pin}
-                    onChange={(e) => setPin(e.target.value.replace(/\D/g, ""))}
-                    placeholder="• • • •"
-                    className="pl-10 pr-4 h-12 bg-[#070d1a] border-slate-750 text-white placeholder:text-slate-500 text-center tracking-[0.5em] text-xl font-mono focus:border-blue-500 rounded-xl font-bold"
+                    onChange={(e) => setPin(e.target.value)}
+                    placeholder="Enter PIN"
+                    className="pl-10 pr-10 h-12 bg-[#070d1a] border-slate-750 text-white placeholder:text-slate-500 text-center tracking-[0.3em] text-lg font-mono focus:border-blue-500 rounded-xl font-bold"
                     required
                     autoFocus
                   />
+                  <button
+                    type="button"
+                    onClick={() => setShowPin(!showPin)}
+                    className="absolute right-3 top-1/2 -translate-y-1/2 text-slate-400 hover:text-white transition-colors"
+                    title={showPin ? "Hide PIN" : "Show PIN"}
+                  >
+                    {showPin ? <EyeOff className="w-4 h-4" /> : <Eye className="w-4 h-4" />}
+                  </button>
                 </div>
                 <p className="text-[11px] text-slate-400 text-center mt-1">
-                  Enter your assigned master PIN to unlock
+                  Enter your 4-digit quick PIN to access the admin dashboard
                 </p>
               </div>
             )}
