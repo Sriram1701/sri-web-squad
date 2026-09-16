@@ -41,7 +41,7 @@ const squadValues = [
 
 export function About() {
   return (
-    <section id="about" className="py-24 bg-[#030712] border-t border-slate-900 relative overflow-hidden text-white">
+    <section id="about" className="py-8 sm:py-14 md:py-18 bg-[#030712] border-t border-slate-900 relative overflow-hidden text-white">
       {/* Ambient background glow */}
       <div className="absolute top-1/2 left-0 w-96 h-96 bg-primary-600/10 rounded-full blur-3xl pointer-events-none" />
       <div className="absolute bottom-0 right-0 w-96 h-96 bg-blue-500/10 rounded-full blur-3xl pointer-events-none" />
@@ -53,7 +53,7 @@ export function About() {
         />
         
         {/* Main Story & Who We Are */}
-        <div className="grid lg:grid-cols-12 gap-12 items-center mt-12 mb-16">
+        <div className="grid lg:grid-cols-12 gap-8 lg:gap-12 items-center mt-6 mb-8 sm:mt-8 sm:mb-12">
           
           {/* Left Text Block */}
           <motion.div 

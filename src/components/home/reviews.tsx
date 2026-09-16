@@ -108,19 +108,19 @@ function GoogleIcon({ className = "w-5 h-5" }: { className?: string }) {
 
 export function Reviews() {
   return (
-    <section id="reviews" className="py-24 bg-[#030712] border-t border-slate-900 overflow-hidden relative text-white">
+    <section id="reviews" className="py-8 sm:py-14 md:py-18 bg-[#030712] border-t border-slate-900 overflow-hidden relative text-white">
       {/* Background ambient lighting */}
       <div className="absolute top-1/3 right-1/4 w-[450px] h-[450px] bg-blue-600/10 rounded-full mix-blend-screen filter blur-[120px] pointer-events-none" />
       <div className="absolute bottom-10 left-1/4 w-[400px] h-[400px] bg-primary-500/10 rounded-full mix-blend-screen filter blur-[100px] pointer-events-none" />
 
-      <div className="container relative z-10 mx-auto px-4 sm:px-6 lg:px-8 mb-10">
+      <div className="container relative z-10 mx-auto px-4 sm:px-6 lg:px-8 mb-4 sm:mb-6 md:mb-8">
         <SectionHeader 
           title="Client Reviews" 
           subtitle="Real feedback from real businesses and clients who partnered with Sri Web Squad."
         />
 
         {/* Google Reviews Live Summary & Direct Action Button */}
-        <div className="flex flex-col sm:flex-row items-center justify-center gap-4 mt-6">
+        <div className="flex flex-col sm:flex-row items-center justify-center gap-4 mt-3 sm:mt-5">
           <div className="inline-flex items-center gap-2.5 px-4 py-2 rounded-full bg-[#0a0f1d] border border-slate-800 shadow-md">
             <GoogleIcon className="w-5 h-5 shrink-0" />
             <div className="flex items-center gap-1">

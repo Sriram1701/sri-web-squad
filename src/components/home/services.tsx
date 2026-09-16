@@ -40,7 +40,7 @@ const services = [
 
 export function Services() {
   return (
-    <section id="services" className="py-24 bg-slate-50 dark:bg-slate-950 relative overflow-hidden">
+    <section id="services" className="py-8 sm:py-14 md:py-18 bg-slate-50 dark:bg-slate-950 relative overflow-hidden">
       {/* Background decoration */}
       <div className="absolute top-0 right-0 -mt-20 -mr-20 w-80 h-80 bg-primary-400/10 rounded-full blur-3xl pointer-events-none" />
       <div className="absolute bottom-0 left-0 -mb-20 -ml-20 w-80 h-80 bg-blue-400/10 rounded-full blur-3xl pointer-events-none" />
@@ -51,7 +51,7 @@ export function Services() {
           subtitle="Comprehensive digital solutions tailored to elevate your business in the modern landscape."
         />
 
-        <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8 mt-12">
+        <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6 sm:gap-8 mt-6 sm:mt-8 md:mt-10">
           {services.map((service, index) => (
             <motion.div
               key={service.title}

@@ -155,8 +155,8 @@ const techStackRow1: TechItem[] = [
 
 export function TechStack() {
   return (
-    <section className="py-14 bg-[#030712] border-y border-slate-800/90 overflow-hidden relative z-20">
-      <div className="container mx-auto px-4 mb-8 text-center">
+    <section className="py-8 sm:py-12 bg-[#030712] border-y border-slate-800/90 overflow-hidden relative z-20">
+      <div className="container mx-auto px-4 mb-4 sm:mb-6 text-center">
         <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-blue-500/10 border border-blue-500/20 text-blue-400 text-xs font-bold uppercase tracking-widest mb-2">
           Technologies We Master
         </div>

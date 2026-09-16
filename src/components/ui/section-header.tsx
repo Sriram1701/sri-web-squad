@@ -13,13 +13,13 @@ interface SectionHeaderProps {
 
 export const SectionHeader: React.FC<SectionHeaderProps> = ({ title, subtitle, centered = true, className }) => {
   return (
-    <div className={cn("mb-12", centered && "text-center", className)}>
+    <div className={cn("mb-6 sm:mb-8 md:mb-10", centered && "text-center", className)}>
       <motion.h2 
         initial={{ opacity: 0, y: 20 }}
         whileInView={{ opacity: 1, y: 0 }}
         viewport={{ once: true }}
         transition={{ duration: 0.5 }}
-        className="text-3xl md:text-4xl font-bold tracking-tight text-slate-900 dark:text-white mb-4"
+        className="text-2xl sm:text-3xl md:text-4xl font-bold tracking-tight text-slate-900 dark:text-white mb-2 sm:mb-3"
       >
         {title}
       </motion.h2>
@@ -29,7 +29,7 @@ export const SectionHeader: React.FC<SectionHeaderProps> = ({ title, subtitle, c
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
           transition={{ duration: 0.5, delay: 0.1 }}
-          className="text-lg text-slate-600 dark:text-slate-400 max-w-2xl mx-auto"
+          className="text-sm sm:text-base text-slate-600 dark:text-slate-400 max-w-2xl mx-auto"
         >
           {subtitle}
         </motion.p>

@@ -137,7 +137,7 @@ export function Portfolio() {
   const hasMoreProjects = filteredProjects.length > INITIAL_DISPLAY_COUNT
 
   return (
-    <section id="portfolio" className="py-24 bg-slate-50 dark:bg-slate-950">
+    <section id="portfolio" className="py-8 sm:py-14 md:py-18 bg-slate-50 dark:bg-slate-950">
       <div className="container mx-auto px-4 sm:px-6 lg:px-8">
         <SectionHeader 
           title="Our Projects" 
@@ -145,7 +145,7 @@ export function Portfolio() {
         />
 
         {/* Filters */}
-        <div className="flex flex-wrap justify-center gap-2 mb-12">
+        <div className="flex flex-wrap justify-center gap-2 mb-6 sm:mb-8">
           {categories.map((category) => (
             <button
               key={category}
@@ -216,7 +216,7 @@ export function Portfolio() {
 
         {/* Dynamic View All Projects Toggle Button */}
         {hasMoreProjects && (
-          <div className="mt-14 flex justify-center">
+          <div className="mt-6 sm:mt-8 flex justify-center">
             <Button 
               type="button"
               onClick={() => setShowAll(!showAll)}
