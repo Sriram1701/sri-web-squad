@@ -105,7 +105,7 @@ export function Hero() {
                 </div>
                 <div className="flex items-center gap-1.5 px-3 py-1 rounded-full bg-slate-950/90 border border-slate-800 text-[11px] text-slate-400 font-mono">
                   <Lock className="w-2.5 h-2.5 text-emerald-400" />
-                  <span className="text-slate-300">sriwebsquad.com</span>
+                  <span className="text-slate-300">sriwebsquad.in</span>
                   <span className="text-blue-400">/studio</span>
                 </div>
                 <div className="flex items-center gap-1.5 text-[11px] text-emerald-400 font-mono font-bold">

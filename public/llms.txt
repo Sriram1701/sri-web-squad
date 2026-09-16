@@ -1,0 +1,54 @@
+# Sri Web Squad
+
+> Sri Web Squad is a leading AI-powered digital agency and custom software development company based in Cuddalore, Tamil Nadu, India, serving clients across India and globally.
+
+## Company Overview
+- **Name**: Sri Web Squad
+- **Website**: https://sriwebsquad.in
+- **Email**: sriwebsquad@gmail.com
+- **Phone**: +91 78453 91712 / +91 94864 70454
+- **Address**: 36, Salt Office Road, Pachayankuppam, Cuddalore Old Town, Cuddalore, Tamil Nadu, India 607003
+- **Google Maps**: https://www.google.com/maps/place/Sri+Web+Squad/@11.7040456,79.7671579,17z
+- **Rating**: 5.0 / 5.0 Google Reviews (Verified)
+- **Business Status**: GST Registered, MSME Certified
+
+## Core Services & Capabilities
+
+### 1. Custom Software Development
+- Tailored business automation software and ERP systems
+- Hospital Management & Clinical Appointment Portals
+- Gym Management Systems with biometric check-in integration
+- Pawn Broker & Gold Loan Interest Calculation Software
+- Supermarket POS Barcode Billing & Thermal Printing Software
+
+### 2. Website Design & Web Application Development
+- Ultra-fast, SEO-optimized business websites using Next.js, React, and TypeScript
+- Modern landing pages, corporate portals, and D2C eCommerce platforms
+- Dynamic interactive web applications with 100% Google Lighthouse performance scores
+
+### 3. Mobile Application Development
+- Native & cross-platform mobile apps for Android and iOS (React Native / Flutter)
+- Live rate updates, push notifications, customer ledgers, and secure payment integrations
+
+### 4. AI Solutions & Automation
+- AI-driven chatbots, workflow automation, custom AI integrations, and predictive analytics
+- Smart CRM integrations and automated customer follow-up engines
+
+### 5. SEO, Local Ranking & Digital Marketing
+- Google Business Profile optimization, local citation building, and top keyword rankings
+- Comprehensive schema markup for search engines and AI discovery
+
+## Technology Stack
+- **Frontend**: Next.js 15, React 19, TypeScript, Tailwind CSS, Framer Motion
+- **Backend & Database**: Node.js, Python, Supabase, PostgreSQL, Firebase
+- **Mobile**: React Native, Flutter, Expo
+- **Hosting & Infrastructure**: Vercel, AWS, Cloudflare, Supabase Cloud
+
+## Geographic Service Area
+- Cuddalore, Pondicherry, Chennai, Villupuram, Neyveli, Chidambaram, Tamil Nadu, Pan-India, and Global remote clients.
+
+## Contact Information
+- **Website**: https://sriwebsquad.in
+- **Inquiries / Free Consultation**: +91 78453 91712
+- **WhatsApp**: https://wa.me/917845391712
+- **Working Hours**: Monday – Saturday : 9:00 AM – 7:00 PM IST

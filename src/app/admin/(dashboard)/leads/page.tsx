@@ -95,7 +95,7 @@ We would love to discuss your project requirements and provide the best solution
 
 Best regards,
 *Sri Web Squad Team*
-🌐 https://sriwebsquad.com`
+🌐 https://sriwebsquad.in`
     return getWhatsAppDirectUrl(lead.phone, msg)
   }
 

@@ -25,7 +25,7 @@ import { getStoredSettings, setAdminAuth, checkAdminAuth } from "@/lib/admin-sto
 export default function AdminLogin() {
   const router = useRouter()
   const [loginMethod, setLoginMethod] = React.useState<"password" | "pin">("password")
-  const [email, setEmail] = React.useState("admin@sriwebsquad.com")
+  const [email, setEmail] = React.useState("admin@sriwebsquad.in")
   const [password, setPassword] = React.useState("")
   const [showPassword, setShowPassword] = React.useState(false)
   const [pin, setPin] = React.useState("")
@@ -165,7 +165,7 @@ export default function AdminLogin() {
                       type="email"
                       value={email}
                       onChange={(e) => setEmail(e.target.value)}
-                      placeholder="admin@sriwebsquad.com"
+                      placeholder="admin@sriwebsquad.in"
                       className="pl-10 h-10 bg-[#070d1a] border-slate-750 text-white placeholder:text-slate-500 focus:border-blue-500 rounded-xl text-xs font-medium"
                       required
                     />

@@ -73,7 +73,7 @@ const getPastDate = (monthsAgo: number): string => {
 }
 
 export const DEFAULT_SETTINGS: AdminSettings = {
-  adminEmail: "admin@sriwebsquad.com",
+  adminEmail: "admin@sriwebsquad.in",
   adminPass: "admin123",
   adminPin: "1701",
   companyName: "Sri Web Squad",
@@ -935,7 +935,7 @@ export function printProjectsPDFReport(): void {
           <div class="report-meta">
             <div><strong>Generated:</strong> ${dateStr} at ${timeStr}</div>
             <div><strong>Company Phone:</strong> ${settings.companyPhone || "+91 99446 88602"}</div>
-            <div><strong>Website:</strong> https://sriwebsquad.com</div>
+            <div><strong>Website:</strong> https://sriwebsquad.in</div>
           </div>
         </div>
 

@@ -50,7 +50,7 @@ CREATE TABLE IF NOT EXISTS public.leads (
 -- 3. SETTINGS TABLE
 CREATE TABLE IF NOT EXISTS public.settings (
   id TEXT PRIMARY KEY DEFAULT 'global_settings',
-  admin_email TEXT DEFAULT 'admin@sriwebsquad.com',
+  admin_email TEXT DEFAULT 'admin@sriwebsquad.in',
   admin_pass TEXT DEFAULT 'admin123',
   admin_pin TEXT DEFAULT '1701',
   company_name TEXT DEFAULT 'Sri Web Squad',
@@ -78,5 +78,5 @@ CREATE POLICY "Allow anon all operations on settings"
 
 -- Insert Default Settings Row
 INSERT INTO public.settings (id, admin_email, company_name, company_phone, company_upi_id, notify_days_before)
-VALUES ('global_settings', 'admin@sriwebsquad.com', 'Sri Web Squad', '+91 99446 88602', 'sriwebsquad@upi', 30)
+VALUES ('global_settings', 'admin@sriwebsquad.in', 'Sri Web Squad', '+91 99446 88602', 'sriwebsquad@upi', 30)
 ON CONFLICT (id) DO NOTHING;
