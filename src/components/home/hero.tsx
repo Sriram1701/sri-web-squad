@@ -23,7 +23,7 @@ export function Hero() {
             transition={{ duration: 0.6 }}
           >
             {/* Tech Status Badge */}
-            <div className="flex justify-center lg:justify-start mb-4">
+            <div className="flex justify-start mb-4">
               <div className="inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-full bg-gradient-to-r from-blue-500/15 via-cyan-500/10 to-blue-500/15 border border-blue-500/30 backdrop-blur-xl text-[10px] sm:text-xs font-semibold tracking-wider text-cyan-300 shadow-[0_0_15px_rgba(6,182,212,0.12)]">
                 <Sparkles className="w-3 h-3 text-cyan-400 shrink-0" />
                 <span>AI-POWERED</span>
@@ -42,16 +42,13 @@ export function Hero() {
               </span>
             </h1>
 
-            {/* Brand Accent with Side Lines */}
-            <div className="flex items-center gap-3 my-5 max-w-xl">
-              <div className="h-[1px] flex-1 bg-gradient-to-r from-transparent via-blue-500/40 to-primary-500/70" />
-              <div className="inline-flex items-center gap-2 px-3.5 py-1 rounded-full bg-primary-950/80 border border-primary-500/40 shadow-[0_0_15px_rgba(59,130,246,0.2)] shrink-0">
-                <span className="w-2 h-2 rounded-full bg-primary-400 animate-pulse" />
-                <span className="text-xs sm:text-sm font-extrabold tracking-widest text-primary-300 uppercase">
-                  SRI WEB SQUAD
-                </span>
-              </div>
-              <div className="h-[1px] flex-1 bg-gradient-to-l from-transparent via-blue-500/40 to-primary-500/70" />
+            {/* Stylish Brand Divider without container box or dot */}
+            <div className="flex items-center gap-4 my-5 max-w-xl">
+              <div className="h-[1px] flex-1 bg-gradient-to-r from-transparent via-blue-500/40 to-cyan-400/70" />
+              <span className="font-extrabold tracking-[0.28em] text-xs sm:text-sm uppercase bg-clip-text text-transparent bg-gradient-to-r from-blue-400 via-cyan-300 to-primary-400 drop-shadow-[0_0_16px_rgba(56,189,248,0.45)] select-none shrink-0 font-mono">
+                SRI WEB SQUAD
+              </span>
+              <div className="h-[1px] flex-1 bg-gradient-to-l from-transparent via-blue-500/40 to-cyan-400/70" />
             </div>
 
             {/* Paragraph with Highlighted Keyword Accents */}
@@ -119,13 +116,13 @@ export function Hero() {
               </div>
 
               {/* Internal Content */}
-              <div className="relative z-10 max-w-full md:max-w-sm">
+              <div className="relative z-10 max-w-sm">
                 <div className="inline-flex items-center gap-2 px-2.5 py-1 rounded-md bg-blue-500/10 border border-blue-500/20 text-blue-400 text-xs font-semibold mb-4">
                   <Sparkles className="w-3 h-3" />
                   <span>High-Converting Digital Agency</span>
                 </div>
 
-                <h3 className="text-xl sm:text-2xl lg:text-3xl font-black text-white mb-2 leading-tight">
+                <h3 className="text-2xl sm:text-3xl font-black text-white mb-2 leading-tight">
                   WE BUILD BRANDS THAT<br />
                   <span className="bg-gradient-to-r from-blue-400 via-indigo-300 to-cyan-400 bg-clip-text text-transparent">
                     LEAD & INSPIRE
@@ -175,20 +172,12 @@ export function Hero() {
                   </div>
                 </div>
 
-                <div className="flex items-center justify-between gap-4 flex-wrap">
-                  <Link 
-                    href="#services" 
-                    className="px-5 py-2.5 bg-primary-600 hover:bg-primary-500 rounded-full text-xs sm:text-sm font-semibold text-white transition-all inline-flex items-center gap-2 shadow-lg shadow-primary-600/30 hover:scale-105"
-                  >
-                    Explore Our Services <ArrowRight className="w-4 h-4" />
-                  </Link>
-
-                  {/* Mobile stats preview */}
-                  <div className="flex md:hidden items-center gap-2.5 text-[11px] font-mono font-bold">
-                    <span className="text-primary-400 bg-primary-950/80 px-2 py-0.5 rounded border border-primary-500/30">50+ Projects</span>
-                    <span className="text-emerald-400 bg-emerald-950/80 px-2 py-0.5 rounded border border-emerald-500/30">99% Quality</span>
-                  </div>
-                </div>
+                <Link 
+                  href="#services" 
+                  className="px-5 py-2.5 bg-primary-600 hover:bg-primary-500 rounded-full text-xs sm:text-sm font-semibold text-white transition-all inline-flex items-center gap-2 shadow-lg shadow-primary-600/30 hover:scale-105"
+                >
+                  Explore Our Services <ArrowRight className="w-4 h-4" />
+                </Link>
               </div>
 
               {/* Orbital Graphic / Spinning Tech Rings on Right */}
@@ -202,11 +191,13 @@ export function Hero() {
               </div>
             </div>
 
-            {/* Mobile Phone Mockup Overlay - Hidden on small mobile to avoid text cutoff, visible on tablet/desktop */}
+
+
+            {/* Mobile Phone Mockup Overlay with Levitating Motion */}
             <motion.div
               animate={{ y: [0, -12, 0] }}
               transition={{ repeat: Infinity, duration: 5, ease: "easeInOut", delay: 0.5 }}
-              className="hidden md:block absolute -bottom-8 -right-2 lg:right-6 w-44 sm:w-52 bg-[#0a0f1d] border-4 border-slate-700/80 rounded-[2.2rem] shadow-[0_25px_60px_rgba(0,0,0,0.9)] aspect-[9/18.5] overflow-hidden z-20 backdrop-blur-xl"
+              className="absolute -bottom-10 -right-4 sm:right-6 w-44 sm:w-52 bg-[#0a0f1d] border-4 border-slate-700/80 rounded-[2.2rem] shadow-[0_25px_60px_rgba(0,0,0,0.9)] aspect-[9/18.5] overflow-hidden z-20 backdrop-blur-xl"
             >
               {/* Phone Speaker Notch */}
               <div className="absolute top-0 inset-x-0 h-5 bg-slate-800 rounded-b-xl w-24 mx-auto z-30" />
