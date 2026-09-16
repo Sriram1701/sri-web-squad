@@ -8,47 +8,66 @@ import Link from "next/link"
 
 export function Hero() {
   return (
-    <section className="relative min-h-[90vh] flex flex-col items-center justify-center overflow-hidden pt-24 pb-12 bg-black text-white">
+    <section className="relative min-h-[85vh] flex flex-col items-center justify-center overflow-hidden pt-20 sm:pt-24 lg:pt-28 pb-12 bg-black text-white">
       {/* Background ambient glow */}
       <div className="absolute top-1/3 left-1/4 w-[500px] h-[500px] bg-blue-600/10 rounded-full mix-blend-screen filter blur-[120px] pointer-events-none" />
       <div className="absolute bottom-0 right-1/4 w-[400px] h-[400px] bg-blue-900/20 rounded-full mix-blend-screen filter blur-[100px] pointer-events-none" />
 
-      <div className="container relative z-10 mx-auto px-4 sm:px-6 lg:px-8 flex-1 flex flex-col lg:flex-row items-center pt-10">
+      <div className="container relative z-10 mx-auto px-4 sm:px-6 lg:px-8 flex-1 flex flex-col lg:flex-row items-center pt-3 sm:pt-6 lg:pt-8">
         
         {/* Left Content */}
-        <div className="w-full lg:w-1/2 flex flex-col justify-center mb-16 lg:mb-0 pl-2 sm:pl-6 lg:pl-10">
+        <div className="w-full lg:w-1/2 flex flex-col justify-center mb-10 lg:mb-0 pl-2 sm:pl-6 lg:pl-10">
           <motion.div
             initial={{ opacity: 0, x: -10 }}
             animate={{ opacity: 1, x: 0 }}
             transition={{ duration: 0.6 }}
           >
-            <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-blue-500/10 border border-blue-500/30 backdrop-blur-md text-xs sm:text-sm font-bold tracking-wider text-blue-400 mb-5 shadow-[0_0_20px_rgba(59,130,246,0.2)]">
+            {/* Tech Status Badge */}
+            <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-gradient-to-r from-blue-500/15 via-cyan-500/10 to-blue-500/15 border border-blue-500/30 backdrop-blur-xl text-[10px] sm:text-xs font-semibold tracking-wider text-cyan-300 mb-4 shadow-[0_0_15px_rgba(6,182,212,0.12)]">
+              <Sparkles className="w-3 h-3 text-cyan-400 shrink-0" />
               <span>AI-POWERED</span>
-              <span className="text-blue-400/70">•</span>
+              <span className="text-cyan-400/40">•</span>
               <span>INNOVATIVE</span>
-              <span className="text-blue-400/70">•</span>
+              <span className="text-cyan-400/40">•</span>
               <span>RELIABLE</span>
             </div>
             
-            <h1 className="text-2xl sm:text-3xl md:text-4xl lg:text-[2.85rem] font-black leading-[1.18] mb-3 tracking-tight">
-              <span className="whitespace-nowrap">AI-POWERED SOFTWARE</span><br />
-              DEVELOPMENT &<br />
-              <span className="text-primary-600">DIGITAL SOLUTIONS</span>
+            {/* Main Headline */}
+            <h1 className="text-3xl sm:text-4xl md:text-5xl lg:text-[3.1rem] font-black leading-[1.14] mb-4 tracking-tight text-white">
+              AI-Powered Software<br className="hidden sm:inline" /> Development &{" "}
+              <span className="bg-clip-text text-transparent bg-gradient-to-r from-blue-400 via-cyan-400 to-primary-400 drop-shadow-[0_0_25px_rgba(59,130,246,0.3)]">
+                Digital Solutions
+              </span>
             </h1>
 
-            <div className="flex items-center gap-3 mb-5">
-              <span className="text-base sm:text-lg md:text-xl font-extrabold tracking-widest text-primary-500 uppercase">
-                Sri Web Squad
+            {/* Brand Accent Sub-heading (Hidden on Mobile) */}
+            <div className="hidden sm:flex flex-wrap items-center gap-2.5 sm:gap-3 mb-6">
+              <div className="inline-flex items-center gap-2 px-3 py-1 rounded-lg bg-primary-950/80 border border-primary-500/40 shadow-sm">
+                <span className="w-2 h-2 rounded-full bg-primary-400 animate-pulse" />
+                <span className="text-xs sm:text-sm font-extrabold tracking-widest text-primary-300 uppercase">
+                  Sri Web Squad
+                </span>
+              </div>
+              <span className="text-sm sm:text-base md:text-lg font-bold tracking-wide text-slate-200">
+                • For Modern Businesses
               </span>
-              <span className="h-[2px] w-20 sm:w-32 bg-gradient-to-r from-primary-500 to-transparent rounded-full" />
             </div>
-            
-            <h2 className="text-xl sm:text-2xl md:text-3xl font-bold tracking-wide text-slate-200 mb-6 uppercase">
-              For Modern Businesses
-            </h2>
 
-            <p className="text-base sm:text-lg text-slate-300/90 mb-8 max-w-xl leading-relaxed">
-              A passionate squad of developers crafting high-performance <span className="text-white font-semibold">Websites</span>, <span className="text-white font-semibold">Mobile Apps</span>, and <span className="text-white font-semibold">Custom Software</span> at budget-friendly pricing — delivering premium quality and the best output to grow your business.
+            {/* Paragraph with Highlighted Keyword Accents */}
+            <p className="text-sm sm:text-base md:text-lg text-slate-300/90 mb-8 max-w-xl leading-relaxed font-normal">
+              A passionate squad of developers crafting high-performance{" "}
+              <span className="text-white font-semibold underline decoration-blue-500/40 decoration-2 underline-offset-4">
+                Websites
+              </span>
+              ,{" "}
+              <span className="text-white font-semibold underline decoration-cyan-500/40 decoration-2 underline-offset-4">
+                Mobile Apps
+              </span>
+              , and{" "}
+              <span className="text-white font-semibold underline decoration-primary-500/40 decoration-2 underline-offset-4">
+                Custom Software
+              </span>{" "}
+              at budget-friendly pricing — delivering premium quality and the best output to grow your business.
             </p>
 
             <motion.div

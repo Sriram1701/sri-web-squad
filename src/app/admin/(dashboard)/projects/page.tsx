@@ -1,129 +1,1224 @@
 "use client"
 
 import * as React from "react"
-import { GlassCard } from "@/components/ui/glass-card"
+import { motion } from "framer-motion"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Textarea } from "@/components/ui/textarea"
-import { Plus, Pencil, Trash2, Search, Upload } from "lucide-react"
+import { 
+  Plus, 
+  Pencil, 
+  Trash2, 
+  Search, 
+  Globe, 
+  Server, 
+  Phone, 
+  MessageCircle, 
+  RefreshCw, 
+  Check, 
+  Copy, 
+  AlertTriangle, 
+  ExternalLink,
+  ShieldCheck,
+  CheckCircle2,
+  X,
+  FileSpreadsheet,
+  FileText,
+  Paperclip,
+  UploadCloud,
+  FileCheck,
+  Download
+} from "lucide-react"
+import { 
+  getStoredProjects, 
+  saveStoredProjects, 
+  getProjectExpiryDetails, 
+  ProjectRecord, 
+  getStoredSettings,
+  generateWhatsAppReminderMessage,
+  getWhatsAppDirectUrl,
+  exportProjectsToCSV,
+  printProjectsPDFReport,
+  syncAllDataWithSupabase
+} from "@/lib/admin-store"
 
-export default function ProjectsAdmin() {
-  const [isAdding, setIsAdding] = React.useState(false)
+const EMPTY_PROJECT: Omit<ProjectRecord, "id" | "createdAt"> = {
+  projectName: "",
+  clientName: "",
+  clientPhone: "",
+  secondaryPhone: "",
+  clientEmail: "",
+  category: "Website",
+  domainName: "",
+  domainRegistrar: "GoDaddy",
+  domainStartDate: new Date().toISOString().split("T")[0],
+  domainExpiryDate: new Date(new Date().setFullYear(new Date().getFullYear() + 1)).toISOString().split("T")[0],
+  domainRenewalAmount: 1199,
+  hostingProvider: "Hostinger Cloud",
+  hostingStartDate: new Date().toISOString().split("T")[0],
+  hostingExpiryDate: new Date(new Date().setFullYear(new Date().getFullYear() + 1)).toISOString().split("T")[0],
+  hostingRenewalAmount: 3499,
+  amcAmount: 0,
+  sslIncluded: true,
+  status: "active",
+  liveUrl: "",
+  agreementPdfName: "",
+  agreementPdfUrl: "",
+  notes: "",
+}
 
-  const dummyProjects = [
-    { id: 1, title: "E-Commerce Platform", client: "RetailStyle Co.", category: "Website" },
-    { id: 2, title: "Health Tracker App", client: "FitLife", category: "App" },
-    { id: 3, title: "School ERP System", client: "EduGlobal Academy", category: "Software" },
-  ]
+export default function ProjectsAdminPage() {
+  const [projects, setProjects] = React.useState<ProjectRecord[]>([])
+  const [settings, setSettings] = React.useState(getStoredSettings())
+  const [searchTerm, setSearchTerm] = React.useState("")
+  const [activeTab, setActiveTab] = React.useState<"all" | "expiring_30" | "expired">("all")
+  const [categoryFilter, setCategoryFilter] = React.useState<string>("all")
+  
+  // Modal states
+  const [isModalOpen, setIsModalOpen] = React.useState(false)
+  const [editingProjectId, setEditingProjectId] = React.useState<string | null>(null)
+  const [formData, setFormData] = React.useState<Omit<ProjectRecord, "id" | "createdAt">>(EMPTY_PROJECT)
+  const pdfInputRef = React.useRef<HTMLInputElement>(null)
+  
+  // WhatsApp Modal
+  const [selectedForWA, setSelectedForWA] = React.useState<ProjectRecord | null>(null)
+  const [waMessageText, setWaMessageText] = React.useState("")
+  const [copied, setCopied] = React.useState(false)
+
+  // Confirmation Modal states
+  const [deleteConfirmProject, setDeleteConfirmProject] = React.useState<ProjectRecord | null>(null)
+  const [renewConfirmProject, setRenewConfirmProject] = React.useState<ProjectRecord | null>(null)
+
+  React.useEffect(() => {
+    setProjects(getStoredProjects())
+    setSettings(getStoredSettings())
+
+    syncAllDataWithSupabase().then((result) => {
+      if (result && result.projects) {
+        setProjects(result.projects)
+      }
+    }).catch(() => {})
+  }, [])
+
+  // Autocomplete dynamic suggestions from existing projects
+  const uniqueHostingProviders = React.useMemo(() => {
+    const defaults = ["Hostinger Cloud", "Hostinger", "Netlify", "Vercel", "AWS Lightsail", "AWS EC2", "DigitalOcean", "Cloudflare Pages", "Render", "HostGator", "Bluehost", "cPanel Shared", "VPS Hosting"]
+    const fromProjects = projects.map(p => p.hostingProvider).filter(Boolean)
+    return Array.from(new Set([...defaults, ...fromProjects]))
+  }, [projects])
+
+  const uniqueDomainRegistrars = React.useMemo(() => {
+    const defaults = ["GoDaddy", "Hostinger", "Namecheap", "Google Domains", "Cloudflare", "BigRock", "Porkbun", "HostGator", "Bluehost"]
+    const fromProjects = projects.map(p => p.domainRegistrar).filter(Boolean)
+    return Array.from(new Set([...defaults, ...fromProjects]))
+  }, [projects])
+
+  // Handle PDF file selection
+  const handlePdfUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0]
+    if (!file) return
+    const reader = new FileReader()
+    reader.onload = (event) => {
+      const base64 = event.target?.result as string
+      setFormData(prev => ({
+        ...prev,
+        agreementPdfName: file.name,
+        agreementPdfUrl: base64,
+      }))
+    }
+    reader.readAsDataURL(file)
+  }
+
+  // Process and filter projects
+  const processedProjects = React.useMemo(() => {
+    return projects.map((p) => ({
+      ...p,
+      expiryDetails: getProjectExpiryDetails(p, settings.notifyDaysBefore || 30),
+    }))
+  }, [projects, settings])
+
+  const filteredProjects = React.useMemo(() => {
+    return processedProjects.filter((p) => {
+      // Tab filter
+      if (activeTab === "expiring_30" && (!p.expiryDetails.isExpiringSoon || p.expiryDetails.isExpired)) return false
+      if (activeTab === "expired" && !p.expiryDetails.isExpired) return false
+
+      // Category filter
+      if (categoryFilter !== "all" && p.category !== categoryFilter) return false
+
+      // Search term
+      if (searchTerm.trim() !== "") {
+        const query = searchTerm.toLowerCase()
+        const matchTitle = p.projectName.toLowerCase().includes(query)
+        const matchClient = p.clientName.toLowerCase().includes(query)
+        const matchPhone = p.clientPhone.toLowerCase().includes(query)
+        const matchDomain = (p.domainName || "").toLowerCase().includes(query)
+        const matchRegistrar = (p.domainRegistrar || "").toLowerCase().includes(query)
+        if (!matchTitle && !matchClient && !matchPhone && !matchDomain && !matchRegistrar) return false
+      }
+
+      return true
+    })
+  }, [processedProjects, activeTab, categoryFilter, searchTerm])
+
+  // Counts for tabs
+  const expiringCount = processedProjects.filter((p) => p.expiryDetails.isExpiringSoon && !p.expiryDetails.isExpired).length
+  const expiredCount = processedProjects.filter((p) => p.expiryDetails.isExpired).length
+
+  // Helper for +1 year calculation preview
+  const getPlusOneYear = (dateStr?: string) => {
+    if (!dateStr) return "—"
+    try {
+      const d = new Date(dateStr)
+      d.setFullYear(d.getFullYear() + 1)
+      return d.toISOString().split("T")[0]
+    } catch {
+      return "—"
+    }
+  }
+
+  // Helper to format live client website URL
+  const getDirectUrl = (urlOrDomain?: string) => {
+    if (!urlOrDomain) return ""
+    if (urlOrDomain.startsWith("http://") || urlOrDomain.startsWith("https://")) {
+      return urlOrDomain
+    }
+    return `https://${urlOrDomain}`
+  }
+
+  // Open Add Modal
+  const handleOpenAdd = () => {
+    setEditingProjectId(null)
+    setFormData(EMPTY_PROJECT)
+    setIsModalOpen(true)
+  }
+
+  // Open Edit Modal
+  const handleOpenEdit = (project: ProjectRecord) => {
+    setEditingProjectId(project.id)
+    setFormData({
+      projectName: project.projectName,
+      clientName: project.clientName,
+      clientPhone: project.clientPhone,
+      secondaryPhone: project.secondaryPhone || "",
+      clientEmail: project.clientEmail || "",
+      category: project.category,
+      domainName: project.domainName,
+      domainRegistrar: project.domainRegistrar,
+      domainStartDate: project.domainStartDate,
+      domainExpiryDate: project.domainExpiryDate,
+      domainRenewalAmount: project.domainRenewalAmount,
+      hostingProvider: project.hostingProvider,
+      hostingStartDate: project.hostingStartDate,
+      hostingExpiryDate: project.hostingExpiryDate,
+      hostingRenewalAmount: project.hostingRenewalAmount,
+      amcAmount: project.amcAmount || 0,
+      sslIncluded: project.sslIncluded,
+      status: project.status,
+      liveUrl: project.liveUrl || "",
+      agreementPdfName: project.agreementPdfName || "",
+      agreementPdfUrl: project.agreementPdfUrl || "",
+      notes: project.notes || "",
+    })
+    setIsModalOpen(true)
+  }
+
+  // Save Project
+  const handleSaveProject = (e: React.FormEvent) => {
+    e.preventDefault()
+    let updated: ProjectRecord[] = []
+
+    if (editingProjectId) {
+      updated = projects.map((p) => {
+        if (p.id === editingProjectId) {
+          return {
+            ...p,
+            ...formData,
+          }
+        }
+        return p
+      })
+    } else {
+      const newProj: ProjectRecord = {
+        ...formData,
+        id: `proj_${Date.now()}`,
+        createdAt: new Date().toISOString().split("T")[0],
+      }
+      updated = [newProj, ...projects]
+    }
+
+    setProjects(updated)
+    saveStoredProjects(updated)
+    setIsModalOpen(false)
+  }
+
+  // Delete Project with confirmation
+  const handleConfirmDelete = (id: string) => {
+    const updated = projects.filter((p) => p.id !== id)
+    setProjects(updated)
+    saveStoredProjects(updated)
+    setDeleteConfirmProject(null)
+  }
+
+  // Quick 1-Year Extension with confirmation
+  const handleConfirmRenew = (projectId: string) => {
+    const updated = projects.map((p) => {
+      if (p.id === projectId) {
+        const domExp = new Date(p.domainExpiryDate || new Date())
+        domExp.setFullYear(domExp.getFullYear() + 1)
+        
+        const hostExp = new Date(p.hostingExpiryDate || new Date())
+        hostExp.setFullYear(hostExp.getFullYear() + 1)
+
+        return {
+          ...p,
+          domainExpiryDate: domExp.toISOString().split("T")[0],
+          hostingExpiryDate: hostExp.toISOString().split("T")[0],
+          status: "active" as const,
+        }
+      }
+      return p
+    })
+    setProjects(updated)
+    saveStoredProjects(updated)
+    setRenewConfirmProject(null)
+  }
+
+  // Open WhatsApp Modal
+  const openWhatsApp = (project: ProjectRecord) => {
+    setSelectedForWA(project)
+    const msg = generateWhatsAppReminderMessage(project, settings)
+    setWaMessageText(msg)
+    setCopied(false)
+  }
+
+  const copyWhatsAppText = () => {
+    navigator.clipboard.writeText(waMessageText)
+    setCopied(true)
+    setTimeout(() => setCopied(false), 2000)
+  }
+
+  // Export CSV
+  const handleExportCSV = () => {
+    const csvData = exportProjectsToCSV()
+    const blob = new Blob([csvData], { type: "text/csv;charset=utf-8;" })
+    const url = URL.createObjectURL(blob)
+    const link = document.createElement("a")
+    link.href = url
+    link.setAttribute("download", `sri_web_squad_projects_${new Date().toISOString().split("T")[0]}.csv`)
+    document.body.appendChild(link)
+    link.click()
+    document.body.removeChild(link)
+  }
 
   return (
-    <div className="space-y-6">
-      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
-        <div>
-          <h1 className="text-2xl font-bold text-slate-900 dark:text-white">Manage Projects</h1>
-          <p className="text-slate-500 dark:text-slate-400">Add, edit, or remove portfolio projects.</p>
+    <div className="space-y-6 max-w-7xl mx-auto pb-16">
+      {/* Page Header */}
+      <div className="flex flex-col sm:items-center sm:text-center max-w-2xl mx-auto space-y-1">
+        <div className="flex items-center justify-between sm:justify-center w-full">
+          <h1 className="text-2xl sm:text-4xl font-black text-white tracking-tight">
+            Projects & Renewals
+          </h1>
+          <span className="sm:hidden text-[10px] font-bold px-2 py-0.5 rounded-full bg-blue-500/15 text-blue-300 border border-blue-500/30">
+            {projects.length} Total
+          </span>
         </div>
-        <Button onClick={() => setIsAdding(!isAdding)} className="shrink-0 shadow-lg shadow-primary-500/20">
-          <Plus className="w-4 h-4 mr-2" /> {isAdding ? "Cancel" : "Add New Project"}
-        </Button>
+        <p className="text-xs sm:text-sm font-medium text-slate-300">
+          Manage client projects, domain lifecycles, and renewal billing.
+        </p>
       </div>
 
-      {isAdding && (
-        <GlassCard className="p-6" hoverEffect={false}>
-          <h3 className="text-lg font-bold text-slate-900 dark:text-white mb-6">Add New Project</h3>
-          <form className="space-y-6">
-            <div className="grid md:grid-cols-2 gap-6">
-              <div className="space-y-2">
-                <label className="text-sm font-medium text-slate-700 dark:text-slate-300">Project Title</label>
-                <Input placeholder="e.g. AI Customer Support" />
-              </div>
-              <div className="space-y-2">
-                <label className="text-sm font-medium text-slate-700 dark:text-slate-300">Client Name</label>
-                <Input placeholder="e.g. TechSolutions" />
-              </div>
-              <div className="space-y-2">
-                <label className="text-sm font-medium text-slate-700 dark:text-slate-300">Category</label>
-                <select className="flex h-12 w-full rounded-xl border border-slate-200 bg-white px-4 py-2 text-sm focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary-500 dark:border-slate-800 dark:bg-slate-900">
-                  <option>Website</option>
-                  <option>App</option>
-                  <option>Software</option>
-                  <option>AI</option>
-                  <option>Dashboard</option>
-                </select>
-              </div>
-              <div className="space-y-2">
-                <label className="text-sm font-medium text-slate-700 dark:text-slate-300">Project Image (Upload)</label>
-                <div className="flex h-12 w-full rounded-xl border border-dashed border-slate-300 dark:border-slate-700 bg-slate-50 dark:bg-slate-900/50 items-center px-4 py-2 cursor-pointer hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors">
-                  <Upload className="w-4 h-4 text-slate-500 mr-2" />
-                  <span className="text-sm text-slate-500">Click to upload from Supabase Storage</span>
-                </div>
-              </div>
-            </div>
-            <div className="space-y-2">
-              <label className="text-sm font-medium text-slate-700 dark:text-slate-300">Description</label>
-              <Textarea placeholder="Project description..." />
-            </div>
-            <div className="grid md:grid-cols-2 gap-6">
-              <div className="space-y-2">
-                <label className="text-sm font-medium text-slate-700 dark:text-slate-300">Live URL</label>
-                <Input placeholder="https://..." />
-              </div>
-              <div className="space-y-2">
-                <label className="text-sm font-medium text-slate-700 dark:text-slate-300">GitHub URL</label>
-                <Input placeholder="https://github.com/..." />
-              </div>
-            </div>
-            <div className="flex justify-end gap-4">
-              <Button type="button" variant="ghost" onClick={() => setIsAdding(false)}>Cancel</Button>
-              <Button type="button" onClick={() => setIsAdding(false)}>Save Project</Button>
-            </div>
-          </form>
-        </GlassCard>
-      )}
+      {/* Action Buttons Bar */}
+      <div className="flex items-center justify-between gap-2.5">
+        <div className="text-xs font-bold text-slate-300 sm:hidden">
+          Showing {filteredProjects.length} Projects
+        </div>
+        <div className="flex items-center gap-2 shrink-0 ml-auto">
+          <Button
+            variant="outline"
+            size="sm"
+            onClick={printProjectsPDFReport}
+            className="hidden sm:inline-flex text-xs h-9 px-3.5 border-rose-500/40 bg-slate-900/90 hover:bg-rose-500/15 text-rose-300 hover:text-white font-bold transition-all shadow-sm"
+            title="Print or export as PDF report"
+          >
+            <FileText className="w-4 h-4 mr-1.5 text-rose-400" /> Export PDF
+          </Button>
 
-      <GlassCard className="p-0 overflow-hidden" hoverEffect={false}>
-        <div className="p-4 border-b border-slate-200 dark:border-slate-800 flex items-center gap-4 bg-slate-50/50 dark:bg-slate-900/50">
-          <div className="relative flex-1 max-w-sm">
-            <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-400" />
-            <Input className="pl-9 h-10" placeholder="Search projects..." />
+          <Button
+            variant="outline"
+            size="sm"
+            onClick={handleExportCSV}
+            className="hidden sm:inline-flex text-xs h-9 px-3.5 border-emerald-500/40 bg-slate-900/90 hover:bg-emerald-500/15 text-emerald-300 hover:text-white font-bold transition-all shadow-sm"
+            title="Export CSV spreadsheet"
+          >
+            <FileSpreadsheet className="w-4 h-4 mr-1.5 text-emerald-400" /> Export CSV
+          </Button>
+
+          <Button
+            onClick={handleOpenAdd}
+            size="sm"
+            className="text-xs h-9 px-3 sm:px-4 bg-gradient-to-r from-blue-600 to-primary-600 hover:from-blue-500 hover:to-primary-500 text-white font-bold shadow-md shadow-blue-600/30 transition-all rounded-xl whitespace-nowrap flex items-center gap-1"
+          >
+            <Plus className="w-4 h-4 font-bold" />
+            <span>Add Project</span>
+          </Button>
+        </div>
+      </div>
+
+      {/* Filter Tabs & Search Controls */}
+      <div className="p-3 sm:p-4 rounded-xl sm:rounded-2xl bg-[#0d1629] border border-slate-750 shadow-lg space-y-3">
+        <div className="flex flex-col md:flex-row items-stretch md:items-center justify-between gap-3">
+          {/* Tabs */}
+          <div className="flex items-center gap-1.5 p-1 rounded-xl bg-[#070d1a] border border-slate-750 overflow-x-auto">
+            <button
+              onClick={() => setActiveTab("all")}
+              className={`px-3 py-1.5 rounded-lg text-xs font-bold transition-all whitespace-nowrap ${
+                activeTab === "all"
+                  ? "bg-blue-600 text-white shadow-md shadow-blue-600/25"
+                  : "text-slate-300 hover:text-white hover:bg-slate-800/60"
+              }`}
+            >
+              All ({projects.length})
+            </button>
+
+            <button
+              onClick={() => setActiveTab("expiring_30")}
+              className={`px-3 py-1.5 rounded-lg text-xs font-bold transition-all flex items-center gap-1.5 whitespace-nowrap ${
+                activeTab === "expiring_30"
+                  ? "bg-amber-500 text-slate-950 shadow-md shadow-amber-500/25"
+                  : "text-amber-300 hover:bg-amber-500/15"
+              }`}
+            >
+              <AlertTriangle className="w-3.5 h-3.5" />
+              <span>Due 30d</span>
+              {expiringCount > 0 && (
+                <span className="px-1.5 py-0.2 rounded-full bg-slate-950 text-amber-300 text-[10px] font-black">
+                  {expiringCount}
+                </span>
+              )}
+            </button>
+
+            <button
+              onClick={() => setActiveTab("expired")}
+              className={`px-3 py-1.5 rounded-lg text-xs font-bold transition-all flex items-center gap-1.5 whitespace-nowrap ${
+                activeTab === "expired"
+                  ? "bg-rose-600 text-white shadow-md shadow-rose-600/25"
+                  : "text-rose-400 hover:bg-rose-500/15"
+              }`}
+            >
+              <span>Expired</span>
+              {expiredCount > 0 && (
+                <span className="px-1.5 py-0.2 rounded-full bg-slate-950 text-rose-300 text-[10px] font-black">
+                  {expiredCount}
+                </span>
+              )}
+            </button>
+          </div>
+
+          {/* Search & Category Dropdown */}
+          <div className="flex items-center gap-2">
+            <div className="relative flex-1 sm:w-64">
+              <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-400" />
+              <Input
+                placeholder="Search project, client, domain..."
+                value={searchTerm}
+                onChange={(e) => setSearchTerm(e.target.value)}
+                className="pl-9 h-9 text-xs bg-[#070d1a] border-slate-750 text-white placeholder:text-slate-400 focus:border-blue-500 font-medium rounded-xl"
+              />
+              {searchTerm && (
+                <button
+                  onClick={() => setSearchTerm("")}
+                  className="absolute right-2.5 top-1/2 -translate-y-1/2 text-slate-400 hover:text-white text-xs"
+                >
+                  ✕
+                </button>
+              )}
+            </div>
+
+            <select
+              value={categoryFilter}
+              onChange={(e) => setCategoryFilter(e.target.value)}
+              className="h-9 rounded-xl border border-slate-750 bg-[#070d1a] px-2.5 text-xs text-slate-200 focus:outline-none focus:border-blue-500 shrink-0 font-semibold"
+            >
+              <option value="all">All Types</option>
+              <option value="Website">Website</option>
+              <option value="Web App">Web App</option>
+              <option value="Mobile App">Mobile App</option>
+              <option value="ERP & Billing">ERP</option>
+              <option value="E-Commerce">E-Com</option>
+              <option value="Custom Software">Custom</option>
+            </select>
           </div>
         </div>
+      </div>
+
+      {/* Mobile Cards View (< sm) */}
+      <div className="block sm:hidden space-y-3">
+        {filteredProjects.length === 0 ? (
+          <div className="p-8 rounded-xl bg-[#0d1629] border border-slate-750 text-center text-slate-400">
+            <p className="font-bold text-white text-sm">No matching projects found</p>
+            <p className="text-xs text-slate-400 mt-1">Try adjusting your search or filters.</p>
+          </div>
+        ) : (
+          filteredProjects.map((project) => {
+            const totalRenewal = (project.domainRenewalAmount || 0) + (project.hostingRenewalAmount || 0) + (project.amcAmount || 0)
+            const isExp = project.expiryDetails.isExpired
+            return (
+              <div 
+                key={project.id}
+                className="p-4 rounded-xl bg-[#0c1426] border border-slate-800 shadow-md space-y-3"
+              >
+                <div className="flex items-start justify-between gap-2">
+                  <div className="min-w-0 flex-1">
+                    <div className="flex items-center gap-1.5 flex-wrap">
+                      <span className="font-bold text-white text-sm truncate">{project.projectName}</span>
+                      <span className="text-[10px] font-bold px-1.5 py-0.2 rounded bg-slate-800 text-slate-300 border border-slate-750">
+                        {project.category}
+                      </span>
+                    </div>
+                    <div className="text-xs text-slate-300 mt-1 flex items-center gap-1.5">
+                      <span className="font-medium text-white">{project.clientName}</span>
+                      <span>•</span>
+                      <span className="font-mono text-slate-400">{project.clientPhone}</span>
+                    </div>
+                  </div>
+
+                  <div className="text-right shrink-0">
+                    <span className="text-sm font-black text-emerald-300 font-mono block">
+                      ₹{totalRenewal.toLocaleString("en-IN")}
+                    </span>
+                    <span className={`text-[10px] font-mono font-bold px-1.5 py-0.2 rounded inline-block mt-0.5 ${
+                      isExp 
+                        ? "bg-rose-500/20 text-rose-300 border border-rose-500/30" 
+                        : "bg-amber-500/20 text-amber-300 border border-amber-500/30"
+                    }`}>
+                      Exp: {project.domainExpiryDate}
+                    </span>
+                  </div>
+                </div>
+
+                {project.domainName && (
+                  <div className="flex items-center gap-1.5 text-xs">
+                    <Globe className="w-3.5 h-3.5 text-blue-400" />
+                    <a
+                      href={getDirectUrl(project.liveUrl || project.domainName)}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="font-mono text-blue-300 hover:text-white font-semibold flex items-center gap-1 truncate"
+                    >
+                      <span>{project.domainName}</span>
+                      <ExternalLink className="w-3 h-3 text-blue-400" />
+                    </a>
+                  </div>
+                )}
+
+                {/* Mobile Actions Toolbar */}
+                <div className="flex items-center justify-between gap-2 pt-2 border-t border-slate-800">
+                  <Button
+                    size="sm"
+                    onClick={() => openWhatsApp(project)}
+                    className="flex-1 h-8 bg-emerald-600 hover:bg-emerald-500 text-white font-bold text-xs flex items-center justify-center gap-1"
+                  >
+                    <MessageCircle className="w-3.5 h-3.5" />
+                    <span>WhatsApp</span>
+                  </Button>
+
+                  <Button
+                    size="sm"
+                    variant="outline"
+                    onClick={() => setRenewConfirmProject(project)}
+                    className="h-8 px-2.5 border-slate-750 bg-slate-850 hover:bg-blue-600 text-slate-200 hover:text-white font-bold text-xs flex items-center gap-1"
+                    title="+1 Year Extend"
+                  >
+                    <RefreshCw className="w-3 h-3 text-blue-400" />
+                    <span>+1Y</span>
+                  </Button>
+
+                  <Button
+                    size="sm"
+                    variant="outline"
+                    onClick={() => handleOpenEdit(project)}
+                    className="h-8 px-2.5 border-slate-750 bg-slate-850 text-slate-200 hover:text-white font-bold text-xs"
+                    title="Edit"
+                  >
+                    <Pencil className="w-3 h-3" />
+                  </Button>
+
+                  <Button
+                    size="sm"
+                    variant="outline"
+                    onClick={() => setDeleteConfirmProject(project)}
+                    className="h-8 px-2.5 border-slate-750 bg-slate-850 hover:bg-rose-600 text-rose-300 hover:text-white font-bold text-xs"
+                    title="Delete"
+                  >
+                    <Trash2 className="w-3 h-3" />
+                  </Button>
+                </div>
+              </div>
+            )
+          })
+        )}
+      </div>
+
+      {/* Main Table (Desktop View >= sm) */}
+      <div className="hidden sm:block rounded-2xl overflow-hidden bg-[#0d1629] border border-slate-700/80 shadow-xl">
         <div className="overflow-x-auto">
-          <table className="w-full text-left text-sm">
-            <thead className="bg-slate-50 dark:bg-slate-900/50 text-slate-500 dark:text-slate-400">
+          <table className="w-full text-left text-xs">
+            <thead className="bg-[#131f3a] text-slate-100 font-extrabold border-b border-slate-700 uppercase text-[11px] tracking-wider">
               <tr>
-                <th className="px-6 py-4 font-medium">Title</th>
-                <th className="px-6 py-4 font-medium">Client</th>
-                <th className="px-6 py-4 font-medium">Category</th>
-                <th className="px-6 py-4 font-medium text-right">Actions</th>
+                <th className="px-5 py-4">Project & Category</th>
+                <th className="px-5 py-4">Client Contact</th>
+                <th className="px-5 py-4">Domain Lifecycle</th>
+                <th className="px-5 py-4">Hosting Server</th>
+                <th className="px-5 py-4">Annual Charges</th>
+                <th className="px-5 py-4 text-right">Actions</th>
               </tr>
             </thead>
-            <tbody className="divide-y divide-slate-100 dark:divide-slate-800">
-              {dummyProjects.map((project) => (
-                <tr key={project.id} className="hover:bg-slate-50 dark:hover:bg-slate-900/50 transition-colors">
-                  <td className="px-6 py-4 font-medium text-slate-900 dark:text-white">{project.title}</td>
-                  <td className="px-6 py-4 text-slate-600 dark:text-slate-400">{project.client}</td>
-                  <td className="px-6 py-4">
-                    <span className="px-2.5 py-1 rounded-full bg-primary-50 dark:bg-primary-900/20 text-primary-600 dark:text-primary-400 text-xs font-medium border border-primary-100 dark:border-primary-800">
-                      {project.category}
-                    </span>
-                  </td>
-                  <td className="px-6 py-4 text-right">
-                    <div className="flex items-center justify-end gap-2">
-                      <button className="p-2 text-slate-400 hover:text-primary-600 dark:hover:text-primary-400 transition-colors rounded-lg hover:bg-primary-50 dark:hover:bg-primary-900/20">
-                        <Pencil className="w-4 h-4" />
-                      </button>
-                      <button className="p-2 text-slate-400 hover:text-red-600 dark:hover:text-red-400 transition-colors rounded-lg hover:bg-red-50 dark:hover:bg-red-900/20">
-                        <Trash2 className="w-4 h-4" />
-                      </button>
-                    </div>
+            <tbody className="divide-y divide-slate-800/80">
+              {filteredProjects.length === 0 ? (
+                <tr>
+                  <td colSpan={6} className="px-6 py-12 text-center text-slate-400">
+                    <p className="font-bold text-white text-sm">No matching projects found</p>
+                    <p className="text-xs text-slate-400 mt-1">Try adjusting your search or filters.</p>
                   </td>
                 </tr>
-              ))}
+              ) : (
+                filteredProjects.map((project) => {
+                  const totalRenewal = (project.domainRenewalAmount || 0) + (project.hostingRenewalAmount || 0) + (project.amcAmount || 0)
+                  return (
+                    <tr key={project.id} className="hover:bg-[#152342] transition-colors bg-[#0a1122]/60 group">
+                      {/* Project Title & Type */}
+                      <td className="px-5 py-4">
+                        <div className="font-bold text-white text-sm flex items-center gap-1.5 flex-wrap">
+                          <span>{project.projectName}</span>
+                          {(project.liveUrl || project.domainName) && (
+                            <a
+                              href={getDirectUrl(project.liveUrl || project.domainName)}
+                              target="_blank"
+                              rel="noopener noreferrer"
+                              className="text-blue-400 hover:text-white transition-colors inline-flex items-center p-0.5 rounded hover:bg-blue-600/30"
+                              title={`Visit live site: ${project.domainName}`}
+                            >
+                              <ExternalLink className="w-3.5 h-3.5" />
+                            </a>
+                          )}
+                          {project.agreementPdfUrl && (
+                            <a
+                              href={project.agreementPdfUrl}
+                              download={project.agreementPdfName || `${project.projectName}_Agreement.pdf`}
+                              className="inline-flex items-center gap-1 px-2 py-0.5 rounded text-[10px] bg-cyan-500/20 text-cyan-300 border border-cyan-500/40 hover:bg-cyan-500/30 transition-all font-semibold"
+                              title={`Download Attached PDF: ${project.agreementPdfName || "Agreement"}`}
+                            >
+                              <Paperclip className="w-3 h-3 text-cyan-400" />
+                              <span>PDF</span>
+                            </a>
+                          )}
+                        </div>
+                        <div className="flex items-center gap-1.5 mt-1">
+                          <span className="text-[10px] font-bold px-2 py-0.5 rounded bg-slate-800 text-slate-200 border border-slate-700">
+                            {project.category}
+                          </span>
+                          {project.sslIncluded && (
+                            <span className="text-[10px] text-emerald-300 flex items-center gap-0.5 font-bold">
+                              <ShieldCheck className="w-3 h-3" /> SSL
+                            </span>
+                          )}
+                        </div>
+                        {project.notes && (
+                          <p className="text-[11px] text-slate-400 mt-1 line-clamp-1 font-medium">
+                            {project.notes}
+                          </p>
+                        )}
+                      </td>
+
+                      {/* Client Contact */}
+                      <td className="px-5 py-4">
+                        <div className="font-bold text-white text-xs">{project.clientName}</div>
+                        <div className="text-xs text-slate-300 font-mono mt-0.5 flex items-center gap-1 font-medium">
+                          <Phone className="w-3 h-3 text-blue-400" />
+                          <span>{project.clientPhone}</span>
+                        </div>
+                      </td>
+
+                      {/* Domain Lifecycle */}
+                      <td className="px-5 py-4">
+                        <div className="font-mono text-xs text-blue-300 flex items-center gap-1 font-bold">
+                          {project.domainName ? (
+                            <a
+                              href={getDirectUrl(project.liveUrl || project.domainName)}
+                              target="_blank"
+                              rel="noopener noreferrer"
+                              className="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-md bg-blue-500/20 hover:bg-blue-500/30 border border-blue-500/40 text-blue-300 hover:text-white transition-all font-semibold"
+                              title={`Open https://${project.domainName}`}
+                            >
+                              <Globe className="w-3 h-3 text-blue-400" />
+                              <span>{project.domainName}</span>
+                            </a>
+                          ) : (
+                            <span className="text-slate-500">—</span>
+                          )}
+                        </div>
+                        <div className="text-xs text-slate-300 mt-1 font-medium">
+                          {project.domainRegistrar} • Exp: <span className="text-amber-300 font-mono font-bold">{project.domainExpiryDate}</span>
+                        </div>
+                      </td>
+
+                      {/* Hosting Server */}
+                      <td className="px-5 py-4">
+                        <div className="text-xs text-slate-100 flex items-center gap-1.5 font-semibold">
+                          <Server className="w-3.5 h-3.5 text-blue-400" /> {project.hostingProvider}
+                        </div>
+                        <div className="text-xs text-slate-300 mt-1 font-medium">
+                          Exp: <span className="text-slate-100 font-mono font-bold">{project.hostingExpiryDate}</span>
+                        </div>
+                      </td>
+
+                      {/* Annual Charges */}
+                      <td className="px-5 py-4">
+                        <div className="font-black text-emerald-300 font-mono text-sm">
+                          ₹{totalRenewal.toLocaleString("en-IN")}
+                        </div>
+                        <div className="text-[11px] text-slate-300 space-x-1 font-medium mt-0.5">
+                          <span>D: ₹{project.domainRenewalAmount}</span>
+                          <span>•</span>
+                          <span>H: ₹{project.hostingRenewalAmount}</span>
+                        </div>
+                      </td>
+
+                      {/* Action Buttons */}
+                      <td className="px-5 py-4 text-right">
+                        <div className="flex items-center justify-end gap-1.5">
+                          {/* WhatsApp Button */}
+                          <button
+                            onClick={() => openWhatsApp(project)}
+                            title="Send WhatsApp Reminder"
+                            className="p-2 rounded-xl bg-emerald-600/20 hover:bg-emerald-600 border border-emerald-500/40 text-emerald-300 hover:text-white transition-all shadow-sm"
+                          >
+                            <MessageCircle className="w-4 h-4" />
+                          </button>
+
+                          {/* Quick Renew with Confirmation */}
+                          <button
+                            onClick={() => setRenewConfirmProject(project)}
+                            title="Extend +1 Year (Confirm)"
+                            className="p-2 rounded-xl bg-slate-800 hover:bg-blue-600 border border-slate-700 hover:border-blue-500 text-slate-200 hover:text-white transition-all shadow-sm"
+                          >
+                            <RefreshCw className="w-4 h-4" />
+                          </button>
+
+                          {/* Edit */}
+                          <button
+                            onClick={() => handleOpenEdit(project)}
+                            title="Edit Project"
+                            className="p-2 rounded-xl bg-slate-800 hover:bg-slate-700 border border-slate-700 text-slate-200 hover:text-white transition-all shadow-sm"
+                          >
+                            <Pencil className="w-4 h-4" />
+                          </button>
+
+                          {/* Delete with Confirmation */}
+                          <button
+                            onClick={() => setDeleteConfirmProject(project)}
+                            title="Delete Project (Confirm)"
+                            className="p-2 rounded-xl bg-slate-800 hover:bg-rose-600 border border-slate-700 hover:border-rose-500 text-rose-300 hover:text-white transition-all shadow-sm"
+                          >
+                            <Trash2 className="w-4 h-4" />
+                          </button>
+                        </div>
+                      </td>
+                    </tr>
+                  )
+                })
+              )}
             </tbody>
           </table>
         </div>
-      </GlassCard>
+      </div>
+
+      {/* Autocomplete Datalists */}
+      <datalist id="projects-hosting-providers-list">
+        {uniqueHostingProviders.map((provider) => (
+          <option key={provider} value={provider} />
+        ))}
+      </datalist>
+
+      <datalist id="projects-domain-registrars-list">
+        {uniqueDomainRegistrars.map((reg) => (
+          <option key={reg} value={reg} />
+        ))}
+      </datalist>
+
+      {/* ADD / EDIT PROJECT MODAL */}
+      {isModalOpen && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/85 backdrop-blur-md overflow-y-auto animate-in fade-in duration-150">
+          <motion.div
+            initial={{ scale: 0.95, opacity: 0 }}
+            animate={{ scale: 1, opacity: 1 }}
+            className="w-full max-w-2xl bg-[#0d1629] border-2 border-slate-700 rounded-2xl shadow-2xl p-6 sm:p-7 my-8 relative max-h-[90vh] overflow-y-auto"
+          >
+            <div className="flex items-center justify-between pb-3.5 border-b border-slate-700 mb-5">
+              <div>
+                <h3 className="font-black text-lg text-white">
+                  {editingProjectId ? "Edit Client Project" : "Add New Client Project"}
+                </h3>
+                <p className="text-xs text-slate-300 mt-0.5">
+                  Save domain lifecycle, hosting provider & renewal dates.
+                </p>
+              </div>
+              <button
+                onClick={() => setIsModalOpen(false)}
+                className="text-slate-400 hover:text-white p-1 rounded-lg hover:bg-slate-800"
+              >
+                <X className="w-5 h-5" />
+              </button>
+            </div>
+
+            <form onSubmit={handleSaveProject} className="space-y-5">
+              {/* Section 1 */}
+              <div className="space-y-3">
+                <h4 className="text-xs font-bold text-blue-400 uppercase tracking-wider">
+                  Client & Project
+                </h4>
+                <div className="grid sm:grid-cols-2 gap-3.5">
+                  <div className="space-y-1">
+                    <label className="text-xs font-bold text-slate-200">Project Name *</label>
+                    <Input
+                      placeholder="e.g. VKP Website"
+                      value={formData.projectName}
+                      onChange={(e) => setFormData({ ...formData, projectName: e.target.value })}
+                      className="bg-[#070d1a] border-slate-700 text-xs text-white"
+                      required
+                    />
+                  </div>
+
+                  <div className="space-y-1">
+                    <label className="text-xs font-bold text-slate-200">Client Contact Person *</label>
+                    <Input
+                      placeholder="e.g. P. Vijay Kumar"
+                      value={formData.clientName}
+                      onChange={(e) => setFormData({ ...formData, clientName: e.target.value })}
+                      className="bg-[#070d1a] border-slate-700 text-xs text-white"
+                      required
+                    />
+                  </div>
+
+                  <div className="space-y-1">
+                    <label className="text-xs font-bold text-slate-200">Primary Phone / WhatsApp *</label>
+                    <Input
+                      placeholder="+91 98401 23456"
+                      value={formData.clientPhone}
+                      onChange={(e) => setFormData({ ...formData, clientPhone: e.target.value })}
+                      className="bg-[#070d1a] border-slate-700 text-xs text-white font-mono"
+                      required
+                    />
+                  </div>
+
+                  <div className="space-y-1">
+                    <label className="text-xs font-bold text-slate-200">Service Category</label>
+                    <select
+                      value={formData.category}
+                      onChange={(e) => setFormData({ ...formData, category: e.target.value as any })}
+                      className="h-9 w-full rounded-xl border border-slate-700 bg-[#070d1a] px-3 text-xs text-white focus:outline-none focus:border-blue-500 font-semibold"
+                    >
+                      <option value="Website">Website</option>
+                      <option value="Web App">Web App</option>
+                      <option value="Mobile App">Mobile App</option>
+                      <option value="ERP & Billing">ERP & Billing</option>
+                      <option value="E-Commerce">E-Commerce</option>
+                      <option value="Custom Software">Custom Software</option>
+                      <option value="Digital Growth">Digital Growth</option>
+                    </select>
+                  </div>
+                </div>
+              </div>
+
+              {/* Section 2: Domain */}
+              <div className="space-y-3 pt-3 border-t border-slate-750">
+                <h4 className="text-xs font-bold text-blue-400 uppercase tracking-wider">
+                  Domain Details
+                </h4>
+                <div className="grid sm:grid-cols-2 gap-3.5">
+                  <div className="space-y-1">
+                    <label className="text-xs font-bold text-slate-200">Domain Name *</label>
+                    <Input
+                      placeholder="e.g. vkpenterprises.in"
+                      value={formData.domainName}
+                      onChange={(e) => setFormData({ ...formData, domainName: e.target.value })}
+                      className="bg-[#070d1a] border-slate-700 text-xs text-white font-mono"
+                      required
+                    />
+                  </div>
+
+                  <div className="space-y-1">
+                    <label className="text-xs font-bold text-slate-200">Domain Registrar</label>
+                    <Input
+                      placeholder="GoDaddy / Hostinger / Namecheap"
+                      list="projects-domain-registrars-list"
+                      value={formData.domainRegistrar}
+                      onChange={(e) => setFormData({ ...formData, domainRegistrar: e.target.value })}
+                      className="bg-[#070d1a] border-slate-700 text-xs text-white"
+                    />
+                  </div>
+
+                  <div className="space-y-1">
+                    <label className="text-xs font-bold text-slate-200">Domain Expiry Date *</label>
+                    <Input
+                      type="date"
+                      value={formData.domainExpiryDate}
+                      onChange={(e) => setFormData({ ...formData, domainExpiryDate: e.target.value })}
+                      className="bg-[#070d1a] border-slate-700 text-xs text-white"
+                      required
+                    />
+                  </div>
+
+                  <div className="space-y-1">
+                    <label className="text-xs font-bold text-slate-200">Domain Renewal Fee (₹)</label>
+                    <Input
+                      type="number"
+                      placeholder="0"
+                      value={formData.domainRenewalAmount === 0 ? "" : formData.domainRenewalAmount}
+                      onChange={(e) => setFormData({ ...formData, domainRenewalAmount: e.target.value === "" ? 0 : Number(e.target.value) })}
+                      className="bg-[#070d1a] border-slate-700 text-xs text-white font-mono"
+                    />
+                  </div>
+                </div>
+              </div>
+
+              {/* Section 3: Hosting */}
+              <div className="space-y-3 pt-3 border-t border-slate-750">
+                <h4 className="text-xs font-bold text-blue-400 uppercase tracking-wider">
+                  Hosting Server
+                </h4>
+                <div className="grid sm:grid-cols-2 gap-3.5">
+                  <div className="space-y-1">
+                    <label className="text-xs font-bold text-slate-200">Hosting Provider</label>
+                    <Input
+                      placeholder="Hostinger Cloud / Netlify / AWS / Vercel"
+                      list="projects-hosting-providers-list"
+                      value={formData.hostingProvider}
+                      onChange={(e) => setFormData({ ...formData, hostingProvider: e.target.value })}
+                      className="bg-[#070d1a] border-slate-700 text-xs text-white"
+                    />
+                  </div>
+
+                  <div className="space-y-1">
+                    <label className="text-xs font-bold text-slate-200">Hosting Expiry Date *</label>
+                    <Input
+                      type="date"
+                      value={formData.hostingExpiryDate}
+                      onChange={(e) => setFormData({ ...formData, hostingExpiryDate: e.target.value })}
+                      className="bg-[#070d1a] border-slate-700 text-xs text-white"
+                      required
+                    />
+                  </div>
+
+                  <div className="space-y-1">
+                    <label className="text-xs font-bold text-slate-200">Hosting Renewal Fee (₹)</label>
+                    <Input
+                      type="number"
+                      placeholder="0"
+                      value={formData.hostingRenewalAmount === 0 ? "" : formData.hostingRenewalAmount}
+                      onChange={(e) => setFormData({ ...formData, hostingRenewalAmount: e.target.value === "" ? 0 : Number(e.target.value) })}
+                      className="bg-[#070d1a] border-slate-700 text-xs text-white font-mono"
+                    />
+                  </div>
+
+                  <div className="space-y-1">
+                    <label className="text-xs font-bold text-slate-200">AMC Maintenance Fee (₹)</label>
+                    <Input
+                      type="number"
+                      placeholder="0"
+                      value={formData.amcAmount === 0 ? "" : formData.amcAmount}
+                      onChange={(e) => setFormData({ ...formData, amcAmount: e.target.value === "" ? 0 : Number(e.target.value) })}
+                      className="bg-[#070d1a] border-slate-700 text-xs text-white font-mono"
+                    />
+                  </div>
+                </div>
+              </div>
+
+              {/* Section 4: Optional Client Agreement / Invoice PDF */}
+              <div className="space-y-2 pt-3 border-t border-slate-750">
+                <div className="flex items-center justify-between">
+                  <h4 className="text-xs font-bold text-cyan-400 uppercase tracking-wider flex items-center gap-1.5">
+                    <Paperclip className="w-3.5 h-3.5" /> Optional Client Agreement / Invoice PDF
+                  </h4>
+                  {formData.agreementPdfName && (
+                    <button
+                      type="button"
+                      onClick={() => setFormData(prev => ({ ...prev, agreementPdfName: "", agreementPdfUrl: "" }))}
+                      className="text-xs text-rose-400 hover:text-rose-300 font-semibold"
+                    >
+                      Remove File ✕
+                    </button>
+                  )}
+                </div>
+
+                <input
+                  type="file"
+                  ref={pdfInputRef}
+                  onChange={handlePdfUpload}
+                  accept=".pdf"
+                  className="hidden"
+                />
+
+                <div className="flex items-center gap-3">
+                  <Button
+                    type="button"
+                    variant="outline"
+                    size="sm"
+                    onClick={() => pdfInputRef.current?.click()}
+                    className="text-xs border-slate-700 bg-[#070d1a] hover:bg-slate-800 text-slate-200"
+                  >
+                    <UploadCloud className="w-3.5 h-3.5 mr-1.5 text-cyan-400" />
+                    {formData.agreementPdfName ? "Replace PDF File" : "Choose PDF Document"}
+                  </Button>
+
+                  {formData.agreementPdfName && (
+                    <span className="text-xs text-cyan-300 font-medium truncate flex items-center gap-1">
+                      <FileCheck className="w-3.5 h-3.5 text-emerald-400 shrink-0" />
+                      {formData.agreementPdfName}
+                    </span>
+                  )}
+                </div>
+              </div>
+
+              {/* Section 5: Notes */}
+              <div className="space-y-1 pt-2 border-t border-slate-750">
+                <label className="text-xs font-bold text-slate-200">Notes / Remarks</label>
+                <Textarea
+                  rows={2}
+                  placeholder="Client notes..."
+                  value={formData.notes}
+                  onChange={(e) => setFormData({ ...formData, notes: e.target.value })}
+                  className="bg-[#070d1a] border-slate-700 text-xs text-white"
+                />
+              </div>
+
+              {/* Modal Actions */}
+              <div className="flex items-center justify-end gap-2.5 pt-3 border-t border-slate-700">
+                <Button
+                  type="button"
+                  variant="ghost"
+                  onClick={() => setIsModalOpen(false)}
+                  className="text-slate-300 hover:text-white text-xs font-bold"
+                >
+                  Cancel
+                </Button>
+                <Button
+                  type="submit"
+                  className="bg-blue-600 hover:bg-blue-500 text-white px-5 text-xs font-bold shadow-md shadow-blue-600/30"
+                >
+                  {editingProjectId ? "Update Project" : "Save Project"}
+                </Button>
+              </div>
+            </form>
+          </motion.div>
+        </div>
+      )}
+
+      {/* WHATSAPP MODAL */}
+      {selectedForWA && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/85 backdrop-blur-md animate-in fade-in duration-150">
+          <motion.div
+            initial={{ scale: 0.95, opacity: 0 }}
+            animate={{ scale: 1, opacity: 1 }}
+            className="w-full max-w-lg bg-[#0d1629] border-2 border-slate-700 rounded-2xl shadow-2xl p-6 relative"
+          >
+            <div className="flex items-center justify-between pb-3.5 border-b border-slate-700 mb-4">
+              <div className="flex items-center gap-2.5">
+                <div className="w-9 h-9 rounded-xl bg-emerald-500/20 text-emerald-300 border border-emerald-500/40 flex items-center justify-center">
+                  <MessageCircle className="w-4 h-4" />
+                </div>
+                <div>
+                  <h3 className="font-bold text-sm text-white">Send WhatsApp Renewal Notice</h3>
+                  <p className="text-xs text-slate-300">
+                    To: <span className="font-semibold text-white">{selectedForWA.clientName}</span> ({selectedForWA.clientPhone})
+                  </p>
+                </div>
+              </div>
+              <button
+                onClick={() => setSelectedForWA(null)}
+                className="text-slate-400 hover:text-white text-sm font-bold px-2.5 py-1 rounded-lg hover:bg-slate-800"
+              >
+                ✕
+              </button>
+            </div>
+
+            <div className="space-y-2">
+              <label className="text-xs font-bold text-slate-200">Message Content Preview:</label>
+              <textarea
+                rows={10}
+                value={waMessageText}
+                onChange={(e) => setWaMessageText(e.target.value)}
+                className="w-full p-3.5 rounded-xl bg-[#070d1a] border border-slate-700 text-xs font-mono text-slate-100 focus:border-emerald-500 focus:outline-none leading-relaxed"
+              />
+            </div>
+
+            <div className="flex items-center justify-between pt-4 mt-4 border-t border-slate-700 gap-3">
+              <Button
+                variant="outline"
+                size="sm"
+                onClick={copyWhatsAppText}
+                className="text-xs border-slate-700 bg-slate-800 text-slate-100 hover:text-white font-bold"
+              >
+                {copied ? <Check className="w-3.5 h-3.5 mr-1 text-emerald-400" /> : <Copy className="w-3.5 h-3.5 mr-1" />}
+                {copied ? "Copied" : "Copy"}
+              </Button>
+
+              <div className="flex items-center gap-2">
+                <Button
+                  variant="ghost"
+                  size="sm"
+                  onClick={() => setSelectedForWA(null)}
+                  className="text-xs text-slate-300 hover:text-white"
+                >
+                  Cancel
+                </Button>
+                <a
+                  href={getWhatsAppDirectUrl(selectedForWA.clientPhone, waMessageText)}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  onClick={() => setSelectedForWA(null)}
+                  className="inline-flex items-center gap-1.5 px-4 py-2 rounded-xl bg-emerald-600 hover:bg-emerald-500 text-white text-xs font-bold shadow-md shadow-emerald-600/30 transition-all"
+                >
+                  <MessageCircle className="w-4 h-4" /> Open in WhatsApp
+                </a>
+              </div>
+            </div>
+          </motion.div>
+        </div>
+      )}
+
+      {/* RENEW CONFIRMATION MODAL */}
+      {renewConfirmProject && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/85 backdrop-blur-md animate-in fade-in duration-150">
+          <motion.div
+            initial={{ scale: 0.95, opacity: 0 }}
+            animate={{ scale: 1, opacity: 1 }}
+            className="w-full max-w-md bg-[#0d1629] border-2 border-slate-700 rounded-2xl shadow-2xl p-6 relative"
+          >
+            <div className="flex items-center gap-3 pb-3.5 border-b border-slate-700 mb-4">
+              <div className="w-10 h-10 rounded-xl bg-blue-500/20 border border-blue-500/30 text-blue-300 flex items-center justify-center shrink-0">
+                <RefreshCw className="w-5 h-5" />
+              </div>
+              <div>
+                <h3 className="font-black text-base text-white">Confirm 1-Year Extension</h3>
+                <p className="text-xs text-slate-300 mt-0.5">
+                  Extend domain & hosting renewal dates by +1 Year.
+                </p>
+              </div>
+            </div>
+
+            <div className="space-y-3 bg-[#070d1a] p-4 rounded-xl border border-slate-750 text-xs">
+              <div className="flex justify-between items-center pb-2 border-b border-slate-800">
+                <span className="text-slate-300 font-medium">Project:</span>
+                <span className="font-bold text-white text-sm">{renewConfirmProject.projectName}</span>
+              </div>
+              <div className="flex justify-between items-center pb-2 border-b border-slate-800">
+                <span className="text-slate-300 font-medium">Client:</span>
+                <span className="text-white font-semibold">{renewConfirmProject.clientName} ({renewConfirmProject.clientPhone})</span>
+              </div>
+              <div className="flex justify-between items-center pb-2 border-b border-slate-800">
+                <span className="text-slate-300 font-medium">Domain ({renewConfirmProject.domainName}):</span>
+                <span className="font-mono text-slate-200">
+                  <span className="line-through text-slate-400 mr-1.5">{renewConfirmProject.domainExpiryDate}</span>
+                  ➔ <span className="text-emerald-300 font-bold ml-1">{getPlusOneYear(renewConfirmProject.domainExpiryDate)}</span>
+                </span>
+              </div>
+              <div className="flex justify-between items-center pb-2 border-b border-slate-800">
+                <span className="text-slate-300 font-medium">Hosting ({renewConfirmProject.hostingProvider}):</span>
+                <span className="font-mono text-slate-200">
+                  <span className="line-through text-slate-400 mr-1.5">{renewConfirmProject.hostingExpiryDate}</span>
+                  ➔ <span className="text-emerald-300 font-bold ml-1">{getPlusOneYear(renewConfirmProject.hostingExpiryDate)}</span>
+                </span>
+              </div>
+              <div className="flex justify-between items-center pt-1">
+                <span className="text-slate-300 font-bold">Total Renewal Fee:</span>
+                <span className="font-mono font-black text-emerald-300 text-sm">
+                  ₹{((renewConfirmProject.domainRenewalAmount || 0) + (renewConfirmProject.hostingRenewalAmount || 0) + (renewConfirmProject.amcAmount || 0)).toLocaleString("en-IN")}
+                </span>
+              </div>
+            </div>
+
+            <div className="flex items-center justify-end gap-2.5 mt-5">
+              <Button
+                variant="outline"
+                size="sm"
+                onClick={() => setRenewConfirmProject(null)}
+                className="text-xs border-slate-700 bg-slate-800 text-slate-200 hover:text-white font-bold"
+              >
+                Cancel
+              </Button>
+              <Button
+                size="sm"
+                onClick={() => handleConfirmRenew(renewConfirmProject.id)}
+                className="text-xs bg-blue-600 hover:bg-blue-500 text-white font-bold flex items-center gap-1.5 shadow-md shadow-blue-600/30"
+              >
+                <Check className="w-4 h-4" /> Confirm Renew (+1 Year)
+              </Button>
+            </div>
+          </motion.div>
+        </div>
+      )}
+
+      {/* DELETE CONFIRMATION MODAL */}
+      {deleteConfirmProject && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/85 backdrop-blur-md animate-in fade-in duration-150">
+          <motion.div
+            initial={{ scale: 0.95, opacity: 0 }}
+            animate={{ scale: 1, opacity: 1 }}
+            className="w-full max-w-md bg-[#0d1629] border-2 border-slate-700 rounded-2xl shadow-2xl p-6 relative"
+          >
+            <div className="flex items-center gap-3 pb-3.5 border-b border-slate-700 mb-4">
+              <div className="w-10 h-10 rounded-xl bg-rose-500/20 border border-rose-500/30 text-rose-400 flex items-center justify-center shrink-0">
+                <Trash2 className="w-5 h-5" />
+              </div>
+              <div>
+                <h3 className="font-black text-base text-white">Delete Client Project?</h3>
+                <p className="text-xs text-slate-300 mt-0.5">
+                  This action is permanent and cannot be undone.
+                </p>
+              </div>
+            </div>
+
+            <div className="space-y-2.5 bg-[#070d1a] p-4 rounded-xl border border-slate-750 text-xs mb-4">
+              <div className="flex justify-between items-center">
+                <span className="text-slate-300 font-medium">Project:</span>
+                <span className="font-bold text-white text-sm">{deleteConfirmProject.projectName}</span>
+              </div>
+              <div className="flex justify-between items-center">
+                <span className="text-slate-300 font-medium">Client:</span>
+                <span className="text-white font-semibold">{deleteConfirmProject.clientName}</span>
+              </div>
+              <div className="flex justify-between items-center">
+                <span className="text-slate-300 font-medium">Domain:</span>
+                <span className="font-mono text-blue-300 font-bold">{deleteConfirmProject.domainName || "—"}</span>
+              </div>
+            </div>
+
+            <p className="text-xs text-rose-300 font-semibold leading-relaxed">
+              ⚠️ Warning: Deleting this project will remove all domain renewal reminders, hosting details, and contact associations.
+            </p>
+
+            <div className="flex items-center justify-end gap-2.5 mt-5">
+              <Button
+                variant="outline"
+                size="sm"
+                onClick={() => setDeleteConfirmProject(null)}
+                className="text-xs border-slate-700 bg-slate-800 text-slate-200 hover:text-white font-bold"
+              >
+                Cancel
+              </Button>
+              <Button
+                size="sm"
+                onClick={() => handleConfirmDelete(deleteConfirmProject.id)}
+                className="text-xs bg-rose-600 hover:bg-rose-500 text-white font-bold flex items-center gap-1.5 shadow-md shadow-rose-600/30"
+              >
+                <Trash2 className="w-4 h-4" /> Yes, Delete Project
+              </Button>
+            </div>
+          </motion.div>
+        </div>
+      )}
     </div>
   )
 }

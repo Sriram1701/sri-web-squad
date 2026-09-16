@@ -8,33 +8,33 @@ export function FloatingContact() {
   const [isOpen, setIsOpen] = React.useState(false)
 
   return (
-    <div className="fixed bottom-6 right-6 z-50 flex flex-col items-end">
+    <div className="fixed bottom-5 right-5 sm:bottom-6 sm:right-6 z-50 flex flex-col items-end">
       <AnimatePresence>
         {isOpen && (
           <motion.div
-            initial={{ opacity: 0, y: 20, scale: 0.8 }}
+            initial={{ opacity: 0, y: 15, scale: 0.9 }}
             animate={{ opacity: 1, y: 0, scale: 1 }}
-            exit={{ opacity: 0, y: 20, scale: 0.8 }}
+            exit={{ opacity: 0, y: 15, scale: 0.9 }}
             transition={{ duration: 0.2 }}
-            className="flex flex-col gap-3 mb-4"
+            className="flex flex-col gap-2.5 mb-3"
           >
             <a
               href="mailto:sriwebsquad@gmail.com"
-              className="flex items-center gap-3 bg-white dark:bg-slate-800 text-slate-700 dark:text-slate-200 px-4 py-3 rounded-full shadow-lg border border-slate-200 dark:border-slate-700 hover:bg-slate-50 dark:hover:bg-slate-700 transition-colors"
+              className="flex items-center justify-between gap-3 bg-[#0c1426]/95 text-slate-100 px-4 py-2.5 rounded-full shadow-2xl border border-slate-750 hover:border-blue-500/60 hover:bg-[#111c38] transition-all backdrop-blur-xl"
             >
-              <span className="font-medium text-sm">Email Us</span>
-              <div className="w-8 h-8 rounded-full bg-red-100 dark:bg-red-900/30 text-red-600 dark:text-red-400 flex items-center justify-center">
-                <Mail className="w-4 h-4" />
+              <span className="font-bold text-xs">Email Us</span>
+              <div className="w-7 h-7 rounded-full bg-rose-500/20 text-rose-400 border border-rose-500/30 flex items-center justify-center">
+                <Mail className="w-3.5 h-3.5" />
               </div>
             </a>
             
             <a
               href="tel:+917845391712"
-              className="flex items-center gap-3 bg-white dark:bg-slate-800 text-slate-700 dark:text-slate-200 px-4 py-3 rounded-full shadow-lg border border-slate-200 dark:border-slate-700 hover:bg-slate-50 dark:hover:bg-slate-700 transition-colors"
+              className="flex items-center justify-between gap-3 bg-[#0c1426]/95 text-slate-100 px-4 py-2.5 rounded-full shadow-2xl border border-slate-750 hover:border-blue-500/60 hover:bg-[#111c38] transition-all backdrop-blur-xl"
             >
-              <span className="font-medium text-sm">Call Now</span>
-              <div className="w-8 h-8 rounded-full bg-blue-100 dark:bg-blue-900/30 text-blue-600 dark:text-blue-400 flex items-center justify-center">
-                <Phone className="w-4 h-4" />
+              <span className="font-bold text-xs">Call Now</span>
+              <div className="w-7 h-7 rounded-full bg-blue-500/20 text-blue-400 border border-blue-500/30 flex items-center justify-center">
+                <Phone className="w-3.5 h-3.5" />
               </div>
             </a>
             
@@ -42,11 +42,11 @@ export function FloatingContact() {
               href="https://wa.me/917845391712"
               target="_blank"
               rel="noreferrer"
-              className="flex items-center gap-3 bg-white dark:bg-slate-800 text-slate-700 dark:text-slate-200 px-4 py-3 rounded-full shadow-lg border border-slate-200 dark:border-slate-700 hover:bg-slate-50 dark:hover:bg-slate-700 transition-colors"
+              className="flex items-center justify-between gap-3 bg-[#0c1426]/95 text-slate-100 px-4 py-2.5 rounded-full shadow-2xl border border-slate-750 hover:border-emerald-500/60 hover:bg-[#111c38] transition-all backdrop-blur-xl"
             >
-              <span className="font-medium text-sm">WhatsApp</span>
-              <div className="w-8 h-8 rounded-full bg-green-100 dark:bg-green-900/30 text-green-600 dark:text-green-400 flex items-center justify-center">
-                <MessageCircle className="w-4 h-4" />
+              <span className="font-bold text-xs">WhatsApp</span>
+              <div className="w-7 h-7 rounded-full bg-emerald-500/20 text-emerald-400 border border-emerald-500/30 flex items-center justify-center">
+                <MessageCircle className="w-3.5 h-3.5" />
               </div>
             </a>
           </motion.div>
@@ -55,10 +55,10 @@ export function FloatingContact() {
 
       <button
         onClick={() => setIsOpen(!isOpen)}
-        className="w-14 h-14 rounded-full bg-primary-600 text-white shadow-xl shadow-primary-600/30 flex items-center justify-center hover:scale-110 transition-transform active:scale-95 focus:outline-none"
+        className="w-12 h-12 sm:w-14 sm:h-14 rounded-full bg-gradient-to-r from-blue-600 to-primary-600 hover:from-blue-500 hover:to-primary-500 text-white shadow-xl shadow-blue-600/35 border-2 border-blue-400/40 flex items-center justify-center hover:scale-105 transition-transform active:scale-95 focus:outline-none"
         aria-label="Contact options"
       >
-        {isOpen ? <X className="w-6 h-6" /> : <MessageSquare className="w-6 h-6" />}
+        {isOpen ? <X className="w-5 h-5 sm:w-6 sm:h-6" /> : <MessageSquare className="w-5 h-5 sm:w-6 sm:h-6" />}
       </button>
     </div>
   )

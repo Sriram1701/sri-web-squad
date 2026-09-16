@@ -4,7 +4,7 @@ import * as React from "react"
 import { SectionHeader } from "@/components/ui/section-header"
 import { Star, CheckCircle2, ExternalLink } from "lucide-react"
 
-const GOOGLE_MAPS_REVIEW_URL = "https://www.google.com/maps/place/Sri+Web+Squad/@11.7040456,79.7671579,17z/data=!3m1!4b1!4m6!3m5!1s0x3a54970bc69bcd31:0x2514c310923dd33c!8m2!3d11.7040456!4d79.7671579!16s%2Fg%2F11zh8sgg4p?entry=ttu&g_ep=EgoyMDI2MDkwMi4wIKXMDSoASAFQAw%3D%3D"
+const GOOGLE_MAPS_REVIEW_URL = "https://g.page/r/CTzTPZIQwxQlECE/review"
 
 interface Testimonial {
   id: number
@@ -28,7 +28,7 @@ const testimonials: Testimonial[] = [
   },
   {
     id: 2,
-    name: "Dr. Preethi & Team",
+    name: "Dr. Adeline Genivie",
     company: "The Tooth Clinique, Pondicherry",
     service: "Pediatric Dental Platform",
     content: "Extremely satisfied with the website developed by Sri Web Squad! The design is super vibrant, patient-friendly, and online consult inquiries have doubled since launch. Outstanding work!",

@@ -1,11 +1,11 @@
 import type { NextConfig } from "next";
 
-const isProd = process.env.NODE_ENV === 'production';
+const isGithubActions = process.env.GITHUB_ACTIONS === 'true';
 
 const nextConfig: NextConfig = {
   output: 'export',
-  basePath: isProd ? '/sri-web-squad' : '',
-  assetPrefix: isProd ? '/sri-web-squad/' : '',
+  basePath: isGithubActions ? '/sri-web-squad' : '',
+  assetPrefix: isGithubActions ? '/sri-web-squad/' : '',
   trailingSlash: true,
   devIndicators: false,
   images: {
@@ -20,3 +20,4 @@ const nextConfig: NextConfig = {
 };
 
 export default nextConfig;
+

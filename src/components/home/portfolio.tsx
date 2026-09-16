@@ -5,13 +5,13 @@ import { motion, AnimatePresence } from "framer-motion"
 import { SectionHeader } from "@/components/ui/section-header"
 import { GlassCard } from "@/components/ui/glass-card"
 import { Button } from "@/components/ui/button"
-import { ExternalLink } from "lucide-react"
+import { ExternalLink, ChevronDown, ChevronUp, Sparkles } from "lucide-react"
 import Image from "next/image"
 import Link from "next/link"
 
-const categories = ["All", "Website", "App", "Software", "AI", "Dashboard"]
+const categories = ["All", "Website", "App", "Software"]
 
-const projects = [
+const allProjects = [
   {
     id: 1,
     title: "Dr. Gowtham's Smile Care",
@@ -81,23 +81,67 @@ const projects = [
     image: "https://images.unsplash.com/photo-1563986768609-322da13575f3?q=80&w=2070&auto=format&fit=crop",
     liveUrl: "#contact",
     githubUrl: "#"
+  },
+  {
+    id: 8,
+    title: "Sri Murugan Supermarket Billing & POS",
+    client: "Retail Supermarket Chain, Cuddalore",
+    category: "Software",
+    description: "High-speed thermal barcode billing software with multi-counter inventory synchronization, GST invoices, profit-loss analytics, and supplier purchase orders.",
+    image: "https://images.unsplash.com/photo-1578916171728-46686eac8d58?q=80&w=2074&auto=format&fit=crop",
+    liveUrl: "#contact",
+    githubUrl: "#"
+  },
+  {
+    id: 9,
+    title: "Kovai Organics D2C E-Commerce Store",
+    client: "Organic Farm Products, Coimbatore",
+    category: "Website",
+    description: "Direct-to-consumer online grocery store featuring Razorpay & UPI automated checkout, doorstep pincode delivery tracking, and WhatsApp order confirmation.",
+    image: "https://images.unsplash.com/photo-1542838132-92c53300491e?q=80&w=2074&auto=format&fit=crop",
+    liveUrl: "#contact",
+    githubUrl: "#"
+  },
+  {
+    id: 10,
+    title: "Apex Academy School Management ERP",
+    client: "Matriculation Higher Secondary School",
+    category: "Software",
+    description: "Comprehensive cloud ERP managing student fee collections, automated SMS/WhatsApp attendance alerts, exam report cards, and digital staff payroll.",
+    image: "https://images.unsplash.com/photo-1580582932707-520aed937b7b?q=80&w=2064&auto=format&fit=crop",
+    liveUrl: "#contact",
+    githubUrl: "#"
   }
 ]
 
+const INITIAL_DISPLAY_COUNT = 6
+
 export function Portfolio() {
   const [activeCategory, setActiveCategory] = React.useState("All")
+  const [showAll, setShowAll] = React.useState(false)
   
   const filteredProjects = React.useMemo(() => {
-    if (activeCategory === "All") return projects
-    return projects.filter(project => project.category === activeCategory)
+    if (activeCategory === "All") return allProjects
+    return allProjects.filter(project => project.category === activeCategory)
   }, [activeCategory])
+
+  // Reset showAll when category changes if needed
+  React.useEffect(() => {
+    setShowAll(false)
+  }, [activeCategory])
+
+  const visibleProjects = showAll 
+    ? filteredProjects 
+    : filteredProjects.slice(0, INITIAL_DISPLAY_COUNT)
+
+  const hasMoreProjects = filteredProjects.length > INITIAL_DISPLAY_COUNT
 
   return (
     <section id="portfolio" className="py-24 bg-slate-50 dark:bg-slate-950">
       <div className="container mx-auto px-4 sm:px-6 lg:px-8">
         <SectionHeader 
-          title="Our Portfolio" 
-          subtitle="Explore some of our recent projects and digital transformations."
+          title="Our Projects" 
+          subtitle="Explore our proven track record of client projects, custom software, and digital solutions."
         />
 
         {/* Filters */}
@@ -120,7 +164,7 @@ export function Portfolio() {
         {/* Grid */}
         <motion.div layout className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
           <AnimatePresence mode="popLayout">
-            {filteredProjects.map((project) => (
+            {visibleProjects.map((project) => (
               <motion.div
                 key={project.id}
                 layout
@@ -169,7 +213,33 @@ export function Portfolio() {
             ))}
           </AnimatePresence>
         </motion.div>
+
+        {/* Dynamic View All Projects Toggle Button */}
+        {hasMoreProjects && (
+          <div className="mt-14 text-center">
+            <Button 
+              type="button"
+              onClick={() => setShowAll(!showAll)}
+              size="lg" 
+              className="rounded-full px-8 py-6 text-base font-semibold bg-gradient-to-r from-blue-600 to-primary-600 hover:from-blue-500 hover:to-primary-500 text-white shadow-xl shadow-primary-500/25 transition-all hover:scale-105 cursor-pointer"
+            >
+              {showAll ? (
+                <>
+                  <ChevronUp className="w-5 h-5 mr-2" />
+                  Show Less Projects
+                </>
+              ) : (
+                <>
+                  <Sparkles className="w-5 h-5 mr-2" />
+                  View All Projects ({filteredProjects.length} Projects)
+                  <ChevronDown className="w-5 h-5 ml-2" />
+                </>
+              )}
+            </Button>
+          </div>
+        )}
       </div>
     </section>
   )
 }
+

@@ -3,6 +3,7 @@
 import * as React from "react"
 import Link from "next/link"
 import Image from "next/image"
+import logoImg from "@/app/icon.png"
 import { 
   Phone, 
   Mail, 
@@ -77,13 +78,13 @@ export function Footer() {
           <div className="lg:col-span-3 flex flex-col justify-between">
             <div>
               <Link href="/" className="flex items-center gap-3 group mb-4">
-                <div className="w-10 h-10 relative group-hover:scale-105 transition-transform shrink-0">
+                <div className="w-10 h-10 rounded-full bg-slate-900 border border-slate-750 p-0.5 relative group-hover:scale-105 transition-transform shrink-0 flex items-center justify-center overflow-hidden shadow-sm">
                   <Image 
-                    src="/logo.png" 
+                    src={logoImg} 
                     alt="Sri Web Squad Logo" 
-                    fill 
-                    className="object-contain"
-                    sizes="40px"
+                    width={38}
+                    height={38}
+                    className="w-full h-full object-contain rounded-full"
                   />
                 </div>
                 <span className="text-2xl font-black bg-clip-text text-transparent bg-gradient-to-r from-blue-400 via-primary-400 to-cyan-400 tracking-tight">
@@ -340,11 +341,11 @@ export function Footer() {
         </div>
 
         {/* Bottom Copyright & Legal */}
-        <div className="pt-8 flex flex-col sm:flex-row items-center justify-between gap-4 text-xs text-slate-500 font-mono">
+        <div className="pt-8 flex flex-col md:flex-row items-center justify-between gap-4 text-xs text-slate-500 font-mono pb-12 sm:pb-0 pr-0 sm:pr-24">
           <div>
             &copy; {new Date().getFullYear()} Sri Web Squad. All Rights Reserved.
           </div>
-          <div className="flex items-center gap-6">
+          <div className="flex flex-wrap items-center justify-center gap-4 sm:gap-6">
             <Link href="#about" className="hover:text-slate-300 transition-colors">About</Link>
             <Link href="#services" className="hover:text-slate-300 transition-colors">Services</Link>
             <Link href="#contact" className="hover:text-slate-300 transition-colors">Support</Link>

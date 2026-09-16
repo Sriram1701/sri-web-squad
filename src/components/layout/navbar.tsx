@@ -2,22 +2,28 @@
 
 import * as React from "react"
 import Link from "next/link"
+import { useRouter } from "next/navigation"
 import { motion, AnimatePresence } from "framer-motion"
-import { Menu, X, MessageCircle } from "lucide-react"
+import { Menu, X, MessageCircle, ShieldAlert } from "lucide-react"
 import Image from "next/image"
+import logoImg from "@/app/icon.png"
 
 const navLinks = [
   { name: "Home", href: "/" },
   { name: "About", href: "#about" },
   { name: "Services", href: "#services" },
-  { name: "Portfolio", href: "#portfolio" },
+  { name: "Projects", href: "#portfolio" },
   { name: "Reviews", href: "#reviews" },
   { name: "FAQ", href: "#faq" },
 ]
 
 export function Navbar() {
+  const router = useRouter()
   const [isScrolled, setIsScrolled] = React.useState(false)
   const [mobileMenuOpen, setMobileMenuOpen] = React.useState(false)
+  const [adminHint, setAdminHint] = React.useState<string | null>(null)
+  const tapCountRef = React.useRef(0)
+  const tapTimerRef = React.useRef<NodeJS.Timeout | null>(null)
 
   React.useEffect(() => {
     const handleScroll = () => {
@@ -26,6 +32,34 @@ export function Navbar() {
     window.addEventListener("scroll", handleScroll)
     return () => window.removeEventListener("scroll", handleScroll)
   }, [])
+
+  // Secret 10-tap Developer Easter Egg to open Admin Panel
+  const handleLogoClick = (e: React.MouseEvent) => {
+    tapCountRef.current += 1
+
+    if (tapTimerRef.current) {
+      clearTimeout(tapTimerRef.current)
+    }
+
+    tapTimerRef.current = setTimeout(() => {
+      tapCountRef.current = 0
+      setAdminHint(null)
+    }, 2500)
+
+    if (tapCountRef.current >= 10) {
+      e.preventDefault()
+      tapCountRef.current = 0
+      setAdminHint("🔓 Gateway Authorized • Launching Admin...")
+      if (typeof window !== "undefined" && "vibrate" in navigator) {
+        navigator.vibrate([80, 40, 80])
+      }
+      setTimeout(() => {
+        router.push("/admin")
+      }, 500)
+    } else if (tapCountRef.current >= 6) {
+      setAdminHint(`🛡️ Admin Portal: ${10 - tapCountRef.current} taps remaining`)
+    }
+  }
 
   return (
     <header
@@ -36,21 +70,55 @@ export function Navbar() {
       }`}
     >
       <div className="container mx-auto px-4 sm:px-6 lg:px-8 relative">
-        <div className="flex items-center justify-between min-h-[44px]">
+        <div className="flex items-center justify-between min-h-[48px] relative">
           
-          {/* Left: Brand Logo */}
-          <Link href="/" className="flex items-center gap-2.5 group shrink-0 z-10">
-            <div className="w-10 h-10 relative group-hover:scale-105 transition-transform flex items-center justify-center">
-              <Image 
-                src="/logo.png" 
-                alt="Sri Web Squad Logo" 
-                fill 
-                className="object-contain"
-                sizes="40px"
-                priority
-              />
-            </div>
-            <span className="text-xl font-extrabold bg-clip-text text-transparent bg-gradient-to-r from-white via-slate-100 to-slate-300 tracking-tight">
+          {/* Left: Brand Logo (With Secret 10-Tap Admin Trigger) */}
+          <div className="relative z-10">
+            <Link 
+              href="/" 
+              onClick={handleLogoClick}
+              className="flex items-center gap-3 group shrink-0"
+              title="Sri Web Squad"
+            >
+              <div className="w-12 h-12 sm:w-13 sm:h-13 rounded-full bg-slate-900 border-2 border-primary-500/60 p-0.5 relative group-hover:scale-105 active:scale-95 transition-transform flex items-center justify-center shrink-0 overflow-hidden shadow-[0_0_18px_rgba(59,130,246,0.35)]">
+                <Image 
+                  src={logoImg} 
+                  alt="Sri Web Squad Logo" 
+                  width={52}
+                  height={52}
+                  className="w-full h-full object-contain rounded-full"
+                  priority
+                />
+              </div>
+              {/* Desktop Brand Text */}
+              <span className="hidden lg:inline-block text-2xl font-black bg-clip-text text-transparent bg-gradient-to-r from-white via-slate-100 to-slate-200 tracking-tight whitespace-nowrap">
+                Sri Web Squad
+              </span>
+            </Link>
+
+            {/* Subtle, Professional Floating Admin Gateway Pill */}
+            <AnimatePresence>
+              {adminHint && (
+                <motion.div
+                  initial={{ opacity: 0, y: -4, scale: 0.95 }}
+                  animate={{ opacity: 1, y: 6, scale: 1 }}
+                  exit={{ opacity: 0, y: -4, scale: 0.95 }}
+                  transition={{ duration: 0.18 }}
+                  className="absolute left-0 top-full whitespace-nowrap px-3 py-1.5 rounded-full bg-[#0a1122]/95 border border-blue-500/40 text-blue-200 text-[11px] font-mono font-bold shadow-[0_4px_25px_rgba(0,0,0,0.9),0_0_15px_rgba(59,130,246,0.3)] backdrop-blur-xl z-50 pointer-events-none flex items-center gap-1.5"
+                >
+                  <span className="w-1.5 h-1.5 rounded-full bg-cyan-400 animate-pulse" />
+                  <span>{adminHint}</span>
+                </motion.div>
+              )}
+            </AnimatePresence>
+          </div>
+
+          {/* Mobile Center Brand Text */}
+          <Link 
+            href="/" 
+            className="lg:hidden absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 text-center z-10"
+          >
+            <span className="text-xl sm:text-2xl font-black bg-clip-text text-transparent bg-gradient-to-r from-white via-slate-100 to-slate-200 tracking-tight whitespace-nowrap drop-shadow-[0_2px_12px_rgba(0,0,0,0.9)]">
               Sri Web Squad
             </span>
           </Link>
@@ -71,7 +139,7 @@ export function Navbar() {
           </nav>
 
           {/* Right: WhatsApp & Contact Buttons & Mobile Toggle */}
-          <div className="flex items-center gap-3 shrink-0 z-10">
+          <div className="flex items-center gap-2.5 sm:gap-3 shrink-0 z-10">
             <a 
               href="https://wa.me/917845391712?text=Hi%20Sri%20Web%20Squad,%20I'm%20interested%20in%20your%20services." 
               target="_blank"

@@ -1,11 +1,8 @@
 import type { Metadata } from "next";
 import { Inter } from "next/font/google";
-import Image from "next/image";
 import "./globals.css";
 import { ThemeProvider } from "@/components/theme-provider";
-import { Navbar } from "@/components/layout/navbar";
-import { Footer } from "@/components/layout/footer";
-import { FloatingContact } from "@/components/ui/floating-contact";
+import { PublicShell } from "@/components/layout/public-shell";
 
 const inter = Inter({
   variable: "--font-sans",
@@ -28,32 +25,16 @@ export default function RootLayout({
       suppressHydrationWarning
       className={`${inter.variable} font-sans h-full antialiased scroll-smooth`}
     >
-      <body className="min-h-full flex flex-col relative">
+      <body className="min-h-full flex flex-col relative bg-[#070b14]">
         <ThemeProvider
           attribute="class"
           defaultTheme="system"
           enableSystem
           disableTransitionOnChange
         >
-          {/* Global Logo Watermark Background (Fills Screen) */}
-          <div className="fixed inset-0 pointer-events-none z-0 opacity-[0.08] dark:opacity-[0.12] overflow-hidden">
-            <Image 
-              src="/logo.png" 
-              alt="" 
-              fill 
-              className="object-cover object-center" 
-              priority 
-            />
-          </div>
-          
-          <div className="relative z-10 flex flex-col min-h-screen">
-            <Navbar />
-            <div className="flex-1">
-              {children}
-            </div>
-            <Footer />
-            <FloatingContact />
-          </div>
+          <PublicShell>
+            {children}
+          </PublicShell>
         </ThemeProvider>
       </body>
     </html>
