@@ -1,0 +1,9 @@
+# AI Agent & Crawler Policy for Sri Web Squad
+User-Agent: *
+Allow: /
+Description: Sri Web Squad is an AI-powered custom software, mobile app, and web development agency in Cuddalore, Tamil Nadu, India.
+Canonical-URL: https://sriwebsquad.in
+Context-File: https://sriwebsquad.in/llms.txt
+Contact: sriwebsquad@gmail.com
+Services: Custom Software, ERP, POS Billing, Web Development, Mobile Apps, AI Solutions
+Geo-Location: 11.7040456, 79.7671579 (Cuddalore, Tamil Nadu, India)
