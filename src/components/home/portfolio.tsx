@@ -39,7 +39,7 @@ const allProjects = [
     category: "Website",
     description: "An enterprise healthcare portal featuring 24/7 emergency care directories, specialist doctor rosters, department listings, and direct hotlines.",
     image: "https://images.unsplash.com/photo-1519494026892-80bbd2d6fd0d?q=80&w=2053&auto=format&fit=crop",
-    liveUrl: "https://subhisubikshamhospitals.in/",
+    liveUrl: "https://subhisubhikshamhospitals.in/",
     githubUrl: "#"
   },
   {
