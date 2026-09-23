@@ -1,36 +1,27 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Sri Web Squad
 
-## Getting Started
+Official web platform for **Sri Web Squad** — Premier AI-powered software company and digital agency based in Cuddalore, Tamil Nadu.
 
-First, run the development server:
+## 🚀 Tech Stack
+- **Framework**: [Next.js 16](https://nextjs.org/) (App Router, Turbopack)
+- **UI & Styling**: React 19, Tailwind CSS 4, Framer Motion, Lucide Icons
+- **Database & Auth**: Supabase
+- **Deployment**: Vercel
 
+## 🛠️ Local Development
 ```bash
+# Install dependencies
+npm install
+
+# Run development server
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+
+# Build for production
+npm run build
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
-
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
-
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
-
-## Learn More
-
-To learn more about Next.js, take a look at the following resources:
-
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
-
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
-
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+## 🌐 Official Links
+- **Website**: [https://sriwebsquad.in](https://sriwebsquad.in)
+- **Instagram**: [https://www.instagram.com/sri_web_squad](https://www.instagram.com/sri_web_squad)
+- **Facebook**: [https://www.facebook.com/profile.php?id=61594401073325](https://www.facebook.com/profile.php?id=61594401073325)
+- **LinkedIn**: [https://www.linkedin.com/in/sriram-nagarajan-24a9a837b](https://www.linkedin.com/in/sriram-nagarajan-24a9a837b)
