@@ -55,13 +55,6 @@ const LinkedinIcon = (props: React.SVGProps<SVGSVGElement>) => (
   </svg>
 )
 
-const YoutubeIcon = (props: React.SVGProps<SVGSVGElement>) => (
-  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" {...props}>
-    <path d="M22.54 6.42a2.78 2.78 0 0 0-1.94-2C18.88 4 12 4 12 4s-6.88 0-8.6.46a2.78 2.78 0 0 0-1.94 2A29 29 0 0 0 1 11.75a29 29 0 0 0 .46 5.33 2.78 2.78 0 0 0 1.94 2c1.72.46 8.6.46 8.6.46s6.88 0 8.6-.46a2.78 2.78 0 0 0 1.94-2 29 29 0 0 0 .46-5.33 29 29 0 0 0-.46-5.33z" />
-    <polygon points="9.75 15.02 15.5 11.75 9.75 8.48 9.75 15.02" />
-  </svg>
-)
-
 export function Footer() {
   return (
     <footer className="bg-[#02050c] text-slate-300 pt-10 sm:pt-14 pb-6 sm:pb-8 border-t border-slate-900 relative z-20 overflow-hidden">
@@ -106,45 +99,36 @@ export function Footer() {
                 </h5>
                 <div className="flex items-center gap-2.5 flex-wrap">
                   <a 
-                    href="https://facebook.com" 
+                    href="https://www.facebook.com/profile.php?id=61594401073325" 
                     target="_blank" 
-                    rel="noreferrer" 
-                    className="w-9 h-9 rounded-full bg-[#0a0f1e] border border-slate-800 flex items-center justify-center text-slate-400 hover:text-white hover:border-primary-500 hover:bg-primary-600/20 transition-all hover:scale-110 shadow-sm"
+                    rel="noopener noreferrer" 
+                    className="w-9 h-9 rounded-full bg-[#0a0f1e] border border-slate-800 flex items-center justify-center text-slate-400 hover:text-white hover:border-blue-500 hover:bg-blue-600/20 transition-all hover:scale-110 shadow-sm"
                     aria-label="Facebook"
                   >
                     <FacebookIcon className="w-4 h-4" />
                   </a>
                   <a 
-                    href="https://instagram.com" 
+                    href="https://www.instagram.com/sri_web_squad" 
                     target="_blank" 
-                    rel="noreferrer" 
+                    rel="noopener noreferrer" 
                     className="w-9 h-9 rounded-full bg-[#0a0f1e] border border-slate-800 flex items-center justify-center text-slate-400 hover:text-white hover:border-pink-500 hover:bg-pink-600/20 transition-all hover:scale-110 shadow-sm"
                     aria-label="Instagram"
                   >
                     <InstagramIcon className="w-4 h-4" />
                   </a>
                   <a 
-                    href="https://linkedin.com" 
+                    href="https://www.linkedin.com/in/sriram-nagarajan-24a9a837b" 
                     target="_blank" 
-                    rel="noreferrer" 
+                    rel="noopener noreferrer" 
                     className="w-9 h-9 rounded-full bg-[#0a0f1e] border border-slate-800 flex items-center justify-center text-slate-400 hover:text-white hover:border-blue-500 hover:bg-blue-600/20 transition-all hover:scale-110 shadow-sm"
                     aria-label="LinkedIn"
                   >
                     <LinkedinIcon className="w-4 h-4" />
                   </a>
                   <a 
-                    href="https://youtube.com" 
-                    target="_blank" 
-                    rel="noreferrer" 
-                    className="w-9 h-9 rounded-full bg-[#0a0f1e] border border-slate-800 flex items-center justify-center text-slate-400 hover:text-white hover:border-red-500 hover:bg-red-600/20 transition-all hover:scale-110 shadow-sm"
-                    aria-label="YouTube"
-                  >
-                    <YoutubeIcon className="w-4 h-4" />
-                  </a>
-                  <a 
                     href="https://wa.me/917845391712" 
                     target="_blank" 
-                    rel="noreferrer" 
+                    rel="noopener noreferrer" 
                     className="w-9 h-9 rounded-full bg-[#0a0f1e] border border-slate-800 flex items-center justify-center text-slate-400 hover:text-white hover:border-emerald-500 hover:bg-emerald-600/20 transition-all hover:scale-110 shadow-sm"
                     aria-label="WhatsApp"
                   >

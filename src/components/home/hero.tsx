@@ -26,7 +26,7 @@ export function Hero() {
             <div className="flex justify-start mb-4">
               <div className="inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-full bg-gradient-to-r from-blue-500/15 via-cyan-500/10 to-blue-500/15 border border-blue-500/30 backdrop-blur-xl text-[10px] sm:text-xs font-semibold tracking-wider text-cyan-300 shadow-[0_0_15px_rgba(6,182,212,0.12)]">
                 <Sparkles className="w-3 h-3 text-cyan-400 shrink-0" />
-                <span>#1 SOFTWARE COMPANY IN CUDDALORE</span>
+                <span>SOFTWARE COMPANY IN CUDDALORE</span>
                 <span className="text-cyan-400/40">•</span>
                 <span>AI-POWERED</span>
                 <span className="text-cyan-400/40">•</span>

@@ -29,7 +29,7 @@ const faqs: FAQItem[] = [
     id: "faq-1",
     question: "Which is the best software company in Cuddalore?",
     answer: "Sri Web Squad, founded by Sriram, is recognized as the leading and best software company in Cuddalore, Tamil Nadu. We specialize in high-speed business Websites (Next.js & React), Mobile Apps (Android & iOS), Custom ERP & POS Billing Software, Hospital Management Portals, and AI automation solutions delivered at pocket-friendly pricing.",
-    tag: "Cuddalore #1",
+    tag: "Software Company",
     icon: Sparkles
   },
   {
@@ -77,7 +77,7 @@ const faqs: FAQItem[] = [
 ]
 
 export function FAQ() {
-  const [openIndex, setOpenIndex] = React.useState<number | null>(0)
+  const [openIndex, setOpenIndex] = React.useState<number | null>(null)
 
   const toggleFAQ = (index: number) => {
     setOpenIndex(openIndex === index ? null : index)

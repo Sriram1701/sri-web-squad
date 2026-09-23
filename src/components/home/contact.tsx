@@ -9,6 +9,28 @@ import { Button } from "@/components/ui/button"
 import { MapPin, Phone, Mail, MessageCircle, ExternalLink, Send, Sparkles } from "lucide-react"
 import QRCode from "react-qr-code"
 
+const FacebookIcon = (props: React.SVGProps<SVGSVGElement>) => (
+  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" {...props}>
+    <path d="M18 2h-3a5 5 0 0 0-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 0 1 1-1h3z" />
+  </svg>
+)
+
+const InstagramIcon = (props: React.SVGProps<SVGSVGElement>) => (
+  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" {...props}>
+    <rect x="2" y="2" width="20" height="20" rx="5" ry="5" />
+    <path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z" />
+    <line x1="17.5" y1="6.5" x2="17.51" y2="6.5" />
+  </svg>
+)
+
+const LinkedinIcon = (props: React.SVGProps<SVGSVGElement>) => (
+  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" {...props}>
+    <path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-2-2 2 2 0 0 0-2 2v7h-4v-7a6 6 0 0 1 6-6z" />
+    <rect x="2" y="9" width="4" height="12" />
+    <circle cx="4" cy="4" r="2" />
+  </svg>
+)
+
 const GOOGLE_MAPS_LOCATION_URL = "https://www.google.com/maps/place/Sri+Web+Squad/@11.7040456,79.7671579,17z/data=!3m1!4b1!4m6!3m5!1s0x3a54970bc69bcd31:0x2514c310923dd33c!8m2!3d11.7040456!4d79.7671579!16s%2Fg%2F11zh8sgg4p?entry=ttu&g_ep=EgoyMDI2MDkwMi4wIKXMDSoASAFQAw%3D%3D"
 
 export function Contact() {
@@ -134,6 +156,43 @@ export function Contact() {
                       className="text-sm text-slate-200 hover:text-white transition-colors block mt-0.5 font-semibold"
                     >
                       sriwebsquad@gmail.com
+                    </a>
+                  </div>
+                </div>
+
+                {/* Social Connect */}
+                <div className="pt-4 border-t border-slate-800/80">
+                  <h4 className="text-xs font-bold text-slate-300 uppercase tracking-wider mb-2.5">Follow & Connect</h4>
+                  <div className="flex items-center gap-2 flex-wrap">
+                    <a 
+                      href="https://www.instagram.com/sri_web_squad" 
+                      target="_blank" 
+                      rel="noopener noreferrer" 
+                      className="px-3 py-1.5 rounded-xl bg-pink-500/10 border border-pink-500/30 text-pink-300 text-xs font-semibold flex items-center gap-1.5 hover:border-pink-400 hover:bg-pink-500/20 transition-all hover:scale-105"
+                      aria-label="Instagram"
+                    >
+                      <InstagramIcon className="w-3.5 h-3.5 text-pink-400" />
+                      <span>Instagram</span>
+                    </a>
+                    <a 
+                      href="https://www.linkedin.com/in/sriram-nagarajan-24a9a837b" 
+                      target="_blank" 
+                      rel="noopener noreferrer" 
+                      className="px-3 py-1.5 rounded-xl bg-blue-500/10 border border-blue-500/30 text-blue-300 text-xs font-semibold flex items-center gap-1.5 hover:border-blue-400 hover:bg-blue-500/20 transition-all hover:scale-105"
+                      aria-label="LinkedIn"
+                    >
+                      <LinkedinIcon className="w-3.5 h-3.5 text-blue-400" />
+                      <span>LinkedIn</span>
+                    </a>
+                    <a 
+                      href="https://www.facebook.com/profile.php?id=61594401073325" 
+                      target="_blank" 
+                      rel="noopener noreferrer" 
+                      className="px-3 py-1.5 rounded-xl bg-indigo-500/10 border border-indigo-500/30 text-indigo-300 text-xs font-semibold flex items-center gap-1.5 hover:border-indigo-400 hover:bg-indigo-500/20 transition-all hover:scale-105"
+                      aria-label="Facebook"
+                    >
+                      <FacebookIcon className="w-3.5 h-3.5 text-indigo-400" />
+                      <span>Facebook</span>
                     </a>
                   </div>
                 </div>
