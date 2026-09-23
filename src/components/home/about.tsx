@@ -121,12 +121,12 @@ export function About() {
 
               <div className="p-4 sm:p-5 rounded-2xl bg-blue-950/20 border border-blue-500/20">
                 <p className="text-sm sm:text-base text-slate-200 leading-relaxed">
-                  <strong className="text-white font-semibold">Sri Web Squad</strong> was born out of a shared dream among close friends and passionate developers. We noticed small & growing businesses were constantly overcharged by big agencies for basic websites or left with slow, outdated templates.
+                  <strong className="text-white font-semibold">Sri Web Squad</strong> was founded in <strong className="text-white font-semibold">Cuddalore</strong> by <strong className="text-white font-semibold">Sriram</strong> and a passionate squad of engineers. We noticed businesses in Cuddalore, Pondicherry, and across Tamil Nadu were constantly overcharged by large agencies for basic websites or left with slow, unmaintained templates.
                 </p>
               </div>
 
               <p className="text-xs sm:text-sm text-slate-300 leading-relaxed">
-                We decided to change that. We combined our hands-on engineering skills to build enterprise-grade web applications, mobile apps, custom ERP portals, and AI automation systems at prices that everyday businesses can comfortably afford.
+                We set out to build Cuddalore&apos;s leading tech company — delivering enterprise-grade custom web applications, Android & iOS mobile apps, ERP billing systems, and AI automation at transparent, affordable pricing.
               </p>
 
               {/* Highlights Checkmark List */}

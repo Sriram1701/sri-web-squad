@@ -26,9 +26,9 @@ export function Hero() {
             <div className="flex justify-start mb-4">
               <div className="inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-full bg-gradient-to-r from-blue-500/15 via-cyan-500/10 to-blue-500/15 border border-blue-500/30 backdrop-blur-xl text-[10px] sm:text-xs font-semibold tracking-wider text-cyan-300 shadow-[0_0_15px_rgba(6,182,212,0.12)]">
                 <Sparkles className="w-3 h-3 text-cyan-400 shrink-0" />
-                <span>AI-POWERED</span>
+                <span>#1 SOFTWARE COMPANY IN CUDDALORE</span>
                 <span className="text-cyan-400/40">•</span>
-                <span>INNOVATIVE</span>
+                <span>AI-POWERED</span>
                 <span className="text-cyan-400/40">•</span>
                 <span>RELIABLE</span>
               </div>
@@ -53,7 +53,7 @@ export function Hero() {
 
             {/* Paragraph with Highlighted Keyword Accents */}
             <p className="text-sm sm:text-base md:text-lg text-slate-300/90 mb-8 max-w-xl leading-relaxed font-normal">
-              A passionate squad of developers crafting high-performance{" "}
+              A passionate squad of developers in <strong className="text-white font-semibold">Cuddalore</strong> led by <strong className="text-white font-semibold">Sriram</strong>, crafting high-performance{" "}
               <span className="text-white font-semibold">
                 Websites
               </span>

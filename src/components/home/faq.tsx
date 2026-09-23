@@ -28,45 +28,52 @@ interface FAQItem {
 const faqs: FAQItem[] = [
   {
     id: "faq-1",
-    question: "What digital services does Sri Web Squad provide?",
-    answer: "We specialize in end-to-end digital engineering: High-Speed Websites (Next.js 16, React, Tailwind CSS), Mobile Apps (Flutter, Android, iOS), and Custom Business Software (Clinical & Hospital Portals, Biometric Gym/Pawn Systems, E-Commerce, and Inventory Portals).",
+    question: "Which is the best software company in Cuddalore?",
+    answer: "Sri Web Squad, founded by Sriram, is recognized as the leading and best software company in Cuddalore, Tamil Nadu. We specialize in high-speed business Websites (Next.js & React), Mobile Apps (Android & iOS), Custom ERP & POS Billing Software, Hospital Management Portals, and AI automation solutions delivered at pocket-friendly pricing.",
+    tag: "Cuddalore #1",
+    icon: Sparkles
+  },
+  {
+    id: "faq-2",
+    question: "Who is Sriram at Sri Web Squad?",
+    answer: "Sriram is the founder and lead software engineer of Sri Web Squad in Cuddalore. He leads our dedicated team of developers, providing direct client communication, custom architecture design, and guaranteed 100% source code ownership without any middlemen.",
+    tag: "Founder",
+    icon: Rocket
+  },
+  {
+    id: "faq-3",
+    question: "What digital services does Sri Web Squad provide in Cuddalore & Tamil Nadu?",
+    answer: "We specialize in end-to-end digital engineering: High-Speed Business Websites, Mobile Apps (Android & iOS), Custom ERP & GST Billing Software, Clinic & Hospital Management Systems, Gym Biometric Software, Pawn Broker Billing Software, E-Commerce Stores, and Local SEO Services.",
     tag: "Services",
     icon: Layers
   },
   {
-    id: "faq-2",
+    id: "faq-4",
     question: "Why are your prices more affordable compared to traditional agencies?",
-    answer: "We operate as a lean, direct squad of core engineers. With zero middlemen, no bloated corporate overhead, and modern automated toolchains, we deliver enterprise-grade performance and custom UI at transparent, pocket-friendly rates.",
+    answer: "We operate as a lean, direct squad of core engineers based in Cuddalore. With zero middlemen, no bloated corporate overhead, and modern automated toolchains, we deliver enterprise-grade performance and custom UI at transparent, pocket-friendly rates.",
     tag: "Pricing & Value",
     icon: DollarSign
   },
   {
-    id: "faq-3",
-    question: "How long does it take to build and launch a project?",
-    answer: "Standard business websites and landing pages are typically delivered within 3 to 7 business days. Custom full-stack software, mobile apps, and portal systems generally take 2 to 3 weeks depending on the complexity of workflows.",
+    id: "faq-5",
+    question: "How long does it take to build and launch a website or software?",
+    answer: "Standard business websites and landing pages are typically delivered within 3 to 7 business days. Custom full-stack software, mobile apps, and ERP portal systems generally take 2 to 3 weeks depending on the complexity of workflows.",
     tag: "Timeline",
     icon: Clock
   },
   {
-    id: "faq-4",
+    id: "faq-6",
     question: "Do you provide post-launch support and maintenance?",
-    answer: "Yes, 100%! We provide 24/7 dependable developer support, free initial maintenance, server configuration, domain/SSL management, and regular security updates to ensure your application runs without a hitch.",
+    answer: "Yes, 100%! We provide 24/7 dependable developer support, free initial maintenance, server configuration, domain/SSL lifecycle management, and regular security updates to ensure your application runs without a hitch.",
     tag: "Support & Warranty",
     icon: ShieldCheck
   },
   {
-    id: "faq-5",
-    question: "Can our software be customized to match our exact business workflow?",
-    answer: "Absolutely. We build 100% tailored systems rather than rigid off-the-shelf templates. Every UI flow, database model, billing formula, and notification trigger is coded specifically for your business.",
-    tag: "Customization",
-    icon: Settings
-  },
-  {
-    id: "faq-6",
-    question: "How can we start a project with Sri Web Squad?",
-    answer: "You can start right away by messaging us directly on WhatsApp (+91 78453 91712), giving us a quick call, or submitting the contact form below. We will provide a free consultation and project roadmap within hours.",
+    id: "faq-7",
+    question: "How can we start a project with Sri Web Squad in Cuddalore?",
+    answer: "You can start right away by messaging us directly on WhatsApp (+91 78453 91712), giving us a quick call (+91 99446 88602), or submitting the contact form below. We will provide a free consultation and project roadmap within hours.",
     tag: "Getting Started",
-    icon: Rocket
+    icon: PhoneCall
   }
 ]
 

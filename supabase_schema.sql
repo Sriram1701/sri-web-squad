@@ -122,5 +122,5 @@ CREATE POLICY "Allow anon all operations on settings"
 
 -- Insert Default Settings Row
 INSERT INTO public.settings (id, admin_email, company_name, company_phone, company_upi_id, notify_days_before)
-VALUES ('global_settings', 'admin@sriwebsquad.in', 'Sri Web Squad', '+91 99446 88602', 'sriwebsquad@upi', 30)
+VALUES ('global_settings', 'admin@sriwebsquad.in', 'Sri Web Squad', '+91 7845391712', '7845391712@upi', 30)
 ON CONFLICT (id) DO NOTHING;
