@@ -31,8 +31,52 @@ CREATE TABLE IF NOT EXISTS public.projects (
   agreement_pdf_url TEXT,
   notes TEXT,
   created_at TIMESTAMPTZ DEFAULT NOW(),
-  last_reminder_sent_at TIMESTAMPTZ
+  last_reminder_sent_at TIMESTAMPTZ,
+  
+  -- Mobile App, ERP, E-Commerce, Software & Marketing Extended Fields
+  play_store_url TEXT,
+  play_console_status TEXT,
+  app_store_url TEXT,
+  apple_dev_expiry_date DATE,
+  apple_dev_renewal_amount NUMERIC DEFAULT 0,
+  backend_provider TEXT,
+  backend_expiry_date DATE,
+  backend_renewal_amount NUMERIC DEFAULT 0,
+  database_provider TEXT,
+  dlt_provider TEXT,
+  dlt_expiry_date DATE,
+  dlt_renewal_amount NUMERIC DEFAULT 0,
+  whatsapp_api_provider TEXT,
+  software_type TEXT,
+  backup_provider TEXT,
+  license_type TEXT,
+  payment_gateway TEXT,
+  marketing_services TEXT,
+  billing_cycle TEXT,
+  ad_account_id TEXT
 );
+
+-- SAFE MIGRATION FOR EXISTING SUPABASE DATABASES (Run if projects table already exists)
+ALTER TABLE public.projects ADD COLUMN IF NOT EXISTS play_store_url TEXT;
+ALTER TABLE public.projects ADD COLUMN IF NOT EXISTS play_console_status TEXT;
+ALTER TABLE public.projects ADD COLUMN IF NOT EXISTS app_store_url TEXT;
+ALTER TABLE public.projects ADD COLUMN IF NOT EXISTS apple_dev_expiry_date DATE;
+ALTER TABLE public.projects ADD COLUMN IF NOT EXISTS apple_dev_renewal_amount NUMERIC DEFAULT 0;
+ALTER TABLE public.projects ADD COLUMN IF NOT EXISTS backend_provider TEXT;
+ALTER TABLE public.projects ADD COLUMN IF NOT EXISTS backend_expiry_date DATE;
+ALTER TABLE public.projects ADD COLUMN IF NOT EXISTS backend_renewal_amount NUMERIC DEFAULT 0;
+ALTER TABLE public.projects ADD COLUMN IF NOT EXISTS database_provider TEXT;
+ALTER TABLE public.projects ADD COLUMN IF NOT EXISTS dlt_provider TEXT;
+ALTER TABLE public.projects ADD COLUMN IF NOT EXISTS dlt_expiry_date DATE;
+ALTER TABLE public.projects ADD COLUMN IF NOT EXISTS dlt_renewal_amount NUMERIC DEFAULT 0;
+ALTER TABLE public.projects ADD COLUMN IF NOT EXISTS whatsapp_api_provider TEXT;
+ALTER TABLE public.projects ADD COLUMN IF NOT EXISTS software_type TEXT;
+ALTER TABLE public.projects ADD COLUMN IF NOT EXISTS backup_provider TEXT;
+ALTER TABLE public.projects ADD COLUMN IF NOT EXISTS license_type TEXT;
+ALTER TABLE public.projects ADD COLUMN IF NOT EXISTS payment_gateway TEXT;
+ALTER TABLE public.projects ADD COLUMN IF NOT EXISTS marketing_services TEXT;
+ALTER TABLE public.projects ADD COLUMN IF NOT EXISTS billing_cycle TEXT;
+ALTER TABLE public.projects ADD COLUMN IF NOT EXISTS ad_account_id TEXT;
 
 -- 2. LEADS TABLE
 CREATE TABLE IF NOT EXISTS public.leads (

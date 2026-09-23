@@ -27,12 +27,23 @@ import {
   Paperclip,
   UploadCloud,
   FileCheck,
-  Download
+  Download,
+  Smartphone,
+  Database,
+  CreditCard,
+  TrendingUp,
+  Cpu,
+  Layers,
+  HardDrive,
+  Radio,
+  Sparkles,
+  ShoppingBag
 } from "lucide-react"
 import { 
   getStoredProjects, 
   saveStoredProjects, 
   getProjectExpiryDetails, 
+  calculateProjectTotalRenewal,
   ProjectRecord, 
   getStoredSettings,
   generateWhatsAppReminderMessage,
@@ -65,6 +76,34 @@ const EMPTY_PROJECT: Omit<ProjectRecord, "id" | "createdAt"> = {
   agreementPdfName: "",
   agreementPdfUrl: "",
   notes: "",
+
+  // Mobile App
+  playStoreUrl: "",
+  playConsoleStatus: "Published",
+  appStoreUrl: "",
+  appleDevExpiryDate: "",
+  appleDevRenewalAmount: 0,
+  backendProvider: "Node.js on AWS",
+  backendExpiryDate: "",
+  backendRenewalAmount: 0,
+  databaseProvider: "Supabase PostgreSQL",
+  dltProvider: "",
+  dltExpiryDate: "",
+  dltRenewalAmount: 0,
+  whatsappApiProvider: "",
+
+  // ERP / Software
+  softwareType: "Cloud Web ERP + Billing",
+  backupProvider: "AWS S3 Cloud Auto-Backup",
+  licenseType: "Annual Subscription",
+
+  // E-Commerce
+  paymentGateway: "Razorpay PG",
+
+  // Digital Growth
+  marketingServices: "SEO + Google Ads + Meta Ads",
+  billingCycle: "Monthly Retainer",
+  adAccountId: "",
 }
 
 export default function ProjectsAdminPage() {
@@ -203,22 +242,50 @@ export default function ProjectsAdminPage() {
       secondaryPhone: project.secondaryPhone || "",
       clientEmail: project.clientEmail || "",
       category: project.category,
-      domainName: project.domainName,
-      domainRegistrar: project.domainRegistrar,
-      domainStartDate: project.domainStartDate,
-      domainExpiryDate: project.domainExpiryDate,
-      domainRenewalAmount: project.domainRenewalAmount,
-      hostingProvider: project.hostingProvider,
-      hostingStartDate: project.hostingStartDate,
-      hostingExpiryDate: project.hostingExpiryDate,
-      hostingRenewalAmount: project.hostingRenewalAmount,
+      domainName: project.domainName || "",
+      domainRegistrar: project.domainRegistrar || "GoDaddy",
+      domainStartDate: project.domainStartDate || "",
+      domainExpiryDate: project.domainExpiryDate || "",
+      domainRenewalAmount: project.domainRenewalAmount || 0,
+      hostingProvider: project.hostingProvider || "",
+      hostingStartDate: project.hostingStartDate || "",
+      hostingExpiryDate: project.hostingExpiryDate || "",
+      hostingRenewalAmount: project.hostingRenewalAmount || 0,
       amcAmount: project.amcAmount || 0,
-      sslIncluded: project.sslIncluded,
-      status: project.status,
+      sslIncluded: project.sslIncluded ?? true,
+      status: project.status || "active",
       liveUrl: project.liveUrl || "",
       agreementPdfName: project.agreementPdfName || "",
       agreementPdfUrl: project.agreementPdfUrl || "",
       notes: project.notes || "",
+
+      // Mobile App
+      playStoreUrl: project.playStoreUrl || "",
+      playConsoleStatus: project.playConsoleStatus || "Published",
+      appStoreUrl: project.appStoreUrl || "",
+      appleDevExpiryDate: project.appleDevExpiryDate || "",
+      appleDevRenewalAmount: project.appleDevRenewalAmount || 0,
+      backendProvider: project.backendProvider || "",
+      backendExpiryDate: project.backendExpiryDate || "",
+      backendRenewalAmount: project.backendRenewalAmount || 0,
+      databaseProvider: project.databaseProvider || "",
+      dltProvider: project.dltProvider || "",
+      dltExpiryDate: project.dltExpiryDate || "",
+      dltRenewalAmount: project.dltRenewalAmount || 0,
+      whatsappApiProvider: project.whatsappApiProvider || "",
+
+      // ERP / Software
+      softwareType: project.softwareType || "Cloud Web ERP + Billing",
+      backupProvider: project.backupProvider || "",
+      licenseType: project.licenseType || "Annual Subscription",
+
+      // E-Commerce
+      paymentGateway: project.paymentGateway || "Razorpay PG",
+
+      // Digital Growth
+      marketingServices: project.marketingServices || "SEO + Google Ads + Meta Ads",
+      billingCycle: project.billingCycle || "Monthly Retainer",
+      adAccountId: project.adAccountId || "",
     })
     setIsModalOpen(true)
   }
@@ -444,9 +511,10 @@ export default function ProjectsAdminPage() {
               <option value="Website">Website</option>
               <option value="Web App">Web App</option>
               <option value="Mobile App">Mobile App</option>
-              <option value="ERP & Billing">ERP</option>
-              <option value="E-Commerce">E-Com</option>
-              <option value="Custom Software">Custom</option>
+              <option value="ERP & Billing">ERP & Billing</option>
+              <option value="E-Commerce">E-Commerce</option>
+              <option value="Custom Software">Custom Software</option>
+              <option value="Digital Growth">Digital Growth</option>
             </select>
           </div>
         </div>
@@ -461,7 +529,7 @@ export default function ProjectsAdminPage() {
           </div>
         ) : (
           filteredProjects.map((project) => {
-            const totalRenewal = (project.domainRenewalAmount || 0) + (project.hostingRenewalAmount || 0) + (project.amcAmount || 0)
+            const totalRenewal = calculateProjectTotalRenewal(project)
             const isExp = project.expiryDetails.isExpired
             return (
               <div 
@@ -475,6 +543,21 @@ export default function ProjectsAdminPage() {
                       <span className="text-[10px] font-bold px-1.5 py-0.2 rounded bg-slate-800 text-slate-300 border border-slate-750">
                         {project.category}
                       </span>
+                      {project.playStoreUrl && (
+                        <a
+                          href={project.playStoreUrl}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          className="text-[10px] text-emerald-400 flex items-center gap-0.5 bg-emerald-500/10 px-1.5 py-0.2 rounded border border-emerald-500/20 font-semibold"
+                        >
+                          <Smartphone className="w-2.5 h-2.5" /> Play Store
+                        </a>
+                      )}
+                      {project.paymentGateway && (
+                        <span className="text-[10px] text-purple-300 flex items-center gap-0.5 bg-purple-500/10 px-1.5 py-0.2 rounded border border-purple-500/20 font-semibold">
+                          <CreditCard className="w-2.5 h-2.5" /> {project.paymentGateway}
+                        </span>
+                      )}
                     </div>
                     <div className="text-xs text-slate-300 mt-1 flex items-center gap-1.5">
                       <span className="font-medium text-white">{project.clientName}</span>
@@ -492,7 +575,7 @@ export default function ProjectsAdminPage() {
                         ? "bg-rose-500/20 text-rose-300 border border-rose-500/30" 
                         : "bg-amber-500/20 text-amber-300 border border-amber-500/30"
                     }`}>
-                      Exp: {project.domainExpiryDate}
+                      {project.expiryDetails.label}
                     </span>
                   </div>
                 </div>
@@ -566,11 +649,11 @@ export default function ProjectsAdminPage() {
           <table className="w-full text-left text-xs">
             <thead className="bg-[#131f3a] text-slate-100 font-extrabold border-b border-slate-700 uppercase text-[11px] tracking-wider">
               <tr>
-                <th className="px-5 py-4">Project & Category</th>
+                <th className="px-5 py-4">Project & Infrastructure</th>
                 <th className="px-5 py-4">Client Contact</th>
-                <th className="px-5 py-4">Domain Lifecycle</th>
-                <th className="px-5 py-4">Hosting Server</th>
-                <th className="px-5 py-4">Annual Charges</th>
+                <th className="px-5 py-4">Domain / API</th>
+                <th className="px-5 py-4">Hosting / Cloud Server</th>
+                <th className="px-5 py-4">Total Renewal</th>
                 <th className="px-5 py-4 text-right">Actions</th>
               </tr>
             </thead>
@@ -584,10 +667,10 @@ export default function ProjectsAdminPage() {
                 </tr>
               ) : (
                 filteredProjects.map((project) => {
-                  const totalRenewal = (project.domainRenewalAmount || 0) + (project.hostingRenewalAmount || 0) + (project.amcAmount || 0)
+                  const totalRenewal = calculateProjectTotalRenewal(project)
                   return (
                     <tr key={project.id} className="hover:bg-[#152342] transition-colors bg-[#0a1122]/60 group">
-                      {/* Project Title & Type */}
+                      {/* Project Title & Category Badges */}
                       <td className="px-5 py-4">
                         <div className="font-bold text-white text-sm flex items-center gap-1.5 flex-wrap">
                           <span>{project.projectName}</span>
@@ -602,6 +685,18 @@ export default function ProjectsAdminPage() {
                               <ExternalLink className="w-3.5 h-3.5" />
                             </a>
                           )}
+                          {project.playStoreUrl && (
+                            <a
+                              href={project.playStoreUrl}
+                              target="_blank"
+                              rel="noopener noreferrer"
+                              className="inline-flex items-center gap-1 px-1.5 py-0.5 rounded text-[10px] bg-emerald-500/20 text-emerald-300 border border-emerald-500/40 hover:bg-emerald-500/30 transition-all font-semibold"
+                              title="Google Play Store link"
+                            >
+                              <Smartphone className="w-3 h-3 text-emerald-400" />
+                              <span>Play Store</span>
+                            </a>
+                          )}
                           {project.agreementPdfUrl && (
                             <a
                               href={project.agreementPdfUrl}
@@ -614,10 +709,25 @@ export default function ProjectsAdminPage() {
                             </a>
                           )}
                         </div>
-                        <div className="flex items-center gap-1.5 mt-1">
+                        <div className="flex items-center gap-1.5 mt-1 flex-wrap">
                           <span className="text-[10px] font-bold px-2 py-0.5 rounded bg-slate-800 text-slate-200 border border-slate-700">
                             {project.category}
                           </span>
+                          {project.softwareType && (
+                            <span className="text-[10px] text-cyan-300 bg-cyan-500/10 px-1.5 py-0.2 rounded border border-cyan-500/20 font-medium">
+                              {project.softwareType}
+                            </span>
+                          )}
+                          {project.paymentGateway && (
+                            <span className="text-[10px] text-purple-300 bg-purple-500/10 px-1.5 py-0.2 rounded border border-purple-500/20 font-medium">
+                              💳 {project.paymentGateway}
+                            </span>
+                          )}
+                          {project.databaseProvider && (
+                            <span className="text-[10px] text-blue-300 bg-blue-500/10 px-1.5 py-0.2 rounded border border-blue-500/20 font-medium">
+                              🗄️ {project.databaseProvider}
+                            </span>
+                          )}
                           {project.sslIncluded && (
                             <span className="text-[10px] text-emerald-300 flex items-center gap-0.5 font-bold">
                               <ShieldCheck className="w-3 h-3" /> SSL
@@ -659,29 +769,27 @@ export default function ProjectsAdminPage() {
                           )}
                         </div>
                         <div className="text-xs text-slate-300 mt-1 font-medium">
-                          {project.domainRegistrar} • Exp: <span className="text-amber-300 font-mono font-bold">{project.domainExpiryDate}</span>
+                          {project.domainRegistrar || "DNS"} • Exp: <span className="text-amber-300 font-mono font-bold">{project.domainExpiryDate || "N/A"}</span>
                         </div>
                       </td>
 
-                      {/* Hosting Server */}
+                      {/* Hosting / Cloud Server */}
                       <td className="px-5 py-4">
                         <div className="text-xs text-slate-100 flex items-center gap-1.5 font-semibold">
-                          <Server className="w-3.5 h-3.5 text-blue-400" /> {project.hostingProvider}
+                          <Server className="w-3.5 h-3.5 text-blue-400" /> {project.backendProvider || project.hostingProvider || "Cloud Host"}
                         </div>
                         <div className="text-xs text-slate-300 mt-1 font-medium">
-                          Exp: <span className="text-slate-100 font-mono font-bold">{project.hostingExpiryDate}</span>
+                          Exp: <span className="text-slate-100 font-mono font-bold">{project.backendExpiryDate || project.hostingExpiryDate || "N/A"}</span>
                         </div>
                       </td>
 
-                      {/* Annual Charges */}
+                      {/* Total Renewal Charges */}
                       <td className="px-5 py-4">
                         <div className="font-black text-emerald-300 font-mono text-sm">
                           ₹{totalRenewal.toLocaleString("en-IN")}
                         </div>
                         <div className="text-[11px] text-slate-300 space-x-1 font-medium mt-0.5">
-                          <span>D: ₹{project.domainRenewalAmount}</span>
-                          <span>•</span>
-                          <span>H: ₹{project.hostingRenewalAmount}</span>
+                          <span>{project.category === "Digital Growth" ? project.billingCycle || "Retainer" : `AMC: ₹${project.amcAmount || 0}`}</span>
                         </div>
                       </td>
 
@@ -734,7 +842,7 @@ export default function ProjectsAdminPage() {
         </div>
       </div>
 
-      {/* Autocomplete Datalists */}
+      {/* Autocomplete Datalists for Suggestions */}
       <datalist id="projects-hosting-providers-list">
         {uniqueHostingProviders.map((provider) => (
           <option key={provider} value={provider} />
@@ -747,21 +855,87 @@ export default function ProjectsAdminPage() {
         ))}
       </datalist>
 
-      {/* ADD / EDIT PROJECT MODAL */}
+      <datalist id="projects-backend-providers-list">
+        <option value="Node.js on AWS Lightsail" />
+        <option value="Firebase Cloud Backend" />
+        <option value="Supabase Backend" />
+        <option value="FastAPI / Python on VPS" />
+        <option value="AWS EC2 Ubuntu Server" />
+        <option value="DigitalOcean Droplet" />
+        <option value="Hostinger VPS" />
+        <option value="Render Cloud API" />
+      </datalist>
+
+      <datalist id="projects-database-providers-list">
+        <option value="Supabase PostgreSQL" />
+        <option value="MongoDB Atlas Cloud" />
+        <option value="Firebase Firestore" />
+        <option value="MySQL Cloud on Hostinger" />
+        <option value="PostgreSQL on AWS RDS" />
+      </datalist>
+
+      <datalist id="projects-dlt-providers-list">
+        <option value="Fast2SMS DLT" />
+        <option value="Jio DLT Gateway" />
+        <option value="Airtel DLT Portal" />
+        <option value="Textlocal SMS Gateway" />
+        <option value="BSNL DLT" />
+        <option value="Vodafone Idea DLT" />
+      </datalist>
+
+      <datalist id="projects-whatsapp-providers-list">
+        <option value="Meta Cloud API (Official)" />
+        <option value="Interakt WhatsApp API" />
+        <option value="Wati WhatsApp Gateway" />
+        <option value="AiSensy WhatsApp Suite" />
+        <option value="UltraMsg API" />
+      </datalist>
+
+      <datalist id="projects-payment-gateways-list">
+        <option value="Razorpay PG" />
+        <option value="PhonePe Payment Gateway" />
+        <option value="Cashfree Payments" />
+        <option value="Stripe India" />
+        <option value="PayU India" />
+        <option value="Paytm Payment Gateway" />
+      </datalist>
+
+      <datalist id="projects-deployment-types-list">
+        <option value="Cloud Web ERP + Billing" />
+        <option value="Desktop Software + Cloud Sync" />
+        <option value="On-Premise Local Ubuntu Server" />
+        <option value="Multi-Branch Cloud VPS" />
+        <option value="Offline Desktop Single-User" />
+      </datalist>
+
+      <datalist id="projects-backup-providers-list">
+        <option value="AWS S3 Cloud Auto-Backup" />
+        <option value="Google Drive Cloud Sync" />
+        <option value="Daily Automated PostgreSQL Dump" />
+        <option value="Local Synology NAS Backup" />
+        <option value="Hostinger Daily Backup" />
+      </datalist>
+
+      {/* ADD / EDIT PROJECT DYNAMIC MODAL */}
       {isModalOpen && (
         <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/85 backdrop-blur-md overflow-y-auto animate-in fade-in duration-150">
           <motion.div
             initial={{ scale: 0.95, opacity: 0 }}
             animate={{ scale: 1, opacity: 1 }}
-            className="w-full max-w-2xl bg-[#0d1629] border-2 border-slate-700 rounded-2xl shadow-2xl p-6 sm:p-7 my-8 relative max-h-[90vh] overflow-y-auto"
+            className="w-full max-w-2xl bg-[#0d1629] border-2 border-slate-750 rounded-2xl shadow-2xl p-6 sm:p-7 my-8 relative max-h-[90vh] overflow-y-auto"
           >
-            <div className="flex items-center justify-between pb-3.5 border-b border-slate-700 mb-5">
+            <div className="flex items-center justify-between pb-3.5 border-b border-slate-750 mb-5">
               <div>
-                <h3 className="font-black text-lg text-white">
-                  {editingProjectId ? "Edit Client Project" : "Add New Client Project"}
-                </h3>
+                <div className="flex items-center gap-2">
+                  <h3 className="font-black text-lg text-white">
+                    {editingProjectId ? "Edit Client Project" : "Add New Client Project"}
+                  </h3>
+                  <span className="px-2 py-0.5 rounded-md bg-blue-500/20 text-blue-300 border border-blue-500/40 text-[11px] font-bold">
+                    {formData.category}
+                  </span>
+                </div>
                 <p className="text-xs text-slate-300 mt-0.5">
-                  Save domain lifecycle, hosting provider & renewal dates.
+                  Configure dynamic parameters, servers, store links & renewal lifecycle.
                 </p>
               </div>
               <button
@@ -773,16 +947,24 @@ export default function ProjectsAdminPage() {
             </div>
 
             <form onSubmit={handleSaveProject} className="space-y-5">
-              {/* Section 1 */}
+              {/* Section 1: Client & Project Identity */}
               <div className="space-y-3">
-                <h4 className="text-xs font-bold text-blue-400 uppercase tracking-wider">
-                  Client & Project
+                <h4 className="text-xs font-bold text-blue-400 uppercase tracking-wider flex items-center gap-1.5">
+                  <Layers className="w-3.5 h-3.5" /> Client & Project Identity
                 </h4>
                 <div className="grid sm:grid-cols-2 gap-3.5">
                   <div className="space-y-1">
-                    <label className="text-xs font-bold text-slate-200">Project Name *</label>
+                    <label className="text-xs font-bold text-slate-200">Project / App Name *</label>
                     <Input
-                      placeholder="e.g. VKP Website"
+                      placeholder={
+                        formData.category === "Mobile App" 
+                          ? "e.g. Doctor Quick Patient App" 
+                          : formData.category === "ERP & Billing"
+                          ? "e.g. Sri Textiles Billing ERP"
+                          : formData.category === "E-Commerce"
+                          ? "e.g. Aura Luxe Online Store"
+                          : "e.g. VKP Enterprises Website"
+                      }
                       value={formData.projectName}
                       onChange={(e) => setFormData({ ...formData, projectName: e.target.value })}
                       className="bg-[#070d1a] border-slate-700 text-xs text-white"
@@ -813,129 +995,730 @@ export default function ProjectsAdminPage() {
                   </div>
 
                   <div className="space-y-1">
-                    <label className="text-xs font-bold text-slate-200">Service Category</label>
+                    <label className="text-xs font-bold text-slate-200">Service Category *</label>
                     <select
                       value={formData.category}
                       onChange={(e) => setFormData({ ...formData, category: e.target.value as any })}
-                      className="h-9 w-full rounded-xl border border-slate-700 bg-[#070d1a] px-3 text-xs text-white focus:outline-none focus:border-blue-500 font-semibold"
+                      className="h-9 w-full rounded-xl border border-blue-500/50 bg-[#070d1a] px-3 text-xs text-white focus:outline-none focus:border-blue-500 font-bold text-blue-300"
                     >
-                      <option value="Website">Website</option>
-                      <option value="Web App">Web App</option>
-                      <option value="Mobile App">Mobile App</option>
-                      <option value="ERP & Billing">ERP & Billing</option>
-                      <option value="E-Commerce">E-Commerce</option>
-                      <option value="Custom Software">Custom Software</option>
-                      <option value="Digital Growth">Digital Growth</option>
+                      <option value="Website">🌐 Website</option>
+                      <option value="Web App">⚡ Web App</option>
+                      <option value="Mobile App">📱 Mobile App (Android / iOS)</option>
+                      <option value="ERP & Billing">🖥️ ERP & Billing Software</option>
+                      <option value="E-Commerce">🛍️ E-Commerce Store</option>
+                      <option value="Custom Software">⚙️ Custom Software</option>
+                      <option value="Digital Growth">📈 Digital Growth / SEO</option>
                     </select>
                   </div>
                 </div>
               </div>
 
-              {/* Section 2: Domain */}
-              <div className="space-y-3 pt-3 border-t border-slate-750">
-                <h4 className="text-xs font-bold text-blue-400 uppercase tracking-wider">
-                  Domain Details
-                </h4>
-                <div className="grid sm:grid-cols-2 gap-3.5">
-                  <div className="space-y-1">
-                    <label className="text-xs font-bold text-slate-200">Domain Name *</label>
-                    <Input
-                      placeholder="e.g. vkpenterprises.in"
-                      value={formData.domainName}
-                      onChange={(e) => setFormData({ ...formData, domainName: e.target.value })}
-                      className="bg-[#070d1a] border-slate-700 text-xs text-white font-mono"
-                      required
-                    />
+              {/* DYNAMIC CATEGORY SECTION: MOBILE APP */}
+              {formData.category === "Mobile App" && (
+                <>
+                  {/* App Stores & Accounts */}
+                  <div className="space-y-3 pt-3 border-t border-slate-750">
+                    <h4 className="text-xs font-bold text-emerald-400 uppercase tracking-wider flex items-center gap-1.5">
+                      <Smartphone className="w-3.5 h-3.5" /> App Stores & Developer Accounts
+                    </h4>
+                    <div className="grid sm:grid-cols-2 gap-3.5">
+                      <div className="space-y-1 sm:col-span-2">
+                        <label className="text-xs font-bold text-slate-200">Google Play Store URL</label>
+                        <Input
+                          placeholder="https://play.google.com/store/apps/details?id=com..."
+                          value={formData.playStoreUrl || ""}
+                          onChange={(e) => setFormData({ ...formData, playStoreUrl: e.target.value })}
+                          className="bg-[#070d1a] border-slate-700 text-xs text-white font-mono"
+                        />
+                      </div>
+
+                      <div className="space-y-1">
+                        <label className="text-xs font-bold text-slate-200">Play Console Status</label>
+                        <select
+                          value={formData.playConsoleStatus || "Published"}
+                          onChange={(e) => setFormData({ ...formData, playConsoleStatus: e.target.value as any })}
+                          className="h-9 w-full rounded-xl border border-slate-700 bg-[#070d1a] px-3 text-xs text-white font-medium"
+                        >
+                          <option value="Published">Published Live</option>
+                          <option value="In Review">In Review</option>
+                          <option value="Account Setup">Account Setup / Testing</option>
+                          <option value="Pending">Pending Deployment</option>
+                        </select>
+                      </div>
+
+                      <div className="space-y-1">
+                        <label className="text-xs font-bold text-slate-200">Apple App Store URL</label>
+                        <Input
+                          placeholder="https://apps.apple.com/app/..."
+                          value={formData.appStoreUrl || ""}
+                          onChange={(e) => setFormData({ ...formData, appStoreUrl: e.target.value })}
+                          className="bg-[#070d1a] border-slate-700 text-xs text-white font-mono"
+                        />
+                      </div>
+
+                      <div className="space-y-1">
+                        <label className="text-xs font-bold text-slate-200">Apple Dev Account Expiry</label>
+                        <Input
+                          type="date"
+                          value={formData.appleDevExpiryDate || ""}
+                          onChange={(e) => setFormData({ ...formData, appleDevExpiryDate: e.target.value })}
+                          className="bg-[#070d1a] border-slate-700 text-xs text-white"
+                        />
+                      </div>
+
+                      <div className="space-y-1">
+                        <label className="text-xs font-bold text-slate-200">Apple Dev Fee (₹ / $99)</label>
+                        <Input
+                          type="number"
+                          placeholder="8900"
+                          value={formData.appleDevRenewalAmount === 0 ? "" : formData.appleDevRenewalAmount}
+                          onChange={(e) => setFormData({ ...formData, appleDevRenewalAmount: e.target.value === "" ? 0 : Number(e.target.value) })}
+                          className="bg-[#070d1a] border-slate-700 text-xs text-white font-mono"
+                        />
+                      </div>
+                    </div>
                   </div>
 
-                  <div className="space-y-1">
-                    <label className="text-xs font-bold text-slate-200">Domain Registrar</label>
-                    <Input
-                      placeholder="GoDaddy / Hostinger / Namecheap"
-                      list="projects-domain-registrars-list"
-                      value={formData.domainRegistrar}
-                      onChange={(e) => setFormData({ ...formData, domainRegistrar: e.target.value })}
-                      className="bg-[#070d1a] border-slate-700 text-xs text-white"
-                    />
+                  {/* Backend & Database Cloud Infrastructure */}
+                  <div className="space-y-3 pt-3 border-t border-slate-750">
+                    <h4 className="text-xs font-bold text-cyan-400 uppercase tracking-wider flex items-center gap-1.5">
+                      <Cpu className="w-3.5 h-3.5" /> Backend API & Database Infrastructure
+                    </h4>
+                    <div className="grid sm:grid-cols-2 gap-3.5">
+                      <div className="space-y-1">
+                        <label className="text-xs font-bold text-slate-200">Backend Server Provider</label>
+                        <Input
+                          placeholder="Node.js on AWS / Firebase / Supabase"
+                          list="projects-backend-providers-list"
+                          value={formData.backendProvider || ""}
+                          onChange={(e) => setFormData({ ...formData, backendProvider: e.target.value, hostingProvider: e.target.value })}
+                          className="bg-[#070d1a] border-slate-700 text-xs text-white"
+                        />
+                      </div>
+
+                      <div className="space-y-1">
+                        <label className="text-xs font-bold text-slate-200">Database Engine / Provider</label>
+                        <Input
+                          placeholder="Supabase PostgreSQL / MongoDB Atlas"
+                          list="projects-database-providers-list"
+                          value={formData.databaseProvider || ""}
+                          onChange={(e) => setFormData({ ...formData, databaseProvider: e.target.value })}
+                          className="bg-[#070d1a] border-slate-700 text-xs text-white"
+                        />
+                      </div>
+
+                      <div className="space-y-1">
+                        <label className="text-xs font-bold text-slate-200">Backend Hosting Expiry Date</label>
+                        <Input
+                          type="date"
+                          value={formData.backendExpiryDate || formData.hostingExpiryDate || ""}
+                          onChange={(e) => setFormData({ ...formData, backendExpiryDate: e.target.value, hostingExpiryDate: e.target.value })}
+                          className="bg-[#070d1a] border-slate-700 text-xs text-white"
+                        />
+                      </div>
+
+                      <div className="space-y-1">
+                        <label className="text-xs font-bold text-slate-200">Backend Server Renewal Fee (₹)</label>
+                        <Input
+                          type="number"
+                          placeholder="4500"
+                          value={formData.backendRenewalAmount || formData.hostingRenewalAmount || ""}
+                          onChange={(e) => {
+                            const val = e.target.value === "" ? 0 : Number(e.target.value)
+                            setFormData({ ...formData, backendRenewalAmount: val, hostingRenewalAmount: val })
+                          }}
+                          className="bg-[#070d1a] border-slate-700 text-xs text-white font-mono"
+                        />
+                      </div>
+                    </div>
                   </div>
 
-                  <div className="space-y-1">
-                    <label className="text-xs font-bold text-slate-200">Domain Expiry Date *</label>
-                    <Input
-                      type="date"
-                      value={formData.domainExpiryDate}
-                      onChange={(e) => setFormData({ ...formData, domainExpiryDate: e.target.value })}
-                      className="bg-[#070d1a] border-slate-700 text-xs text-white"
-                      required
-                    />
+                  {/* DLT, SMS & WhatsApp Gateway */}
+                  <div className="space-y-3 pt-3 border-t border-slate-750">
+                    <h4 className="text-xs font-bold text-amber-400 uppercase tracking-wider flex items-center gap-1.5">
+                      <Radio className="w-3.5 h-3.5" /> DLT, SMS & WhatsApp Gateways
+                    </h4>
+                    <div className="grid sm:grid-cols-2 gap-3.5">
+                      <div className="space-y-1">
+                        <label className="text-xs font-bold text-slate-200">DLT / Bulk SMS Provider</label>
+                        <Input
+                          placeholder="Fast2SMS / Jio DLT / Textlocal"
+                          list="projects-dlt-providers-list"
+                          value={formData.dltProvider || ""}
+                          onChange={(e) => setFormData({ ...formData, dltProvider: e.target.value })}
+                          className="bg-[#070d1a] border-slate-700 text-xs text-white"
+                        />
+                      </div>
+
+                      <div className="space-y-1">
+                        <label className="text-xs font-bold text-slate-200">WhatsApp Notification API</label>
+                        <Input
+                          placeholder="Meta Cloud API / Interakt / AiSensy"
+                          list="projects-whatsapp-providers-list"
+                          value={formData.whatsappApiProvider || ""}
+                          onChange={(e) => setFormData({ ...formData, whatsappApiProvider: e.target.value })}
+                          className="bg-[#070d1a] border-slate-700 text-xs text-white"
+                        />
+                      </div>
+
+                      <div className="space-y-1">
+                        <label className="text-xs font-bold text-slate-200">DLT / SMS Expiry Date (Optional)</label>
+                        <Input
+                          type="date"
+                          value={formData.dltExpiryDate || ""}
+                          onChange={(e) => setFormData({ ...formData, dltExpiryDate: e.target.value })}
+                          className="bg-[#070d1a] border-slate-700 text-xs text-white"
+                        />
+                      </div>
+
+                      <div className="space-y-1">
+                        <label className="text-xs font-bold text-slate-200">DLT / SMS Annual Fee (₹)</label>
+                        <Input
+                          type="number"
+                          placeholder="0"
+                          value={formData.dltRenewalAmount === 0 ? "" : formData.dltRenewalAmount}
+                          onChange={(e) => setFormData({ ...formData, dltRenewalAmount: e.target.value === "" ? 0 : Number(e.target.value) })}
+                          className="bg-[#070d1a] border-slate-700 text-xs text-white font-mono"
+                        />
+                      </div>
+                    </div>
                   </div>
 
-                  <div className="space-y-1">
-                    <label className="text-xs font-bold text-slate-200">Domain Renewal Fee (₹)</label>
-                    <Input
-                      type="number"
-                      placeholder="0"
-                      value={formData.domainRenewalAmount === 0 ? "" : formData.domainRenewalAmount}
-                      onChange={(e) => setFormData({ ...formData, domainRenewalAmount: e.target.value === "" ? 0 : Number(e.target.value) })}
-                      className="bg-[#070d1a] border-slate-700 text-xs text-white font-mono"
-                    />
+                  {/* API Domain & Landing */}
+                  <div className="space-y-3 pt-3 border-t border-slate-750">
+                    <h4 className="text-xs font-bold text-blue-400 uppercase tracking-wider flex items-center gap-1.5">
+                      <Globe className="w-3.5 h-3.5" /> API Domain & App Landing Page
+                    </h4>
+                    <div className="grid sm:grid-cols-2 gap-3.5">
+                      <div className="space-y-1">
+                        <label className="text-xs font-bold text-slate-200">API / App Domain Name</label>
+                        <Input
+                          placeholder="e.g. api.doctorquick.in"
+                          value={formData.domainName}
+                          onChange={(e) => setFormData({ ...formData, domainName: e.target.value })}
+                          className="bg-[#070d1a] border-slate-700 text-xs text-white font-mono"
+                        />
+                      </div>
+
+                      <div className="space-y-1">
+                        <label className="text-xs font-bold text-slate-200">Domain Registrar</label>
+                        <Input
+                          placeholder="GoDaddy / Hostinger / Namecheap"
+                          list="projects-domain-registrars-list"
+                          value={formData.domainRegistrar}
+                          onChange={(e) => setFormData({ ...formData, domainRegistrar: e.target.value })}
+                          className="bg-[#070d1a] border-slate-700 text-xs text-white"
+                        />
+                      </div>
+
+                      <div className="space-y-1">
+                        <label className="text-xs font-bold text-slate-200">Domain Expiry Date</label>
+                        <Input
+                          type="date"
+                          value={formData.domainExpiryDate}
+                          onChange={(e) => setFormData({ ...formData, domainExpiryDate: e.target.value })}
+                          className="bg-[#070d1a] border-slate-700 text-xs text-white"
+                        />
+                      </div>
+
+                      <div className="space-y-1">
+                        <label className="text-xs font-bold text-slate-200">Domain Renewal Fee (₹)</label>
+                        <Input
+                          type="number"
+                          placeholder="1199"
+                          value={formData.domainRenewalAmount === 0 ? "" : formData.domainRenewalAmount}
+                          onChange={(e) => setFormData({ ...formData, domainRenewalAmount: e.target.value === "" ? 0 : Number(e.target.value) })}
+                          className="bg-[#070d1a] border-slate-700 text-xs text-white font-mono"
+                        />
+                      </div>
+                    </div>
                   </div>
-                </div>
+                </>
+              )}
+
+              {/* DYNAMIC CATEGORY SECTION: ERP & BILLING / CUSTOM SOFTWARE */}
+              {(formData.category === "ERP & Billing" || formData.category === "Custom Software") && (
+                <>
+                  {/* Deployment & License Setup */}
+                  <div className="space-y-3 pt-3 border-t border-slate-750">
+                    <h4 className="text-xs font-bold text-emerald-400 uppercase tracking-wider flex items-center gap-1.5">
+                      <Cpu className="w-3.5 h-3.5" /> Software Deployment & License Setup
+                    </h4>
+                    <div className="grid sm:grid-cols-2 gap-3.5">
+                      <div className="space-y-1">
+                        <label className="text-xs font-bold text-slate-200">Deployment Architecture</label>
+                        <Input
+                          placeholder="Cloud Web ERP / Desktop + Cloud Sync / On-Premise"
+                          list="projects-deployment-types-list"
+                          value={formData.softwareType || ""}
+                          onChange={(e) => setFormData({ ...formData, softwareType: e.target.value })}
+                          className="bg-[#070d1a] border-slate-700 text-xs text-white"
+                        />
+                      </div>
+
+                      <div className="space-y-1">
+                        <label className="text-xs font-bold text-slate-200">Software License Model</label>
+                        <Input
+                          placeholder="Annual Subscription / Perpetual + AMC"
+                          value={formData.licenseType || ""}
+                          onChange={(e) => setFormData({ ...formData, licenseType: e.target.value })}
+                          className="bg-[#070d1a] border-slate-700 text-xs text-white"
+                        />
+                      </div>
+                    </div>
+                  </div>
+
+                  {/* Cloud Server & Auto-Backup Storage */}
+                  <div className="space-y-3 pt-3 border-t border-slate-750">
+                    <h4 className="text-xs font-bold text-cyan-400 uppercase tracking-wider flex items-center gap-1.5">
+                      <HardDrive className="w-3.5 h-3.5" /> Server Hosting & Auto-Backup Cloud
+                    </h4>
+                    <div className="grid sm:grid-cols-2 gap-3.5">
+                      <div className="space-y-1">
+                        <label className="text-xs font-bold text-slate-200">Server / VPS Host</label>
+                        <Input
+                          placeholder="AWS Lightsail / Hostinger VPS / Ubuntu Server"
+                          list="projects-hosting-providers-list"
+                          value={formData.hostingProvider}
+                          onChange={(e) => setFormData({ ...formData, hostingProvider: e.target.value })}
+                          className="bg-[#070d1a] border-slate-700 text-xs text-white"
+                        />
+                      </div>
+
+                      <div className="space-y-1">
+                        <label className="text-xs font-bold text-slate-200">Auto-Backup & Storage Cloud</label>
+                        <Input
+                          placeholder="AWS S3 Cloud Auto-Backup / Google Drive Sync"
+                          list="projects-backup-providers-list"
+                          value={formData.backupProvider || ""}
+                          onChange={(e) => setFormData({ ...formData, backupProvider: e.target.value })}
+                          className="bg-[#070d1a] border-slate-700 text-xs text-white"
+                        />
+                      </div>
+
+                      <div className="space-y-1">
+                        <label className="text-xs font-bold text-slate-200">Server Renewal / Expiry Date</label>
+                        <Input
+                          type="date"
+                          value={formData.hostingExpiryDate}
+                          onChange={(e) => setFormData({ ...formData, hostingExpiryDate: e.target.value })}
+                          className="bg-[#070d1a] border-slate-700 text-xs text-white"
+                        />
+                      </div>
+
+                      <div className="space-y-1">
+                        <label className="text-xs font-bold text-slate-200">Server Hosting Fee (₹)</label>
+                        <Input
+                          type="number"
+                          placeholder="5999"
+                          value={formData.hostingRenewalAmount === 0 ? "" : formData.hostingRenewalAmount}
+                          onChange={(e) => setFormData({ ...formData, hostingRenewalAmount: e.target.value === "" ? 0 : Number(e.target.value) })}
+                          className="bg-[#070d1a] border-slate-700 text-xs text-white font-mono"
+                        />
+                      </div>
+                    </div>
+                  </div>
+
+                  {/* Transactional SMS & WhatsApp Gateway */}
+                  <div className="space-y-3 pt-3 border-t border-slate-750">
+                    <h4 className="text-xs font-bold text-amber-400 uppercase tracking-wider flex items-center gap-1.5">
+                      <Radio className="w-3.5 h-3.5" /> SMS & WhatsApp Invoice Gateway
+                    </h4>
+                    <div className="grid sm:grid-cols-2 gap-3.5">
+                      <div className="space-y-1">
+                        <label className="text-xs font-bold text-slate-200">DLT / SMS Gateway</label>
+                        <Input
+                          placeholder="Fast2SMS / Jio DLT"
+                          list="projects-dlt-providers-list"
+                          value={formData.dltProvider || ""}
+                          onChange={(e) => setFormData({ ...formData, dltProvider: e.target.value })}
+                          className="bg-[#070d1a] border-slate-700 text-xs text-white"
+                        />
+                      </div>
+
+                      <div className="space-y-1">
+                        <label className="text-xs font-bold text-slate-200">WhatsApp Notification API</label>
+                        <Input
+                          placeholder="Meta Cloud API / UltraMsg"
+                          list="projects-whatsapp-providers-list"
+                          value={formData.whatsappApiProvider || ""}
+                          onChange={(e) => setFormData({ ...formData, whatsappApiProvider: e.target.value })}
+                          className="bg-[#070d1a] border-slate-700 text-xs text-white"
+                        />
+                      </div>
+                    </div>
+                  </div>
+
+                  {/* Web Portal Domain */}
+                  <div className="space-y-3 pt-3 border-t border-slate-750">
+                    <h4 className="text-xs font-bold text-blue-400 uppercase tracking-wider flex items-center gap-1.5">
+                      <Globe className="w-3.5 h-3.5" /> Web Portal / ERP Subdomain
+                    </h4>
+                    <div className="grid sm:grid-cols-2 gap-3.5">
+                      <div className="space-y-1">
+                        <label className="text-xs font-bold text-slate-200">Portal Domain / Subdomain</label>
+                        <Input
+                          placeholder="e.g. app.sritextiles.com"
+                          value={formData.domainName}
+                          onChange={(e) => setFormData({ ...formData, domainName: e.target.value })}
+                          className="bg-[#070d1a] border-slate-700 text-xs text-white font-mono"
+                        />
+                      </div>
+
+                      <div className="space-y-1">
+                        <label className="text-xs font-bold text-slate-200">Domain Expiry Date</label>
+                        <Input
+                          type="date"
+                          value={formData.domainExpiryDate}
+                          onChange={(e) => setFormData({ ...formData, domainExpiryDate: e.target.value })}
+                          className="bg-[#070d1a] border-slate-700 text-xs text-white"
+                        />
+                      </div>
+
+                      <div className="space-y-1">
+                        <label className="text-xs font-bold text-slate-200">Domain Renewal Fee (₹)</label>
+                        <Input
+                          type="number"
+                          placeholder="1499"
+                          value={formData.domainRenewalAmount === 0 ? "" : formData.domainRenewalAmount}
+                          onChange={(e) => setFormData({ ...formData, domainRenewalAmount: e.target.value === "" ? 0 : Number(e.target.value) })}
+                          className="bg-[#070d1a] border-slate-700 text-xs text-white font-mono"
+                        />
+                      </div>
+
+                      <div className="space-y-1">
+                        <label className="text-xs font-bold text-slate-200">AMC Maintenance & Support (₹)</label>
+                        <Input
+                          type="number"
+                          placeholder="3500"
+                          value={formData.amcAmount === 0 ? "" : formData.amcAmount}
+                          onChange={(e) => setFormData({ ...formData, amcAmount: e.target.value === "" ? 0 : Number(e.target.value) })}
+                          className="bg-[#070d1a] border-slate-700 text-xs text-white font-mono font-bold text-emerald-400"
+                        />
+                      </div>
+                    </div>
+                  </div>
+                </>
+              )}
+
+              {/* DYNAMIC CATEGORY SECTION: E-COMMERCE */}
+              {formData.category === "E-Commerce" && (
+                <>
+                  {/* Domain */}
+                  <div className="space-y-3 pt-3 border-t border-slate-750">
+                    <h4 className="text-xs font-bold text-blue-400 uppercase tracking-wider flex items-center gap-1.5">
+                      <Globe className="w-3.5 h-3.5" /> Store Domain Details
+                    </h4>
+                    <div className="grid sm:grid-cols-2 gap-3.5">
+                      <div className="space-y-1">
+                        <label className="text-xs font-bold text-slate-200">Online Store Domain *</label>
+                        <Input
+                          placeholder="e.g. auraluxe.shop"
+                          value={formData.domainName}
+                          onChange={(e) => setFormData({ ...formData, domainName: e.target.value })}
+                          className="bg-[#070d1a] border-slate-700 text-xs text-white font-mono"
+                          required
+                        />
+                      </div>
+
+                      <div className="space-y-1">
+                        <label className="text-xs font-bold text-slate-200">Domain Registrar</label>
+                        <Input
+                          placeholder="GoDaddy / Namecheap"
+                          list="projects-domain-registrars-list"
+                          value={formData.domainRegistrar}
+                          onChange={(e) => setFormData({ ...formData, domainRegistrar: e.target.value })}
+                          className="bg-[#070d1a] border-slate-700 text-xs text-white"
+                        />
+                      </div>
+
+                      <div className="space-y-1">
+                        <label className="text-xs font-bold text-slate-200">Domain Expiry Date *</label>
+                        <Input
+                          type="date"
+                          value={formData.domainExpiryDate}
+                          onChange={(e) => setFormData({ ...formData, domainExpiryDate: e.target.value })}
+                          className="bg-[#070d1a] border-slate-700 text-xs text-white"
+                          required
+                        />
+                      </div>
+
+                      <div className="space-y-1">
+                        <label className="text-xs font-bold text-slate-200">Domain Renewal Fee (₹)</label>
+                        <Input
+                          type="number"
+                          placeholder="1599"
+                          value={formData.domainRenewalAmount === 0 ? "" : formData.domainRenewalAmount}
+                          onChange={(e) => setFormData({ ...formData, domainRenewalAmount: e.target.value === "" ? 0 : Number(e.target.value) })}
+                          className="bg-[#070d1a] border-slate-700 text-xs text-white font-mono"
+                        />
+                      </div>
+                    </div>
+                  </div>
+
+                  {/* Hosting & Platform */}
+                  <div className="space-y-3 pt-3 border-t border-slate-750">
+                    <h4 className="text-xs font-bold text-cyan-400 uppercase tracking-wider flex items-center gap-1.5">
+                      <ShoppingBag className="w-3.5 h-3.5" /> E-Commerce Platform & Hosting
+                    </h4>
+                    <div className="grid sm:grid-cols-2 gap-3.5">
+                      <div className="space-y-1">
+                        <label className="text-xs font-bold text-slate-200">Platform / Cloud Host</label>
+                        <Input
+                          placeholder="Shopify / WooCommerce VPS / Next.js Store"
+                          list="projects-hosting-providers-list"
+                          value={formData.hostingProvider}
+                          onChange={(e) => setFormData({ ...formData, hostingProvider: e.target.value })}
+                          className="bg-[#070d1a] border-slate-700 text-xs text-white"
+                        />
+                      </div>
+
+                      <div className="space-y-1">
+                        <label className="text-xs font-bold text-slate-200">Hosting Expiry Date *</label>
+                        <Input
+                          type="date"
+                          value={formData.hostingExpiryDate}
+                          onChange={(e) => setFormData({ ...formData, hostingExpiryDate: e.target.value })}
+                          className="bg-[#070d1a] border-slate-700 text-xs text-white"
+                          required
+                        />
+                      </div>
+
+                      <div className="space-y-1">
+                        <label className="text-xs font-bold text-slate-200">Hosting Renewal Fee (₹)</label>
+                        <Input
+                          type="number"
+                          placeholder="4200"
+                          value={formData.hostingRenewalAmount === 0 ? "" : formData.hostingRenewalAmount}
+                          onChange={(e) => setFormData({ ...formData, hostingRenewalAmount: e.target.value === "" ? 0 : Number(e.target.value) })}
+                          className="bg-[#070d1a] border-slate-700 text-xs text-white font-mono"
+                        />
+                      </div>
+
+                      <div className="space-y-1">
+                        <label className="text-xs font-bold text-slate-200">Payment Gateway</label>
+                        <Input
+                          placeholder="Razorpay PG / PhonePe PG / Cashfree"
+                          list="projects-payment-gateways-list"
+                          value={formData.paymentGateway || ""}
+                          onChange={(e) => setFormData({ ...formData, paymentGateway: e.target.value })}
+                          className="bg-[#070d1a] border-slate-700 text-xs text-white font-semibold text-emerald-400"
+                        />
+                      </div>
+
+                      <div className="space-y-1">
+                        <label className="text-xs font-bold text-slate-200">WhatsApp Order Alerts</label>
+                        <Input
+                          placeholder="AiSensy / Meta Cloud API"
+                          list="projects-whatsapp-providers-list"
+                          value={formData.whatsappApiProvider || ""}
+                          onChange={(e) => setFormData({ ...formData, whatsappApiProvider: e.target.value })}
+                          className="bg-[#070d1a] border-slate-700 text-xs text-white"
+                        />
+                      </div>
+
+                      <div className="space-y-1">
+                        <label className="text-xs font-bold text-slate-200">AMC Maintenance Fee (₹)</label>
+                        <Input
+                          type="number"
+                          placeholder="2500"
+                          value={formData.amcAmount === 0 ? "" : formData.amcAmount}
+                          onChange={(e) => setFormData({ ...formData, amcAmount: e.target.value === "" ? 0 : Number(e.target.value) })}
+                          className="bg-[#070d1a] border-slate-700 text-xs text-white font-mono"
+                        />
+                      </div>
+                    </div>
+                  </div>
+                </>
+              )}
+
+              {/* DYNAMIC CATEGORY SECTION: DIGITAL GROWTH */}
+              {formData.category === "Digital Growth" && (
+                <>
+                  {/* Campaign Scope */}
+                  <div className="space-y-3 pt-3 border-t border-slate-750">
+                    <h4 className="text-xs font-bold text-emerald-400 uppercase tracking-wider flex items-center gap-1.5">
+                      <TrendingUp className="w-3.5 h-3.5" /> Marketing Services & Scope
+                    </h4>
+                    <div className="grid sm:grid-cols-2 gap-3.5">
+                      <div className="space-y-1 sm:col-span-2">
+                        <label className="text-xs font-bold text-slate-200">Services Included</label>
+                        <Input
+                          placeholder="SEO Ranking + Google Ads + Meta / Instagram Ads + Content"
+                          value={formData.marketingServices || ""}
+                          onChange={(e) => setFormData({ ...formData, marketingServices: e.target.value })}
+                          className="bg-[#070d1a] border-slate-700 text-xs text-white"
+                        />
+                      </div>
+
+                      <div className="space-y-1">
+                        <label className="text-xs font-bold text-slate-200">Billing Cycle</label>
+                        <select
+                          value={formData.billingCycle || "Monthly Retainer"}
+                          onChange={(e) => setFormData({ ...formData, billingCycle: e.target.value })}
+                          className="h-9 w-full rounded-xl border border-slate-700 bg-[#070d1a] px-3 text-xs text-white font-medium"
+                        >
+                          <option value="Monthly Retainer">Monthly Retainer</option>
+                          <option value="Quarterly Retainer">Quarterly Retainer</option>
+                          <option value="Half-Yearly">Half-Yearly (6 Months)</option>
+                          <option value="Annual Retainer">Annual Retainer</option>
+                        </select>
+                      </div>
+
+                      <div className="space-y-1">
+                        <label className="text-xs font-bold text-slate-200">Retainer Fee per Cycle (₹)</label>
+                        <Input
+                          type="number"
+                          placeholder="15000"
+                          value={formData.hostingRenewalAmount === 0 ? "" : formData.hostingRenewalAmount}
+                          onChange={(e) => setFormData({ ...formData, hostingRenewalAmount: e.target.value === "" ? 0 : Number(e.target.value) })}
+                          className="bg-[#070d1a] border-slate-700 text-xs text-white font-mono font-bold text-emerald-400"
+                        />
+                      </div>
+
+                      <div className="space-y-1">
+                        <label className="text-xs font-bold text-slate-200">Next Renewal / Billing Date</label>
+                        <Input
+                          type="date"
+                          value={formData.hostingExpiryDate}
+                          onChange={(e) => setFormData({ ...formData, hostingExpiryDate: e.target.value })}
+                          className="bg-[#070d1a] border-slate-700 text-xs text-white"
+                          required
+                        />
+                      </div>
+
+                      <div className="space-y-1">
+                        <label className="text-xs font-bold text-slate-200">Google Ads / Meta CID / ID</label>
+                        <Input
+                          placeholder="e.g. 123-456-7890 (Google Ads)"
+                          value={formData.adAccountId || ""}
+                          onChange={(e) => setFormData({ ...formData, adAccountId: e.target.value })}
+                          className="bg-[#070d1a] border-slate-700 text-xs text-white font-mono"
+                        />
+                      </div>
+                    </div>
+                  </div>
+                </>
+              )}
+
+              {/* DYNAMIC CATEGORY SECTION: DEFAULT (WEBSITE / WEB APP) */}
+              {(formData.category === "Website" || formData.category === "Web App") && (
+                <>
+                  {/* Domain Details */}
+                  <div className="space-y-3 pt-3 border-t border-slate-750">
+                    <h4 className="text-xs font-bold text-blue-400 uppercase tracking-wider flex items-center gap-1.5">
+                      <Globe className="w-3.5 h-3.5" /> Domain Lifecycle Details
+                    </h4>
+                    <div className="grid sm:grid-cols-2 gap-3.5">
+                      <div className="space-y-1">
+                        <label className="text-xs font-bold text-slate-200">Domain Name *</label>
+                        <Input
+                          placeholder="e.g. vkpenterprises.in"
+                          value={formData.domainName}
+                          onChange={(e) => setFormData({ ...formData, domainName: e.target.value })}
+                          className="bg-[#070d1a] border-slate-700 text-xs text-white font-mono"
+                          required
+                        />
+                      </div>
+
+                      <div className="space-y-1">
+                        <label className="text-xs font-bold text-slate-200">Domain Registrar</label>
+                        <Input
+                          placeholder="GoDaddy / Hostinger / Namecheap"
+                          list="projects-domain-registrars-list"
+                          value={formData.domainRegistrar}
+                          onChange={(e) => setFormData({ ...formData, domainRegistrar: e.target.value })}
+                          className="bg-[#070d1a] border-slate-700 text-xs text-white"
+                        />
+                      </div>
+
+                      <div className="space-y-1">
+                        <label className="text-xs font-bold text-slate-200">Domain Expiry Date *</label>
+                        <Input
+                          type="date"
+                          value={formData.domainExpiryDate}
+                          onChange={(e) => setFormData({ ...formData, domainExpiryDate: e.target.value })}
+                          className="bg-[#070d1a] border-slate-700 text-xs text-white"
+                          required
+                        />
+                      </div>
+
+                      <div className="space-y-1">
+                        <label className="text-xs font-bold text-slate-200">Domain Renewal Fee (₹)</label>
+                        <Input
+                          type="number"
+                          placeholder="1199"
+                          value={formData.domainRenewalAmount === 0 ? "" : formData.domainRenewalAmount}
+                          onChange={(e) => setFormData({ ...formData, domainRenewalAmount: e.target.value === "" ? 0 : Number(e.target.value) })}
+                          className="bg-[#070d1a] border-slate-700 text-xs text-white font-mono"
+                        />
+                      </div>
+                    </div>
+                  </div>
+
+                  {/* Hosting Server */}
+                  <div className="space-y-3 pt-3 border-t border-slate-750">
+                    <h4 className="text-xs font-bold text-cyan-400 uppercase tracking-wider flex items-center gap-1.5">
+                      <Server className="w-3.5 h-3.5" /> Hosting Server & Maintenance
+                    </h4>
+                    <div className="grid sm:grid-cols-2 gap-3.5">
+                      <div className="space-y-1">
+                        <label className="text-xs font-bold text-slate-200">Hosting Provider</label>
+                        <Input
+                          placeholder="Hostinger Cloud / Netlify / Vercel / AWS"
+                          list="projects-hosting-providers-list"
+                          value={formData.hostingProvider}
+                          onChange={(e) => setFormData({ ...formData, hostingProvider: e.target.value })}
+                          className="bg-[#070d1a] border-slate-700 text-xs text-white"
+                        />
+                      </div>
+
+                      <div className="space-y-1">
+                        <label className="text-xs font-bold text-slate-200">Hosting Expiry Date *</label>
+                        <Input
+                          type="date"
+                          value={formData.hostingExpiryDate}
+                          onChange={(e) => setFormData({ ...formData, hostingExpiryDate: e.target.value })}
+                          className="bg-[#070d1a] border-slate-700 text-xs text-white"
+                          required
+                        />
+                      </div>
+
+                      <div className="space-y-1">
+                        <label className="text-xs font-bold text-slate-200">Hosting Renewal Fee (₹)</label>
+                        <Input
+                          type="number"
+                          placeholder="3499"
+                          value={formData.hostingRenewalAmount === 0 ? "" : formData.hostingRenewalAmount}
+                          onChange={(e) => setFormData({ ...formData, hostingRenewalAmount: e.target.value === "" ? 0 : Number(e.target.value) })}
+                          className="bg-[#070d1a] border-slate-700 text-xs text-white font-mono"
+                        />
+                      </div>
+
+                      <div className="space-y-1">
+                        <label className="text-xs font-bold text-slate-200">AMC Maintenance Fee (₹)</label>
+                        <Input
+                          type="number"
+                          placeholder="0"
+                          value={formData.amcAmount === 0 ? "" : formData.amcAmount}
+                          onChange={(e) => setFormData({ ...formData, amcAmount: e.target.value === "" ? 0 : Number(e.target.value) })}
+                          className="bg-[#070d1a] border-slate-700 text-xs text-white font-mono"
+                        />
+                      </div>
+                    </div>
+                  </div>
+                </>
+              )}
+
+              {/* Total Live Renewal Amount Preview Box */}
+              <div className="p-3.5 rounded-xl bg-[#070d1a] border border-blue-500/30 flex items-center justify-between">
+                <span className="text-xs font-bold text-slate-300">Total Calculated Annual Renewal:</span>
+                <span className="font-mono text-base font-black text-emerald-300">
+                  ₹{calculateProjectTotalRenewal(formData as ProjectRecord).toLocaleString("en-IN")}
+                </span>
               </div>
 
-              {/* Section 3: Hosting */}
-              <div className="space-y-3 pt-3 border-t border-slate-750">
-                <h4 className="text-xs font-bold text-blue-400 uppercase tracking-wider">
-                  Hosting Server
-                </h4>
-                <div className="grid sm:grid-cols-2 gap-3.5">
-                  <div className="space-y-1">
-                    <label className="text-xs font-bold text-slate-200">Hosting Provider</label>
-                    <Input
-                      placeholder="Hostinger Cloud / Netlify / AWS / Vercel"
-                      list="projects-hosting-providers-list"
-                      value={formData.hostingProvider}
-                      onChange={(e) => setFormData({ ...formData, hostingProvider: e.target.value })}
-                      className="bg-[#070d1a] border-slate-700 text-xs text-white"
-                    />
-                  </div>
-
-                  <div className="space-y-1">
-                    <label className="text-xs font-bold text-slate-200">Hosting Expiry Date *</label>
-                    <Input
-                      type="date"
-                      value={formData.hostingExpiryDate}
-                      onChange={(e) => setFormData({ ...formData, hostingExpiryDate: e.target.value })}
-                      className="bg-[#070d1a] border-slate-700 text-xs text-white"
-                      required
-                    />
-                  </div>
-
-                  <div className="space-y-1">
-                    <label className="text-xs font-bold text-slate-200">Hosting Renewal Fee (₹)</label>
-                    <Input
-                      type="number"
-                      placeholder="0"
-                      value={formData.hostingRenewalAmount === 0 ? "" : formData.hostingRenewalAmount}
-                      onChange={(e) => setFormData({ ...formData, hostingRenewalAmount: e.target.value === "" ? 0 : Number(e.target.value) })}
-                      className="bg-[#070d1a] border-slate-700 text-xs text-white font-mono"
-                    />
-                  </div>
-
-                  <div className="space-y-1">
-                    <label className="text-xs font-bold text-slate-200">AMC Maintenance Fee (₹)</label>
-                    <Input
-                      type="number"
-                      placeholder="0"
-                      value={formData.amcAmount === 0 ? "" : formData.amcAmount}
-                      onChange={(e) => setFormData({ ...formData, amcAmount: e.target.value === "" ? 0 : Number(e.target.value) })}
-                      className="bg-[#070d1a] border-slate-700 text-xs text-white font-mono"
-                    />
-                  </div>
-                </div>
-              </div>
-
-              {/* Section 4: Optional Client Agreement / Invoice PDF */}
+              {/* Client Agreement / Invoice PDF */}
               <div className="space-y-2 pt-3 border-t border-slate-750">
                 <div className="flex items-center justify-between">
                   <h4 className="text-xs font-bold text-cyan-400 uppercase tracking-wider flex items-center gap-1.5">
@@ -981,12 +1764,12 @@ export default function ProjectsAdminPage() {
                 </div>
               </div>
 
-              {/* Section 5: Notes */}
+              {/* Notes */}
               <div className="space-y-1 pt-2 border-t border-slate-750">
                 <label className="text-xs font-bold text-slate-200">Notes / Remarks</label>
                 <Textarea
                   rows={2}
-                  placeholder="Client notes..."
+                  placeholder="Additional client requirements, renewal notes, or access keys..."
                   value={formData.notes}
                   onChange={(e) => setFormData({ ...formData, notes: e.target.value })}
                   className="bg-[#070d1a] border-slate-700 text-xs text-white"

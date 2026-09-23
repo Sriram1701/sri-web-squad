@@ -27,6 +27,34 @@ export interface ProjectRecord {
   notes?: string
   createdAt: string
   lastReminderSentAt?: string
+
+  // Mobile App Specific
+  playStoreUrl?: string
+  playConsoleStatus?: "Published" | "In Review" | "Account Setup" | "Pending"
+  appStoreUrl?: string
+  appleDevExpiryDate?: string
+  appleDevRenewalAmount?: number
+  backendProvider?: string
+  backendExpiryDate?: string
+  backendRenewalAmount?: number
+  databaseProvider?: string
+  dltProvider?: string
+  dltExpiryDate?: string
+  dltRenewalAmount?: number
+  whatsappApiProvider?: string
+
+  // ERP & Billing / Custom Software Specific
+  softwareType?: string
+  backupProvider?: string
+  licenseType?: string
+
+  // E-Commerce Specific
+  paymentGateway?: string
+
+  // Digital Growth Specific
+  marketingServices?: string
+  billingCycle?: string
+  adAccountId?: string
 }
 
 export interface LeadRecord {
@@ -86,12 +114,10 @@ Greetings from Sri Web Squad!
 
 This is a gentle reminder regarding the annual renewal of your digital services:
 
-📌 *Project:* {projectName}
+📌 *Project:* {projectName} ({category})
 
 *Renewal Charges Breakdown:*
-🌐 *Domain Charges ({domainName}):* ₹{domainRenewalAmount} (Exp: {domainExpiryDate})
-💻 *Hosting Charges ({hostingProvider}):* ₹{hostingRenewalAmount} (Exp: {hostingExpiryDate})
-🛠️ *Maintenance Charges (AMC):* ₹{amcAmount}
+{categoryBreakdown}
 💰 *Total Renewal Amount:* ₹{totalAmount}
 
 *Payment Details:*
@@ -151,29 +177,45 @@ export const SEED_PROJECTS: ProjectRecord[] = [
     sslIncluded: true,
     status: "expiring_soon",
     liveUrl: "https://app.sritextiles.com",
-    notes: "Critical billing software. Needs urgent renewal reminder.",
+    softwareType: "Cloud Web ERP + Billing",
+    backupProvider: "AWS S3 Cloud Auto-Backup",
+    licenseType: "Annual Subscription",
+    dltProvider: "Fast2SMS DLT",
+    whatsappApiProvider: "Meta Cloud API",
+    notes: "Critical billing software. Auto-backup enabled.",
     createdAt: getPastDate(12),
   },
   {
     id: "proj_3",
-    projectName: "Dr. Gowtham Smile Care",
+    projectName: "Doctor Quick Mobile App",
     clientName: "Dr. K. Gowtham",
     clientPhone: "+91 98940 11223",
-    category: "Website",
-    domainName: "thetoothcliniquepondy.in",
+    category: "Mobile App",
+    domainName: "api.doctorquick.in",
     domainRegistrar: "Namecheap",
     domainStartDate: getPastDate(14),
-    domainExpiryDate: getDateOffset(-5),
+    domainExpiryDate: getDateOffset(45),
     domainRenewalAmount: 999,
-    hostingProvider: "Hostinger Cloud",
+    hostingProvider: "AWS EC2 Backend",
     hostingStartDate: getPastDate(14),
-    hostingExpiryDate: getDateOffset(-5),
-    hostingRenewalAmount: 2999,
-    amcAmount: 0,
+    hostingExpiryDate: getDateOffset(12),
+    hostingRenewalAmount: 4500,
+    amcAmount: 3000,
     sslIncluded: true,
-    status: "expired",
-    liveUrl: "https://thetoothcliniquepondy.in",
-    notes: "Dental clinic website. In grace period.",
+    status: "expiring_soon",
+    liveUrl: "https://doctorquick.in",
+    playStoreUrl: "https://play.google.com/store/apps/details?id=com.sri.doctorquick",
+    playConsoleStatus: "Published",
+    appStoreUrl: "https://apps.apple.com/app/doctorquick/id123456789",
+    appleDevExpiryDate: getDateOffset(20),
+    appleDevRenewalAmount: 8900,
+    backendProvider: "Node.js on AWS Lightsail",
+    backendExpiryDate: getDateOffset(12),
+    backendRenewalAmount: 4500,
+    databaseProvider: "Supabase PostgreSQL",
+    dltProvider: "Jio DLT / Fast2SMS",
+    whatsappApiProvider: "Interakt WhatsApp API",
+    notes: "Doctor appointment app with patient records.",
     createdAt: getPastDate(14),
   },
   {
@@ -196,7 +238,9 @@ export const SEED_PROJECTS: ProjectRecord[] = [
     sslIncluded: true,
     status: "expiring_soon",
     liveUrl: "https://auraluxe.shop",
-    notes: "E-Commerce store with payment gateway.",
+    paymentGateway: "Razorpay PG",
+    whatsappApiProvider: "AiSensy WhatsApp Order Alerts",
+    notes: "E-Commerce store with payment gateway and automated order alerts.",
     createdAt: getPastDate(11),
   },
 ]
@@ -227,14 +271,26 @@ export const SEED_LEADS: LeadRecord[] = [
 ]
 
 // Expiry Calculations
-export function calculateDaysRemaining(expiryDateStr: string): number {
+export function calculateDaysRemaining(expiryDateStr?: string): number {
   if (!expiryDateStr) return 9999
   const now = new Date()
   now.setHours(0, 0, 0, 0)
   const exp = new Date(expiryDateStr)
+  if (isNaN(exp.getTime())) return 9999
   exp.setHours(0, 0, 0, 0)
   const diffTime = exp.getTime() - now.getTime()
   return Math.ceil(diffTime / (1000 * 60 * 60 * 24))
+}
+
+export function calculateProjectTotalRenewal(p: ProjectRecord): number {
+  return (
+    (p.domainRenewalAmount || 0) +
+    (p.hostingRenewalAmount || 0) +
+    (p.amcAmount || 0) +
+    (p.appleDevRenewalAmount || 0) +
+    (p.backendRenewalAmount || 0) +
+    (p.dltRenewalAmount || 0)
+  )
 }
 
 export interface ExpiryStatusDetails {
@@ -246,12 +302,30 @@ export interface ExpiryStatusDetails {
   isExpiringSoon: boolean
   severity: "expired" | "urgent" | "warning" | "healthy"
   label: string
+  nearestItem?: string
 }
 
 export function getProjectExpiryDetails(project: ProjectRecord, notifyDays = 30): ExpiryStatusDetails {
+  const dates: { type: string; date: string }[] = []
+  if (project.domainExpiryDate) dates.push({ type: "Domain", date: project.domainExpiryDate })
+  if (project.hostingExpiryDate) dates.push({ type: "Hosting Server", date: project.hostingExpiryDate })
+  if (project.backendExpiryDate) dates.push({ type: "Backend Server", date: project.backendExpiryDate })
+  if (project.appleDevExpiryDate) dates.push({ type: "Apple Dev Account", date: project.appleDevExpiryDate })
+  if (project.dltExpiryDate) dates.push({ type: "DLT / SMS Gateway", date: project.dltExpiryDate })
+
+  let minDays = 9999
+  let nearestItem = ""
+
+  for (const item of dates) {
+    const days = calculateDaysRemaining(item.date)
+    if (days < minDays) {
+      minDays = days
+      nearestItem = item.type
+    }
+  }
+
   const domainDays = calculateDaysRemaining(project.domainExpiryDate)
   const hostingDays = calculateDaysRemaining(project.hostingExpiryDate)
-  const minDays = Math.min(domainDays, hostingDays)
 
   const isExpired = minDays < 0
   const isUrgent = minDays >= 0 && minDays <= 7
@@ -260,12 +334,14 @@ export function getProjectExpiryDetails(project: ProjectRecord, notifyDays = 30)
   let severity: "expired" | "urgent" | "warning" | "healthy" = "healthy"
   let label = "Active & Healthy"
 
-  if (isExpired) {
+  if (minDays === 9999) {
+    label = "Active"
+  } else if (isExpired) {
     severity = "expired"
     label = `Expired (${Math.abs(minDays)}d ago)`
   } else if (isUrgent) {
     severity = "urgent"
-    label = `Urgent: ${minDays}d left`
+    label = `Urgent: ${minDays}d left${nearestItem ? ` (${nearestItem})` : ""}`
   } else if (isExpiringSoon) {
     severity = "warning"
     label = `Due in ${minDays} days`
@@ -282,6 +358,7 @@ export function getProjectExpiryDetails(project: ProjectRecord, notifyDays = 30)
     isExpiringSoon,
     severity,
     label,
+    nearestItem,
   }
 }
 
@@ -313,13 +390,107 @@ export function generateWhatsAppReminderMessage(
     ? "Expires TODAY" 
     : `${hostingDays} days remaining`
 
-  const totalAmount = (project.domainRenewalAmount || 0) + (project.hostingRenewalAmount || 0) + (project.amcAmount || 0)
+  const totalAmount = calculateProjectTotalRenewal(project)
+
+  // Construct dynamic category breakdown lines
+  const breakdownLines: string[] = []
+
+  if (project.category === "Mobile App") {
+    if (project.domainName) {
+      breakdownLines.push(`🌐 *API Domain (${project.domainName}):* ₹${(project.domainRenewalAmount || 0).toLocaleString("en-IN")} (Exp: ${project.domainExpiryDate || "N/A"})`)
+    }
+    if (project.backendProvider || project.backendRenewalAmount) {
+      breakdownLines.push(`⚡ *Backend Server (${project.backendProvider || "Cloud API"}):* ₹${(project.backendRenewalAmount || project.hostingRenewalAmount || 0).toLocaleString("en-IN")} (Exp: ${project.backendExpiryDate || project.hostingExpiryDate || "N/A"})`)
+    }
+    if (project.databaseProvider) {
+      breakdownLines.push(`🗄️ *Database Engine:* ${project.databaseProvider}`)
+    }
+    if (project.appleDevRenewalAmount || project.appleDevExpiryDate) {
+      breakdownLines.push(`🍎 *Apple Developer Program:* ₹${(project.appleDevRenewalAmount || 0).toLocaleString("en-IN")} (Exp: ${project.appleDevExpiryDate || "N/A"})`)
+    }
+    if (project.dltProvider || project.dltRenewalAmount) {
+      breakdownLines.push(`💬 *DLT / Bulk SMS Gateway (${project.dltProvider || "SMS"}):* ₹${(project.dltRenewalAmount || 0).toLocaleString("en-IN")}`)
+    }
+    if (project.whatsappApiProvider) {
+      breakdownLines.push(`📲 *WhatsApp Notification API:* ${project.whatsappApiProvider}`)
+    }
+    if (project.amcAmount) {
+      breakdownLines.push(`🛠️ *App Maintenance & Support (AMC):* ₹${(project.amcAmount || 0).toLocaleString("en-IN")}`)
+    }
+  } else if (project.category === "ERP & Billing" || project.category === "Custom Software") {
+    if (project.softwareType) {
+      breakdownLines.push(`🖥️ *Software Deployment:* ${project.softwareType}`)
+    }
+    if (project.hostingProvider || project.hostingRenewalAmount) {
+      breakdownLines.push(`💻 *Server / VPS Hosting (${project.hostingProvider}):* ₹${(project.hostingRenewalAmount || 0).toLocaleString("en-IN")} (Exp: ${project.hostingExpiryDate || "N/A"})`)
+    }
+    if (project.backupProvider) {
+      breakdownLines.push(`💾 *Auto-Backup Cloud Storage:* ${project.backupProvider}`)
+    }
+    if (project.domainName && project.domainRenewalAmount) {
+      breakdownLines.push(`🌐 *Web Access Domain (${project.domainName}):* ₹${(project.domainRenewalAmount || 0).toLocaleString("en-IN")} (Exp: ${project.domainExpiryDate || "N/A"})`)
+    }
+    if (project.dltProvider || project.dltRenewalAmount) {
+      breakdownLines.push(`💬 *DLT SMS / Bill Alerts:* ₹${(project.dltRenewalAmount || 0).toLocaleString("en-IN")}`)
+    }
+    if (project.amcAmount) {
+      breakdownLines.push(`🛠️ *Annual Maintenance & AMC Support:* ₹${(project.amcAmount || 0).toLocaleString("en-IN")}`)
+    }
+  } else if (project.category === "E-Commerce") {
+    if (project.domainName) {
+      breakdownLines.push(`🌐 *Store Domain (${project.domainName}):* ₹${(project.domainRenewalAmount || 0).toLocaleString("en-IN")} (Exp: ${project.domainExpiryDate || "N/A"})`)
+    }
+    if (project.hostingProvider) {
+      breakdownLines.push(`💻 *Store Hosting / Cloud (${project.hostingProvider}):* ₹${(project.hostingRenewalAmount || 0).toLocaleString("en-IN")} (Exp: ${project.hostingExpiryDate || "N/A"})`)
+    }
+    if (project.paymentGateway) {
+      breakdownLines.push(`💳 *Payment Gateway:* ${project.paymentGateway}`)
+    }
+    if (project.whatsappApiProvider) {
+      breakdownLines.push(`📲 *WhatsApp Order Notification:* ${project.whatsappApiProvider}`)
+    }
+    if (project.amcAmount) {
+      breakdownLines.push(`🛠️ *Maintenance Charges (AMC):* ₹${(project.amcAmount || 0).toLocaleString("en-IN")}`)
+    }
+  } else if (project.category === "Digital Growth") {
+    if (project.marketingServices) {
+      breakdownLines.push(`📈 *Marketing Services Scope:* ${project.marketingServices}`)
+    }
+    if (project.billingCycle) {
+      breakdownLines.push(`🗓️ *Billing Cycle:* ${project.billingCycle}`)
+    }
+    if (project.adAccountId) {
+      breakdownLines.push(`🎯 *Ad Account ID:* ${project.adAccountId}`)
+    }
+    breakdownLines.push(`💰 *Retainer / Service Charges:* ₹${(totalAmount || 0).toLocaleString("en-IN")}`)
+  } else {
+    // Default Website / Web App
+    if (project.domainName) {
+      breakdownLines.push(`🌐 *Domain Charges (${project.domainName}):* ₹${(project.domainRenewalAmount || 0).toLocaleString("en-IN")} (Exp: ${project.domainExpiryDate || "N/A"})`)
+    }
+    if (project.hostingProvider) {
+      breakdownLines.push(`💻 *Hosting Charges (${project.hostingProvider}):* ₹${(project.hostingRenewalAmount || 0).toLocaleString("en-IN")} (Exp: ${project.hostingExpiryDate || "N/A"})`)
+    }
+    if (project.amcAmount) {
+      breakdownLines.push(`🛠️ *Maintenance Charges (AMC):* ₹${(project.amcAmount || 0).toLocaleString("en-IN")}`)
+    }
+  }
+
+  const categoryBreakdownText = breakdownLines.length > 0 
+    ? breakdownLines.join("\n") + "\n"
+    : `🌐 *Domain Charges (${project.domainName || "Domain"}):* ₹${(project.domainRenewalAmount || 0).toLocaleString("en-IN")}\n💻 *Hosting Charges (${project.hostingProvider || "Hosting"}):* ₹${(project.hostingRenewalAmount || 0).toLocaleString("en-IN")}\n`
 
   let template = settings.whatsappTemplate || DEFAULT_SETTINGS.whatsappTemplate
+
+  // If template contains {categoryBreakdown}, substitute it
+  if (template.includes("{categoryBreakdown}")) {
+    template = template.replace(/{categoryBreakdown}/g, categoryBreakdownText)
+  }
 
   template = template
     .replace(/{clientName}/g, project.clientName)
     .replace(/{projectName}/g, project.projectName)
+    .replace(/{category}/g, project.category)
     .replace(/{domainName}/g, project.domainName || "Not configured")
     .replace(/{domainExpiryDate}/g, project.domainExpiryDate || "N/A")
     .replace(/{domainDaysText}/g, domainDaysText)
@@ -537,6 +708,28 @@ export async function syncProjectsToSupabase(projects: ProjectRecord[]): Promise
       agreement_pdf_url: p.agreementPdfUrl || null,
       notes: p.notes || null,
       created_at: p.createdAt || new Date().toISOString(),
+
+      // Category Extensions
+      play_store_url: p.playStoreUrl || null,
+      play_console_status: p.playConsoleStatus || null,
+      app_store_url: p.appStoreUrl || null,
+      apple_dev_expiry_date: p.appleDevExpiryDate || null,
+      apple_dev_renewal_amount: p.appleDevRenewalAmount || 0,
+      backend_provider: p.backendProvider || null,
+      backend_expiry_date: p.backendExpiryDate || null,
+      backend_renewal_amount: p.backendRenewalAmount || 0,
+      database_provider: p.databaseProvider || null,
+      dlt_provider: p.dltProvider || null,
+      dlt_expiry_date: p.dltExpiryDate || null,
+      dlt_renewal_amount: p.dltRenewalAmount || 0,
+      whatsapp_api_provider: p.whatsappApiProvider || null,
+      software_type: p.softwareType || null,
+      backup_provider: p.backupProvider || null,
+      license_type: p.licenseType || null,
+      payment_gateway: p.paymentGateway || null,
+      marketing_services: p.marketingServices || null,
+      billing_cycle: p.billingCycle || null,
+      ad_account_id: p.adAccountId || null,
     }))
 
     const { error } = await supabase.from("projects").upsert(rows, { onConflict: "id" })
@@ -585,6 +778,28 @@ export async function fetchProjectsFromSupabase(): Promise<ProjectRecord[] | nul
       agreementPdfUrl: r.agreement_pdf_url || "",
       notes: r.notes || "",
       createdAt: r.created_at ? r.created_at.split("T")[0] : new Date().toISOString().split("T")[0],
+
+      // Extended Category Fields
+      playStoreUrl: r.play_store_url || "",
+      playConsoleStatus: r.play_console_status || "",
+      appStoreUrl: r.app_store_url || "",
+      appleDevExpiryDate: r.apple_dev_expiry_date || "",
+      appleDevRenewalAmount: Number(r.apple_dev_renewal_amount) || 0,
+      backendProvider: r.backend_provider || "",
+      backendExpiryDate: r.backend_expiry_date || "",
+      backendRenewalAmount: Number(r.backend_renewal_amount) || 0,
+      databaseProvider: r.database_provider || "",
+      dltProvider: r.dlt_provider || "",
+      dltExpiryDate: r.dlt_expiry_date || "",
+      dltRenewalAmount: Number(r.dlt_renewal_amount) || 0,
+      whatsappApiProvider: r.whatsapp_api_provider || "",
+      softwareType: r.software_type || "",
+      backupProvider: r.backup_provider || "",
+      licenseType: r.license_type || "",
+      paymentGateway: r.payment_gateway || "",
+      marketingServices: r.marketing_services || "",
+      billingCycle: r.billing_cycle || "",
+      adAccountId: r.ad_account_id || "",
     }))
   } catch (e) {
     console.error("Supabase fetch error:", e)
@@ -655,6 +870,28 @@ export async function syncAllDataWithSupabase(): Promise<{ projects: ProjectReco
         agreementPdfUrl: r.agreement_pdf_url || "",
         notes: r.notes || "",
         createdAt: r.created_at ? r.created_at.split("T")[0] : new Date().toISOString().split("T")[0],
+
+        // Extended Category Fields
+        playStoreUrl: r.play_store_url || "",
+        playConsoleStatus: r.play_console_status || "",
+        appStoreUrl: r.app_store_url || "",
+        appleDevExpiryDate: r.apple_dev_expiry_date || "",
+        appleDevRenewalAmount: Number(r.apple_dev_renewal_amount) || 0,
+        backendProvider: r.backend_provider || "",
+        backendExpiryDate: r.backend_expiry_date || "",
+        backendRenewalAmount: Number(r.backend_renewal_amount) || 0,
+        databaseProvider: r.database_provider || "",
+        dltProvider: r.dlt_provider || "",
+        dltExpiryDate: r.dlt_expiry_date || "",
+        dltRenewalAmount: Number(r.dlt_renewal_amount) || 0,
+        whatsappApiProvider: r.whatsapp_api_provider || "",
+        softwareType: r.software_type || "",
+        backupProvider: r.backup_provider || "",
+        licenseType: r.license_type || "",
+        paymentGateway: r.payment_gateway || "",
+        marketingServices: r.marketing_services || "",
+        billingCycle: r.billing_cycle || "",
+        adAccountId: r.ad_account_id || "",
       }))
 
       const cloudIds = new Set(cloudProjects.map((p) => p.id))
@@ -766,18 +1003,23 @@ export function exportProjectsToCSV(): string {
     "Domain Registrar",
     "Domain Expiry Date",
     "Domain Renewal Amount (INR)",
-    "Hosting Provider",
+    "Hosting / Backend Provider",
     "Hosting Expiry Date",
-    "Hosting Renewal Amount (INR)",
+    "Hosting / Backend Renewal Amount (INR)",
+    "Apple Dev Renewal Amount (INR)",
+    "DLT / SMS Gateway",
     "AMC Amount (INR)",
     "Total Annual Renewal (INR)",
     "Status",
-    "Live URL",
+    "Live URL / App Store",
+    "Deployment / Software Type",
+    "Backup / Database Provider",
+    "Payment Gateway / WhatsApp API",
     "Notes",
   ]
 
   const rows = projects.map((p) => {
-    const total = (p.domainRenewalAmount || 0) + (p.hostingRenewalAmount || 0) + (p.amcAmount || 0)
+    const total = calculateProjectTotalRenewal(p)
     return [
       `"${p.id}"`,
       `"${p.projectName.replace(/"/g, '""')}"`,
@@ -789,13 +1031,18 @@ export function exportProjectsToCSV(): string {
       `"${p.domainRegistrar || ""}"`,
       `"${p.domainExpiryDate || ""}"`,
       p.domainRenewalAmount || 0,
-      `"${p.hostingProvider || ""}"`,
-      `"${p.hostingExpiryDate || ""}"`,
-      p.hostingRenewalAmount || 0,
+      `"${p.backendProvider || p.hostingProvider || ""}"`,
+      `"${p.backendExpiryDate || p.hostingExpiryDate || ""}"`,
+      p.backendRenewalAmount || p.hostingRenewalAmount || 0,
+      p.appleDevRenewalAmount || 0,
+      `"${p.dltProvider || ""}"`,
       p.amcAmount || 0,
       total,
       `"${p.status}"`,
-      `"${p.liveUrl || ""}"`,
+      `"${p.playStoreUrl || p.appStoreUrl || p.liveUrl || ""}"`,
+      `"${p.softwareType || ""}"`,
+      `"${p.databaseProvider || p.backupProvider || ""}"`,
+      `"${p.paymentGateway || p.whatsappApiProvider || ""}"`,
       `"${(p.notes || "").replace(/"/g, '""')}"`,
     ].join(",")
   })
@@ -818,7 +1065,7 @@ export function printProjectsPDFReport(): void {
   })
 
   const totalAnnual = projects.reduce((acc, p) => {
-    return acc + (p.domainRenewalAmount || 0) + (p.hostingRenewalAmount || 0) + (p.amcAmount || 0)
+    return acc + calculateProjectTotalRenewal(p)
   }, 0)
 
   const printWindow = window.open("", "_blank", "width=1000,height=800")
