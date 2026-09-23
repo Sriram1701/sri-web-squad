@@ -12,7 +12,6 @@ import {
   Plus, 
   Trash2, 
   Search, 
-  CheckCircle2, 
   X
 } from "lucide-react"
 import { 
@@ -33,15 +32,11 @@ const EMPTY_LEAD: Omit<LeadRecord, "id" | "createdAt"> = {
 }
 
 export default function LeadsAdminPage() {
-  const [leads, setLeads] = React.useState<LeadRecord[]>([])
+  const [leads, setLeads] = React.useState<LeadRecord[]>(() => getStoredLeads())
   const [searchTerm, setSearchTerm] = React.useState("")
   const [statusFilter, setStatusFilter] = React.useState<string>("all")
   const [isAddModalOpen, setIsAddModalOpen] = React.useState(false)
   const [newLeadData, setNewLeadData] = React.useState(EMPTY_LEAD)
-
-  React.useEffect(() => {
-    setLeads(getStoredLeads())
-  }, [])
 
   const filteredLeads = React.useMemo(() => {
     return leads.filter((lead) => {
@@ -194,7 +189,7 @@ Best regards,
 
                   <select
                     value={lead.status}
-                    onChange={(e) => handleUpdateStatus(lead.id, e.target.value as any)}
+                    onChange={(e) => handleUpdateStatus(lead.id, e.target.value as LeadRecord["status"])}
                     className={`text-xs font-bold px-2.5 py-1 rounded-lg border focus:outline-none capitalize ${
                       lead.status === "new"
                         ? "bg-amber-500/20 text-amber-300 border-amber-500/40"

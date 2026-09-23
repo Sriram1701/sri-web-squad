@@ -20,23 +20,19 @@ import {
   AlertTriangle, 
   ExternalLink,
   ShieldCheck,
-  CheckCircle2,
   X,
   FileSpreadsheet,
   FileText,
   Paperclip,
   UploadCloud,
   FileCheck,
-  Download,
   Smartphone,
-  Database,
   CreditCard,
   TrendingUp,
   Cpu,
   Layers,
   HardDrive,
   Radio,
-  Sparkles,
   ShoppingBag
 } from "lucide-react"
 import { 
@@ -107,8 +103,8 @@ const EMPTY_PROJECT: Omit<ProjectRecord, "id" | "createdAt"> = {
 }
 
 export default function ProjectsAdminPage() {
-  const [projects, setProjects] = React.useState<ProjectRecord[]>([])
-  const [settings, setSettings] = React.useState(getStoredSettings())
+  const [projects, setProjects] = React.useState<ProjectRecord[]>(() => getStoredProjects())
+  const [settings] = React.useState(() => getStoredSettings())
   const [searchTerm, setSearchTerm] = React.useState("")
   const [activeTab, setActiveTab] = React.useState<"all" | "expiring_30" | "expired">("all")
   const [categoryFilter, setCategoryFilter] = React.useState<string>("all")
@@ -129,9 +125,6 @@ export default function ProjectsAdminPage() {
   const [renewConfirmProject, setRenewConfirmProject] = React.useState<ProjectRecord | null>(null)
 
   React.useEffect(() => {
-    setProjects(getStoredProjects())
-    setSettings(getStoredSettings())
-
     syncAllDataWithSupabase().then((result) => {
       if (result && result.projects) {
         setProjects(result.projects)
@@ -998,7 +991,7 @@ export default function ProjectsAdminPage() {
                     <label className="text-xs font-bold text-slate-200">Service Category *</label>
                     <select
                       value={formData.category}
-                      onChange={(e) => setFormData({ ...formData, category: e.target.value as any })}
+                      onChange={(e) => setFormData({ ...formData, category: e.target.value as ProjectRecord["category"] })}
                       className="h-9 w-full rounded-xl border border-blue-500/50 bg-[#070d1a] px-3 text-xs text-white focus:outline-none focus:border-blue-500 font-bold text-blue-300"
                     >
                       <option value="Website">🌐 Website</option>
@@ -1036,7 +1029,7 @@ export default function ProjectsAdminPage() {
                         <label className="text-xs font-bold text-slate-200">Play Console Status</label>
                         <select
                           value={formData.playConsoleStatus || "Published"}
-                          onChange={(e) => setFormData({ ...formData, playConsoleStatus: e.target.value as any })}
+                          onChange={(e) => setFormData({ ...formData, playConsoleStatus: e.target.value as ProjectRecord["playConsoleStatus"] })}
                           className="h-9 w-full rounded-xl border border-slate-700 bg-[#070d1a] px-3 text-xs text-white font-medium"
                         >
                           <option value="Published">Published Live</option>

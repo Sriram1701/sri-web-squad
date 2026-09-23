@@ -12,7 +12,6 @@ import {
   DollarSign,
   Clock,
   ShieldCheck,
-  Settings,
   Rocket
 } from "lucide-react"
 import Link from "next/link"
@@ -22,7 +21,7 @@ interface FAQItem {
   question: string
   answer: string
   tag: string
-  icon: any
+  icon: React.ComponentType<{ className?: string }>
 }
 
 const faqs: FAQItem[] = [

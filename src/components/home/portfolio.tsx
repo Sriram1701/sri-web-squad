@@ -125,11 +125,6 @@ export function Portfolio() {
     return allProjects.filter(project => project.category === activeCategory)
   }, [activeCategory])
 
-  // Reset showAll when category changes if needed
-  React.useEffect(() => {
-    setShowAll(false)
-  }, [activeCategory])
-
   const visibleProjects = showAll 
     ? filteredProjects 
     : filteredProjects.slice(0, INITIAL_DISPLAY_COUNT)
@@ -149,7 +144,10 @@ export function Portfolio() {
           {categories.map((category) => (
             <button
               key={category}
-              onClick={() => setActiveCategory(category)}
+              onClick={() => {
+                setActiveCategory(category)
+                setShowAll(false)
+              }}
               className={`px-5 py-2 rounded-full text-sm font-medium transition-all ${
                 activeCategory === category
                   ? "bg-primary-600 text-white shadow-md"

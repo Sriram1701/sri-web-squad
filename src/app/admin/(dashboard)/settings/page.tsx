@@ -6,7 +6,6 @@ import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Textarea } from "@/components/ui/textarea"
 import { 
-  Settings, 
   KeyRound, 
   MessageCircle, 
   Download, 
@@ -16,28 +15,29 @@ import {
   Check, 
   ShieldCheck, 
   Building2, 
-  FileText,
-  FileSpreadsheet,
-  CheckCircle2
+  FileText, 
+  FileSpreadsheet, 
+  CheckCircle2, 
+  Eye, 
+  EyeOff 
 } from "lucide-react"
 import { 
   getStoredSettings, 
   saveStoredSettings, 
-  syncSettingsToSupabase,
-  fetchSettingsFromSupabase,
+  syncSettingsToSupabase, 
+  fetchSettingsFromSupabase, 
   AdminSettings, 
-  DEFAULT_SETTINGS, 
+  DEFAULT_SETTINGS,
   SEED_PROJECTS, 
-  exportDatabaseBackupJSON,
-  importDatabaseBackupJSON,
-  generateWhatsAppReminderMessage,
-  exportProjectsToCSV,
-  printProjectsPDFReport
+  exportDatabaseBackupJSON, 
+  importDatabaseBackupJSON, 
+  generateWhatsAppReminderMessage, 
+  exportProjectsToCSV, 
+  printProjectsPDFReport 
 } from "@/lib/admin-store"
-import { Eye, EyeOff, Lock, Sparkles } from "lucide-react"
 
 export default function SettingsAdminPage() {
-  const [settings, setSettings] = React.useState<AdminSettings>(DEFAULT_SETTINGS)
+  const [settings, setSettings] = React.useState<AdminSettings>(() => getStoredSettings())
   const [savedSuccess, setSavedSuccess] = React.useState(false)
   const [securitySuccess, setSecuritySuccess] = React.useState(false)
   const [showPass, setShowPass] = React.useState(false)
@@ -45,13 +45,11 @@ export default function SettingsAdminPage() {
   const fileInputRef = React.useRef<HTMLInputElement>(null)
 
   React.useEffect(() => {
-    const local = getStoredSettings()
-    setSettings(local)
     fetchSettingsFromSupabase().then((cloud) => {
       if (cloud) {
         setSettings(cloud)
       }
-    })
+    }).catch(() => {})
   }, [])
 
   const handleSave = async (e: React.FormEvent) => {

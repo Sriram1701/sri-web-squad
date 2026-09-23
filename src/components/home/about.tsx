@@ -10,8 +10,6 @@ import {
   Clock,
   Sparkles,
   Rocket,
-  ShieldCheck,
-  Zap,
   CheckCircle2,
   ArrowRight,
   MessageSquare

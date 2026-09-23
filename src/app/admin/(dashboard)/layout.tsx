@@ -31,7 +31,12 @@ export default function AdminDashboardLayout({
 }) {
   const router = useRouter()
   const pathname = usePathname()
-  const [isAuthenticated, setIsAuthenticated] = React.useState<boolean | null>(null)
+  const [isAuthenticated] = React.useState<boolean>(() => {
+    if (typeof window !== "undefined") {
+      return checkAdminAuth()
+    }
+    return false
+  })
   const [mobileMenuOpen, setMobileMenuOpen] = React.useState(false)
   const [isSidebarOpen, setIsSidebarOpen] = React.useState(true)
 
@@ -40,9 +45,7 @@ export default function AdminDashboardLayout({
     const isAuth = checkAdminAuth()
     if (!isAuth) {
       router.push("/admin/login")
-      return
     }
-    setIsAuthenticated(true)
   }, [router, pathname])
 
   const handleSignOut = () => {
@@ -50,7 +53,7 @@ export default function AdminDashboardLayout({
     router.push("/admin/login")
   }
 
-  if (isAuthenticated === null) {
+  if (!isAuthenticated) {
     return (
       <div className="min-h-screen bg-[#070b14] flex items-center justify-center text-white">
         <div className="flex flex-col items-center gap-3">

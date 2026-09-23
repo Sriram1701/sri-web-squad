@@ -30,9 +30,7 @@ import {
   UploadCloud,
   Paperclip,
   Smartphone,
-  Database,
   Server,
-  CreditCard,
   TrendingUp,
   Cpu,
   Layers,
@@ -108,8 +106,8 @@ const EMPTY_PROJECT: Omit<ProjectRecord, "id" | "createdAt"> = {
 }
 
 export default function AdminDashboardPage() {
-  const [projects, setProjects] = React.useState<ProjectRecord[]>([])
-  const [settings, setSettings] = React.useState(getStoredSettings())
+  const [projects, setProjects] = React.useState<ProjectRecord[]>(() => getStoredProjects())
+  const [settings] = React.useState(() => getStoredSettings())
   const [dashboardSearch, setDashboardSearch] = React.useState("")
   const [selectedProjectForWA, setSelectedProjectForWA] = React.useState<ProjectRecord | null>(null)
   const [renewConfirmProject, setRenewConfirmProject] = React.useState<ProjectRecord | null>(null)
@@ -120,9 +118,6 @@ export default function AdminDashboardPage() {
   const pdfInputRef = React.useRef<HTMLInputElement>(null)
 
   React.useEffect(() => {
-    setProjects(getStoredProjects())
-    setSettings(getStoredSettings())
-
     // Auto-sync with Supabase in background
     syncAllDataWithSupabase().then((result) => {
       if (result && result.projects) {
@@ -1209,7 +1204,7 @@ export default function AdminDashboardPage() {
                     <label className="text-xs font-bold text-slate-200">Service Category *</label>
                     <select
                       value={newProjectData.category}
-                      onChange={(e) => setNewProjectData({ ...newProjectData, category: e.target.value as any })}
+                      onChange={(e) => setNewProjectData({ ...newProjectData, category: e.target.value as ProjectRecord["category"] })}
                       className="h-9 w-full rounded-xl border border-blue-500/50 bg-[#070d1a] px-3 text-xs text-white focus:outline-none focus:border-blue-500 font-bold text-blue-300"
                     >
                       <option value="Website">🌐 Website</option>
@@ -1247,7 +1242,7 @@ export default function AdminDashboardPage() {
                         <label className="text-xs font-bold text-slate-200">Play Console Status</label>
                         <select
                           value={newProjectData.playConsoleStatus || "Published"}
-                          onChange={(e) => setNewProjectData({ ...newProjectData, playConsoleStatus: e.target.value as any })}
+                          onChange={(e) => setNewProjectData({ ...newProjectData, playConsoleStatus: e.target.value as ProjectRecord["playConsoleStatus"] })}
                           className="h-9 w-full rounded-xl border border-slate-700 bg-[#070d1a] px-3 text-xs text-white font-medium"
                         >
                           <option value="Published">Published Live</option>

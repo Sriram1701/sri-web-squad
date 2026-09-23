@@ -4,7 +4,7 @@ import * as React from "react"
 import Link from "next/link"
 import { useRouter } from "next/navigation"
 import { motion, AnimatePresence } from "framer-motion"
-import { Menu, X, MessageCircle, ShieldAlert } from "lucide-react"
+import { Menu, X, MessageCircle } from "lucide-react"
 import Image from "next/image"
 import logoImg from "@/app/icon.png"
 
