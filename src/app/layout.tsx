@@ -29,10 +29,10 @@ export const viewport: Viewport = {
 export const metadata: Metadata = {
   metadataBase: new URL("https://sriwebsquad.in"),
   title: {
-    default: "Sri Web Squad | Software Company in Cuddalore | Web Design & Mobile Apps",
-    template: "%s | Sri Web Squad - Software Company in Cuddalore",
+    default: "Sri Web Squad | Websites, Apps & Software in Cuddalore",
+    template: "%s | Sri Web Squad - Web & App Development in Cuddalore",
   },
-  description: "Sri Web Squad, founded by Sriram, is a premier AI-powered software company and web design agency in Cuddalore, Tamil Nadu. We build high-speed Websites, Android & iOS Mobile Apps, Custom ERP Billing Softwares, POS Systems, Clinic Portals, and Digital Growth Solutions at budget-friendly pricing.",
+  description: "Sri Web Squad is a premier web design, mobile app, and custom software development team in Cuddalore, Tamil Nadu. We build high-speed Websites, Android & iOS Mobile Apps, Custom ERP Billing Softwares, POS Systems, Clinic Portals, and Digital Growth Solutions at budget-friendly pricing.",
   keywords: [
     // Core Brand Keywords
     "Sri Web Squad",
@@ -44,16 +44,15 @@ export const metadata: Metadata = {
     "Sriram software developer",
     "Sriram web designer",
     
-    // Cuddalore Software & IT Company Keywords
-    "Software company in Cuddalore",
-    "Cuddalore software company",
-    "Best software company in Cuddalore",
-    "Top software company Cuddalore",
+    // Cuddalore Software & IT Keywords
+    "Software in Cuddalore",
     "Cuddalore software",
+    "Best software in Cuddalore",
+    "Top software Cuddalore",
     "Softwares Cuddalore",
     "Software development Cuddalore",
     "Custom software development in Cuddalore",
-    "IT company in Cuddalore",
+    "IT services in Cuddalore",
     "Software agency Cuddalore",
     
     // Cuddalore Web Design & Website Development Keywords
@@ -61,7 +60,7 @@ export const metadata: Metadata = {
     "Web design in Cuddalore",
     "Website Cuddalore",
     "Website development Cuddalore",
-    "Best web design company in Cuddalore",
+    "Best web design in Cuddalore",
     "Web designer in Cuddalore",
     "Affordable website development Cuddalore",
     "Website design Cuddalore Old Town",
@@ -91,21 +90,21 @@ export const metadata: Metadata = {
     
     // Regional Surrounding Area Keywords
     "Web design Pondicherry",
-    "Software company Pondicherry",
+    "Software Pondicherry",
     "Web development Panruti",
-    "Software company Neyveli",
+    "Software Neyveli",
     "Website design Chidambaram",
     "Web development Villupuram",
-    "Software company in Tamil Nadu",
+    "Web and software development in Tamil Nadu",
     "Best digital agency Tamil Nadu",
     "Next.js Developer India",
     "AI Development Agency Cuddalore"
   ],
   authors: [
-    { name: "Sriram", url: "https://sriwebsquad.in" },
+    { name: "Sri Web Squad", url: "https://sriwebsquad.in" },
     { name: "Sri Web Squad Team", url: "https://sriwebsquad.in" }
   ],
-  creator: "Sriram - Sri Web Squad",
+  creator: "Sri Web Squad",
   publisher: "Sri Web Squad",
   category: "technology",
   formatDetection: {
@@ -117,8 +116,8 @@ export const metadata: Metadata = {
     canonical: "https://sriwebsquad.in",
   },
   openGraph: {
-    title: "Sri Web Squad | Software Company in Cuddalore",
-    description: "Founded by Sriram — Crafting high-speed Websites, Android/iOS Mobile Apps, and Custom ERP Billing Softwares in Cuddalore, Tamil Nadu at pocket-friendly pricing.",
+    title: "Sri Web Squad | Websites, Apps & Software in Cuddalore",
+    description: "Crafting high-speed Websites, Android/iOS Mobile Apps, and Custom ERP Billing Softwares in Cuddalore, Tamil Nadu at pocket-friendly pricing.",
     url: "https://sriwebsquad.in",
     siteName: "Sri Web Squad",
     images: [
@@ -126,7 +125,7 @@ export const metadata: Metadata = {
         url: "https://sriwebsquad.in/og-image.png",
         width: 1200,
         height: 630,
-        alt: "Sri Web Squad - Software Company in Cuddalore",
+        alt: "Sri Web Squad - Websites, Apps & Software in Cuddalore",
         type: "image/png",
       },
       {
@@ -142,8 +141,8 @@ export const metadata: Metadata = {
   },
   twitter: {
     card: "summary_large_image",
-    title: "Sri Web Squad | Best Software Company in Cuddalore",
-    description: "High-performance Websites, Mobile Apps, and Custom ERP Software crafted by Sriram & Sri Web Squad in Cuddalore.",
+    title: "Sri Web Squad | Websites, Apps & Software in Cuddalore",
+    description: "High-performance Websites, Mobile Apps, and Custom ERP Software crafted by Sri Web Squad in Cuddalore, Tamil Nadu.",
     site: "@sriwebsquad",
     creator: "@sriwebsquad",
     images: ["https://sriwebsquad.in/og-image.png"],
@@ -161,9 +160,11 @@ export const metadata: Metadata = {
   },
   icons: {
     icon: [
-      { url: "/icon.png", sizes: "32x32", type: "image/png" },
-      { url: "/logo.png", sizes: "192x192", type: "image/png" }
+      { url: "/favicon.ico", sizes: "any" },
+      { url: "/icon.png", sizes: "512x512", type: "image/png" },
+      { url: "/logo.png", sizes: "512x512", type: "image/png" }
     ],
+    shortcut: "/favicon.ico",
     apple: [
       { url: "/logo.png", sizes: "180x180", type: "image/png" }
     ],
@@ -189,7 +190,8 @@ const jsonLd = {
       "@id": "https://sriwebsquad.in/#website",
       "url": "https://sriwebsquad.in",
       "name": "Sri Web Squad",
-      "description": "Best Software Company in Cuddalore & Web Design Agency",
+      "alternateName": ["SriWebSquad", "Sri Web Squad Cuddalore"],
+      "description": "Websites, Mobile Apps & Software Development in Cuddalore",
       "publisher": {
         "@id": "https://sriwebsquad.in/#organization"
       },
@@ -204,7 +206,7 @@ const jsonLd = {
       "@type": "Person",
       "@id": "https://sriwebsquad.in/#founder",
       "name": "Sriram",
-      "jobTitle": "Founder & Lead Software Architect",
+      "jobTitle": "Lead Software Architect",
       "worksFor": {
         "@id": "https://sriwebsquad.in/#organization"
       },
@@ -230,9 +232,7 @@ const jsonLd = {
       "alternateName": [
         "SriWebSquad",
         "Sri Web Squad Cuddalore",
-        "Sri Web Squad Software Company",
-        "Sriram Sri Web Squad",
-        "Best Software Company in Cuddalore"
+        "Sri Web Squad Web & App Development"
       ],
       "founder": {
         "@id": "https://sriwebsquad.in/#founder"
@@ -240,7 +240,7 @@ const jsonLd = {
       "url": "https://sriwebsquad.in",
       "logo": "https://sriwebsquad.in/logo.png",
       "image": "https://sriwebsquad.in/og-image.png",
-      "description": "Sri Web Squad is a premier AI-powered software company and web design agency in Cuddalore, Tamil Nadu, India. Providing custom business software, ERP, POS billing systems, modern web apps, Android & iOS mobile applications, and SEO services.",
+      "description": "Sri Web Squad is a premier AI-powered digital agency and web development firm in Cuddalore, Tamil Nadu, India. Providing custom business software, ERP, POS billing systems, modern web apps, Android & iOS mobile applications, and SEO services.",
       "telephone": "+91-7845391712",
       "email": "sriwebsquad@gmail.com",
       "priceRange": "₹₹",
@@ -294,7 +294,6 @@ const jsonLd = {
         "worstRating": "1"
       },
       "knowsAbout": [
-        "Software Company in Cuddalore",
         "Web Designing in Cuddalore",
         "Mobile App Development in Cuddalore",
         "Custom Software Development",
@@ -369,18 +368,10 @@ const jsonLd = {
       "mainEntity": [
         {
           "@type": "Question",
-          "name": "Which is the best software company in Cuddalore?",
+          "name": "Which is the best web and software development team in Cuddalore?",
           "acceptedAnswer": {
             "@type": "Answer",
-            "text": "Sri Web Squad, founded by Sriram, is recognized as the best software company and web design agency in Cuddalore, Tamil Nadu. Sri Web Squad specializes in custom software development, mobile apps (Android/iOS), high-speed websites, ERP & GST billing systems, and AI automation."
-          }
-        },
-        {
-          "@type": "Question",
-          "name": "Who is Sriram at Sri Web Squad?",
-          "acceptedAnswer": {
-            "@type": "Answer",
-            "text": "Sriram is the founder and lead software architect of Sri Web Squad in Cuddalore. He leads the engineering team building enterprise websites, mobile apps, and custom software for businesses across Tamil Nadu."
+            "text": "Sri Web Squad is recognized as the leading tech team in Cuddalore, Tamil Nadu. Sri Web Squad specializes in custom software development, mobile apps (Android/iOS), high-speed websites, ERP & GST billing systems, and AI automation."
           }
         },
         {
@@ -420,6 +411,11 @@ export default function RootLayout({
           type="application/ld+json"
           dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
         />
+        {/* Favicon & Web Application Manifest Links for Search Engines */}
+        <link rel="icon" href="/favicon.ico" sizes="any" />
+        <link rel="icon" href="/icon.png" type="image/png" sizes="512x512" />
+        <link rel="apple-touch-icon" href="/logo.png" />
+
         {/* OpenGraph & Facebook Specific Tags */}
         <meta property="og:site_name" content="Sri Web Squad" />
         <meta property="og:type" content="website" />

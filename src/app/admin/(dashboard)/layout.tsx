@@ -88,7 +88,7 @@ export default function AdminDashboardLayout({
   ]
 
   return (
-    <div className="flex min-h-screen bg-[#060a12] text-slate-100 font-sans selection:bg-primary-500/30 selection:text-white">
+    <div className="flex min-h-screen bg-[#060a12] text-slate-100 font-sans selection:bg-primary-500/30 selection:text-white overflow-x-hidden w-full max-w-full">
       {/* Sidebar - Desktop Collapsible with Mini & Full Modes */}
       <aside
         className={`${
@@ -283,7 +283,7 @@ export default function AdminDashboardLayout({
       </aside>
 
       {/* Main Content Area */}
-      <main className="flex-1 flex flex-col min-w-0 overflow-hidden">
+      <main className="flex-1 flex flex-col min-w-0 overflow-x-hidden w-full max-w-full">
         {/* Mobile Header (Hidden on Desktop) */}
         <header className="h-14 md:hidden flex items-center justify-between px-4 bg-[#0c1426] border-b border-slate-800 backdrop-blur-xl z-30 relative">
           <div className="flex items-center gap-2.5">
@@ -346,7 +346,7 @@ export default function AdminDashboardLayout({
         )}
 
         {/* Dashboard Body */}
-        <div className="flex-1 overflow-y-auto p-4 sm:p-6 lg:p-8 bg-[#060a12] transition-all duration-300">
+        <div className="flex-1 overflow-y-auto overflow-x-hidden p-3.5 sm:p-6 lg:p-8 bg-[#060a12] transition-all duration-300 w-full max-w-full">
           {children}
         </div>
       </main>

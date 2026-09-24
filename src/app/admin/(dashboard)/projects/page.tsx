@@ -918,22 +918,12 @@ export default function ProjectsAdminPage() {
             className="w-full max-w-2xl bg-[#0d1629] border-2 border-slate-750 rounded-2xl shadow-2xl p-6 sm:p-7 my-8 relative max-h-[90vh] overflow-y-auto"
           >
             <div className="flex items-center justify-between pb-3.5 border-b border-slate-750 mb-5">
-              <div>
-                <div className="flex items-center gap-2">
-                  <h3 className="font-black text-lg text-white">
-                    {editingProjectId ? "Edit Client Project" : "Add New Client Project"}
-                  </h3>
-                  <span className="px-2 py-0.5 rounded-md bg-blue-500/20 text-blue-300 border border-blue-500/40 text-[11px] font-bold">
-                    {formData.category}
-                  </span>
-                </div>
-                <p className="text-xs text-slate-300 mt-0.5">
-                  Configure dynamic parameters, servers, store links & renewal lifecycle.
-                </p>
-              </div>
+              <h3 className="font-black text-lg text-white">
+                {editingProjectId ? "Edit Client Project" : "Add New Client Project"}
+              </h3>
               <button
                 onClick={() => setIsModalOpen(false)}
-                className="text-slate-400 hover:text-white p-1 rounded-lg hover:bg-slate-800"
+                className="text-slate-400 hover:text-white p-1.5 rounded-lg hover:bg-slate-800"
               >
                 <X className="w-5 h-5" />
               </button>
@@ -949,15 +939,6 @@ export default function ProjectsAdminPage() {
                   <div className="space-y-1">
                     <label className="text-xs font-bold text-slate-200">Project / App Name *</label>
                     <Input
-                      placeholder={
-                        formData.category === "Mobile App" 
-                          ? "e.g. Doctor Quick Patient App" 
-                          : formData.category === "ERP & Billing"
-                          ? "e.g. Sri Textiles Billing ERP"
-                          : formData.category === "E-Commerce"
-                          ? "e.g. Aura Luxe Online Store"
-                          : "e.g. VKP Enterprises Website"
-                      }
                       value={formData.projectName}
                       onChange={(e) => setFormData({ ...formData, projectName: e.target.value })}
                       className="bg-[#070d1a] border-slate-700 text-xs text-white"
@@ -968,7 +949,6 @@ export default function ProjectsAdminPage() {
                   <div className="space-y-1">
                     <label className="text-xs font-bold text-slate-200">Client Contact Person *</label>
                     <Input
-                      placeholder="e.g. P. Vijay Kumar"
                       value={formData.clientName}
                       onChange={(e) => setFormData({ ...formData, clientName: e.target.value })}
                       className="bg-[#070d1a] border-slate-700 text-xs text-white"
@@ -979,7 +959,6 @@ export default function ProjectsAdminPage() {
                   <div className="space-y-1">
                     <label className="text-xs font-bold text-slate-200">Primary Phone / WhatsApp *</label>
                     <Input
-                      placeholder="+91 98401 23456"
                       value={formData.clientPhone}
                       onChange={(e) => setFormData({ ...formData, clientPhone: e.target.value })}
                       className="bg-[#070d1a] border-slate-700 text-xs text-white font-mono"
@@ -1018,7 +997,6 @@ export default function ProjectsAdminPage() {
                       <div className="space-y-1 sm:col-span-2">
                         <label className="text-xs font-bold text-slate-200">Google Play Store URL</label>
                         <Input
-                          placeholder="https://play.google.com/store/apps/details?id=com..."
                           value={formData.playStoreUrl || ""}
                           onChange={(e) => setFormData({ ...formData, playStoreUrl: e.target.value })}
                           className="bg-[#070d1a] border-slate-700 text-xs text-white font-mono"
@@ -1042,7 +1020,6 @@ export default function ProjectsAdminPage() {
                       <div className="space-y-1">
                         <label className="text-xs font-bold text-slate-200">Apple App Store URL</label>
                         <Input
-                          placeholder="https://apps.apple.com/app/..."
                           value={formData.appStoreUrl || ""}
                           onChange={(e) => setFormData({ ...formData, appStoreUrl: e.target.value })}
                           className="bg-[#070d1a] border-slate-700 text-xs text-white font-mono"
@@ -1063,7 +1040,6 @@ export default function ProjectsAdminPage() {
                         <label className="text-xs font-bold text-slate-200">Apple Dev Fee (₹ / $99)</label>
                         <Input
                           type="number"
-                          placeholder="8900"
                           value={formData.appleDevRenewalAmount === 0 ? "" : formData.appleDevRenewalAmount}
                           onChange={(e) => setFormData({ ...formData, appleDevRenewalAmount: e.target.value === "" ? 0 : Number(e.target.value) })}
                           className="bg-[#070d1a] border-slate-700 text-xs text-white font-mono"
@@ -1081,7 +1057,6 @@ export default function ProjectsAdminPage() {
                       <div className="space-y-1">
                         <label className="text-xs font-bold text-slate-200">Backend Server Provider</label>
                         <Input
-                          placeholder="Node.js on AWS / Firebase / Supabase"
                           list="projects-backend-providers-list"
                           value={formData.backendProvider || ""}
                           onChange={(e) => setFormData({ ...formData, backendProvider: e.target.value, hostingProvider: e.target.value })}
@@ -1092,7 +1067,6 @@ export default function ProjectsAdminPage() {
                       <div className="space-y-1">
                         <label className="text-xs font-bold text-slate-200">Database Engine / Provider</label>
                         <Input
-                          placeholder="Supabase PostgreSQL / MongoDB Atlas"
                           list="projects-database-providers-list"
                           value={formData.databaseProvider || ""}
                           onChange={(e) => setFormData({ ...formData, databaseProvider: e.target.value })}
@@ -1114,7 +1088,6 @@ export default function ProjectsAdminPage() {
                         <label className="text-xs font-bold text-slate-200">Backend Server Renewal Fee (₹)</label>
                         <Input
                           type="number"
-                          placeholder="4500"
                           value={formData.backendRenewalAmount || formData.hostingRenewalAmount || ""}
                           onChange={(e) => {
                             const val = e.target.value === "" ? 0 : Number(e.target.value)
@@ -1135,7 +1108,6 @@ export default function ProjectsAdminPage() {
                       <div className="space-y-1">
                         <label className="text-xs font-bold text-slate-200">DLT / Bulk SMS Provider</label>
                         <Input
-                          placeholder="Fast2SMS / Jio DLT / Textlocal"
                           list="projects-dlt-providers-list"
                           value={formData.dltProvider || ""}
                           onChange={(e) => setFormData({ ...formData, dltProvider: e.target.value })}
@@ -1146,7 +1118,6 @@ export default function ProjectsAdminPage() {
                       <div className="space-y-1">
                         <label className="text-xs font-bold text-slate-200">WhatsApp Notification API</label>
                         <Input
-                          placeholder="Meta Cloud API / Interakt / AiSensy"
                           list="projects-whatsapp-providers-list"
                           value={formData.whatsappApiProvider || ""}
                           onChange={(e) => setFormData({ ...formData, whatsappApiProvider: e.target.value })}
@@ -1168,7 +1139,6 @@ export default function ProjectsAdminPage() {
                         <label className="text-xs font-bold text-slate-200">DLT / SMS Annual Fee (₹)</label>
                         <Input
                           type="number"
-                          placeholder="0"
                           value={formData.dltRenewalAmount === 0 ? "" : formData.dltRenewalAmount}
                           onChange={(e) => setFormData({ ...formData, dltRenewalAmount: e.target.value === "" ? 0 : Number(e.target.value) })}
                           className="bg-[#070d1a] border-slate-700 text-xs text-white font-mono"
@@ -1186,7 +1156,6 @@ export default function ProjectsAdminPage() {
                       <div className="space-y-1">
                         <label className="text-xs font-bold text-slate-200">API / App Domain Name</label>
                         <Input
-                          placeholder="e.g. api.doctorquick.in"
                           value={formData.domainName}
                           onChange={(e) => setFormData({ ...formData, domainName: e.target.value })}
                           className="bg-[#070d1a] border-slate-700 text-xs text-white font-mono"
@@ -1196,7 +1165,6 @@ export default function ProjectsAdminPage() {
                       <div className="space-y-1">
                         <label className="text-xs font-bold text-slate-200">Domain Registrar</label>
                         <Input
-                          placeholder="GoDaddy / Hostinger / Namecheap"
                           list="projects-domain-registrars-list"
                           value={formData.domainRegistrar}
                           onChange={(e) => setFormData({ ...formData, domainRegistrar: e.target.value })}
@@ -1218,7 +1186,6 @@ export default function ProjectsAdminPage() {
                         <label className="text-xs font-bold text-slate-200">Domain Renewal Fee (₹)</label>
                         <Input
                           type="number"
-                          placeholder="1199"
                           value={formData.domainRenewalAmount === 0 ? "" : formData.domainRenewalAmount}
                           onChange={(e) => setFormData({ ...formData, domainRenewalAmount: e.target.value === "" ? 0 : Number(e.target.value) })}
                           className="bg-[#070d1a] border-slate-700 text-xs text-white font-mono"
@@ -1241,7 +1208,6 @@ export default function ProjectsAdminPage() {
                       <div className="space-y-1">
                         <label className="text-xs font-bold text-slate-200">Deployment Architecture</label>
                         <Input
-                          placeholder="Cloud Web ERP / Desktop + Cloud Sync / On-Premise"
                           list="projects-deployment-types-list"
                           value={formData.softwareType || ""}
                           onChange={(e) => setFormData({ ...formData, softwareType: e.target.value })}
@@ -1252,7 +1218,6 @@ export default function ProjectsAdminPage() {
                       <div className="space-y-1">
                         <label className="text-xs font-bold text-slate-200">Software License Model</label>
                         <Input
-                          placeholder="Annual Subscription / Perpetual + AMC"
                           value={formData.licenseType || ""}
                           onChange={(e) => setFormData({ ...formData, licenseType: e.target.value })}
                           className="bg-[#070d1a] border-slate-700 text-xs text-white"
@@ -1270,7 +1235,6 @@ export default function ProjectsAdminPage() {
                       <div className="space-y-1">
                         <label className="text-xs font-bold text-slate-200">Server / VPS Host</label>
                         <Input
-                          placeholder="AWS Lightsail / Hostinger VPS / Ubuntu Server"
                           list="projects-hosting-providers-list"
                           value={formData.hostingProvider}
                           onChange={(e) => setFormData({ ...formData, hostingProvider: e.target.value })}
@@ -1281,7 +1245,6 @@ export default function ProjectsAdminPage() {
                       <div className="space-y-1">
                         <label className="text-xs font-bold text-slate-200">Auto-Backup & Storage Cloud</label>
                         <Input
-                          placeholder="AWS S3 Cloud Auto-Backup / Google Drive Sync"
                           list="projects-backup-providers-list"
                           value={formData.backupProvider || ""}
                           onChange={(e) => setFormData({ ...formData, backupProvider: e.target.value })}
@@ -1303,7 +1266,6 @@ export default function ProjectsAdminPage() {
                         <label className="text-xs font-bold text-slate-200">Server Hosting Fee (₹)</label>
                         <Input
                           type="number"
-                          placeholder="5999"
                           value={formData.hostingRenewalAmount === 0 ? "" : formData.hostingRenewalAmount}
                           onChange={(e) => setFormData({ ...formData, hostingRenewalAmount: e.target.value === "" ? 0 : Number(e.target.value) })}
                           className="bg-[#070d1a] border-slate-700 text-xs text-white font-mono"
@@ -1321,7 +1283,6 @@ export default function ProjectsAdminPage() {
                       <div className="space-y-1">
                         <label className="text-xs font-bold text-slate-200">DLT / SMS Gateway</label>
                         <Input
-                          placeholder="Fast2SMS / Jio DLT"
                           list="projects-dlt-providers-list"
                           value={formData.dltProvider || ""}
                           onChange={(e) => setFormData({ ...formData, dltProvider: e.target.value })}
@@ -1332,7 +1293,6 @@ export default function ProjectsAdminPage() {
                       <div className="space-y-1">
                         <label className="text-xs font-bold text-slate-200">WhatsApp Notification API</label>
                         <Input
-                          placeholder="Meta Cloud API / UltraMsg"
                           list="projects-whatsapp-providers-list"
                           value={formData.whatsappApiProvider || ""}
                           onChange={(e) => setFormData({ ...formData, whatsappApiProvider: e.target.value })}
@@ -1351,7 +1311,6 @@ export default function ProjectsAdminPage() {
                       <div className="space-y-1">
                         <label className="text-xs font-bold text-slate-200">Portal Domain / Subdomain</label>
                         <Input
-                          placeholder="e.g. app.sritextiles.com"
                           value={formData.domainName}
                           onChange={(e) => setFormData({ ...formData, domainName: e.target.value })}
                           className="bg-[#070d1a] border-slate-700 text-xs text-white font-mono"
@@ -1372,7 +1331,6 @@ export default function ProjectsAdminPage() {
                         <label className="text-xs font-bold text-slate-200">Domain Renewal Fee (₹)</label>
                         <Input
                           type="number"
-                          placeholder="1499"
                           value={formData.domainRenewalAmount === 0 ? "" : formData.domainRenewalAmount}
                           onChange={(e) => setFormData({ ...formData, domainRenewalAmount: e.target.value === "" ? 0 : Number(e.target.value) })}
                           className="bg-[#070d1a] border-slate-700 text-xs text-white font-mono"
@@ -1383,7 +1341,6 @@ export default function ProjectsAdminPage() {
                         <label className="text-xs font-bold text-slate-200">AMC Maintenance & Support (₹)</label>
                         <Input
                           type="number"
-                          placeholder="3500"
                           value={formData.amcAmount === 0 ? "" : formData.amcAmount}
                           onChange={(e) => setFormData({ ...formData, amcAmount: e.target.value === "" ? 0 : Number(e.target.value) })}
                           className="bg-[#070d1a] border-slate-700 text-xs text-white font-mono font-bold text-emerald-400"
@@ -1406,7 +1363,6 @@ export default function ProjectsAdminPage() {
                       <div className="space-y-1">
                         <label className="text-xs font-bold text-slate-200">Online Store Domain *</label>
                         <Input
-                          placeholder="e.g. auraluxe.shop"
                           value={formData.domainName}
                           onChange={(e) => setFormData({ ...formData, domainName: e.target.value })}
                           className="bg-[#070d1a] border-slate-700 text-xs text-white font-mono"
@@ -1417,7 +1373,6 @@ export default function ProjectsAdminPage() {
                       <div className="space-y-1">
                         <label className="text-xs font-bold text-slate-200">Domain Registrar</label>
                         <Input
-                          placeholder="GoDaddy / Namecheap"
                           list="projects-domain-registrars-list"
                           value={formData.domainRegistrar}
                           onChange={(e) => setFormData({ ...formData, domainRegistrar: e.target.value })}
@@ -1440,7 +1395,6 @@ export default function ProjectsAdminPage() {
                         <label className="text-xs font-bold text-slate-200">Domain Renewal Fee (₹)</label>
                         <Input
                           type="number"
-                          placeholder="1599"
                           value={formData.domainRenewalAmount === 0 ? "" : formData.domainRenewalAmount}
                           onChange={(e) => setFormData({ ...formData, domainRenewalAmount: e.target.value === "" ? 0 : Number(e.target.value) })}
                           className="bg-[#070d1a] border-slate-700 text-xs text-white font-mono"
@@ -1458,7 +1412,6 @@ export default function ProjectsAdminPage() {
                       <div className="space-y-1">
                         <label className="text-xs font-bold text-slate-200">Platform / Cloud Host</label>
                         <Input
-                          placeholder="Shopify / WooCommerce VPS / Next.js Store"
                           list="projects-hosting-providers-list"
                           value={formData.hostingProvider}
                           onChange={(e) => setFormData({ ...formData, hostingProvider: e.target.value })}
@@ -1481,7 +1434,6 @@ export default function ProjectsAdminPage() {
                         <label className="text-xs font-bold text-slate-200">Hosting Renewal Fee (₹)</label>
                         <Input
                           type="number"
-                          placeholder="4200"
                           value={formData.hostingRenewalAmount === 0 ? "" : formData.hostingRenewalAmount}
                           onChange={(e) => setFormData({ ...formData, hostingRenewalAmount: e.target.value === "" ? 0 : Number(e.target.value) })}
                           className="bg-[#070d1a] border-slate-700 text-xs text-white font-mono"
@@ -1491,7 +1443,6 @@ export default function ProjectsAdminPage() {
                       <div className="space-y-1">
                         <label className="text-xs font-bold text-slate-200">Payment Gateway</label>
                         <Input
-                          placeholder="Razorpay PG / PhonePe PG / Cashfree"
                           list="projects-payment-gateways-list"
                           value={formData.paymentGateway || ""}
                           onChange={(e) => setFormData({ ...formData, paymentGateway: e.target.value })}
@@ -1502,7 +1453,6 @@ export default function ProjectsAdminPage() {
                       <div className="space-y-1">
                         <label className="text-xs font-bold text-slate-200">WhatsApp Order Alerts</label>
                         <Input
-                          placeholder="AiSensy / Meta Cloud API"
                           list="projects-whatsapp-providers-list"
                           value={formData.whatsappApiProvider || ""}
                           onChange={(e) => setFormData({ ...formData, whatsappApiProvider: e.target.value })}
@@ -1514,7 +1464,6 @@ export default function ProjectsAdminPage() {
                         <label className="text-xs font-bold text-slate-200">AMC Maintenance Fee (₹)</label>
                         <Input
                           type="number"
-                          placeholder="2500"
                           value={formData.amcAmount === 0 ? "" : formData.amcAmount}
                           onChange={(e) => setFormData({ ...formData, amcAmount: e.target.value === "" ? 0 : Number(e.target.value) })}
                           className="bg-[#070d1a] border-slate-700 text-xs text-white font-mono"
@@ -1537,7 +1486,6 @@ export default function ProjectsAdminPage() {
                       <div className="space-y-1 sm:col-span-2">
                         <label className="text-xs font-bold text-slate-200">Services Included</label>
                         <Input
-                          placeholder="SEO Ranking + Google Ads + Meta / Instagram Ads + Content"
                           value={formData.marketingServices || ""}
                           onChange={(e) => setFormData({ ...formData, marketingServices: e.target.value })}
                           className="bg-[#070d1a] border-slate-700 text-xs text-white"
@@ -1562,7 +1510,6 @@ export default function ProjectsAdminPage() {
                         <label className="text-xs font-bold text-slate-200">Retainer Fee per Cycle (₹)</label>
                         <Input
                           type="number"
-                          placeholder="15000"
                           value={formData.hostingRenewalAmount === 0 ? "" : formData.hostingRenewalAmount}
                           onChange={(e) => setFormData({ ...formData, hostingRenewalAmount: e.target.value === "" ? 0 : Number(e.target.value) })}
                           className="bg-[#070d1a] border-slate-700 text-xs text-white font-mono font-bold text-emerald-400"
@@ -1583,7 +1530,6 @@ export default function ProjectsAdminPage() {
                       <div className="space-y-1">
                         <label className="text-xs font-bold text-slate-200">Google Ads / Meta CID / ID</label>
                         <Input
-                          placeholder="e.g. 123-456-7890 (Google Ads)"
                           value={formData.adAccountId || ""}
                           onChange={(e) => setFormData({ ...formData, adAccountId: e.target.value })}
                           className="bg-[#070d1a] border-slate-700 text-xs text-white font-mono"
@@ -1606,7 +1552,6 @@ export default function ProjectsAdminPage() {
                       <div className="space-y-1">
                         <label className="text-xs font-bold text-slate-200">Domain Name *</label>
                         <Input
-                          placeholder="e.g. vkpenterprises.in"
                           value={formData.domainName}
                           onChange={(e) => setFormData({ ...formData, domainName: e.target.value })}
                           className="bg-[#070d1a] border-slate-700 text-xs text-white font-mono"
@@ -1617,7 +1562,6 @@ export default function ProjectsAdminPage() {
                       <div className="space-y-1">
                         <label className="text-xs font-bold text-slate-200">Domain Registrar</label>
                         <Input
-                          placeholder="GoDaddy / Hostinger / Namecheap"
                           list="projects-domain-registrars-list"
                           value={formData.domainRegistrar}
                           onChange={(e) => setFormData({ ...formData, domainRegistrar: e.target.value })}
@@ -1640,7 +1584,6 @@ export default function ProjectsAdminPage() {
                         <label className="text-xs font-bold text-slate-200">Domain Renewal Fee (₹)</label>
                         <Input
                           type="number"
-                          placeholder="1199"
                           value={formData.domainRenewalAmount === 0 ? "" : formData.domainRenewalAmount}
                           onChange={(e) => setFormData({ ...formData, domainRenewalAmount: e.target.value === "" ? 0 : Number(e.target.value) })}
                           className="bg-[#070d1a] border-slate-700 text-xs text-white font-mono"
@@ -1658,7 +1601,6 @@ export default function ProjectsAdminPage() {
                       <div className="space-y-1">
                         <label className="text-xs font-bold text-slate-200">Hosting Provider</label>
                         <Input
-                          placeholder="Hostinger Cloud / Netlify / Vercel / AWS"
                           list="projects-hosting-providers-list"
                           value={formData.hostingProvider}
                           onChange={(e) => setFormData({ ...formData, hostingProvider: e.target.value })}
@@ -1681,7 +1623,6 @@ export default function ProjectsAdminPage() {
                         <label className="text-xs font-bold text-slate-200">Hosting Renewal Fee (₹)</label>
                         <Input
                           type="number"
-                          placeholder="3499"
                           value={formData.hostingRenewalAmount === 0 ? "" : formData.hostingRenewalAmount}
                           onChange={(e) => setFormData({ ...formData, hostingRenewalAmount: e.target.value === "" ? 0 : Number(e.target.value) })}
                           className="bg-[#070d1a] border-slate-700 text-xs text-white font-mono"
@@ -1692,7 +1633,6 @@ export default function ProjectsAdminPage() {
                         <label className="text-xs font-bold text-slate-200">AMC Maintenance Fee (₹)</label>
                         <Input
                           type="number"
-                          placeholder="0"
                           value={formData.amcAmount === 0 ? "" : formData.amcAmount}
                           onChange={(e) => setFormData({ ...formData, amcAmount: e.target.value === "" ? 0 : Number(e.target.value) })}
                           className="bg-[#070d1a] border-slate-700 text-xs text-white font-mono"
@@ -1762,7 +1702,6 @@ export default function ProjectsAdminPage() {
                 <label className="text-xs font-bold text-slate-200">Notes / Remarks</label>
                 <Textarea
                   rows={2}
-                  placeholder="Additional client requirements, renewal notes, or access keys..."
                   value={formData.notes}
                   onChange={(e) => setFormData({ ...formData, notes: e.target.value })}
                   className="bg-[#070d1a] border-slate-700 text-xs text-white"

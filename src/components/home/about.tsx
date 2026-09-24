@@ -119,12 +119,12 @@ export function About() {
 
               <div className="p-4 sm:p-5 rounded-2xl bg-blue-950/20 border border-blue-500/20">
                 <p className="text-sm sm:text-base text-slate-200 leading-relaxed">
-                  <strong className="text-white font-semibold">Sri Web Squad</strong> was founded in <strong className="text-white font-semibold">Cuddalore</strong> by <strong className="text-white font-semibold">Sriram</strong> and a passionate squad of engineers. We noticed businesses in Cuddalore, Pondicherry, and across Tamil Nadu were constantly overcharged by large agencies for basic websites or left with slow, unmaintained templates.
+                  <strong className="text-white font-semibold">Sri Web Squad</strong> was built in <strong className="text-white font-semibold">Cuddalore</strong> by a passionate squad of engineers. We noticed businesses in Cuddalore, Pondicherry, and across Tamil Nadu were constantly overcharged by large agencies for basic websites or left with slow, unmaintained templates.
                 </p>
               </div>
 
               <p className="text-xs sm:text-sm text-slate-300 leading-relaxed">
-                We set out to build Cuddalore&apos;s leading tech company — delivering enterprise-grade custom web applications, Android & iOS mobile apps, ERP billing systems, and AI automation at transparent, affordable pricing.
+                We set out to deliver Cuddalore&apos;s premier web & software solutions — building enterprise-grade custom web applications, Android & iOS mobile apps, ERP billing systems, and AI automation at transparent, affordable pricing.
               </p>
 
               {/* Highlights Checkmark List */}
@@ -191,11 +191,6 @@ export function About() {
                     {value.desc}
                   </p>
                 </div>
-
-                <div className="pt-4 mt-4 border-t border-slate-800/60 flex items-center justify-between text-[11px] font-semibold text-slate-400 group-hover:text-white transition-colors">
-                  <span>Guaranteed Standards</span>
-                  <ArrowRight className="w-3.5 h-3.5 transform group-hover:translate-x-1 transition-transform text-blue-400" />
-                </div>
               </div>
             ))}
           </motion.div>
@@ -212,8 +207,7 @@ export function About() {
           <div className="absolute top-0 right-0 w-64 h-64 bg-cyan-500/10 rounded-full blur-3xl pointer-events-none" />
           
           <div className="max-w-2xl relative z-10">
-            <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-emerald-500/10 border border-emerald-500/30 text-emerald-400 text-xs font-semibold mb-3">
-              <span className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse" />
+            <div className="inline-flex items-center px-3 py-1 rounded-full bg-emerald-500/10 border border-emerald-500/30 text-emerald-400 text-xs font-semibold mb-3">
               <span>Available for New Projects</span>
             </div>
             

@@ -150,8 +150,8 @@ export function Reviews() {
         <div className="absolute left-0 top-0 bottom-0 w-24 sm:w-48 bg-gradient-to-r from-[#030712] via-[#030712]/90 to-transparent z-10 pointer-events-none" />
         <div className="absolute right-0 top-0 bottom-0 w-24 sm:w-48 bg-gradient-to-l from-[#030712] via-[#030712]/90 to-transparent z-10 pointer-events-none" />
 
-        {/* Single Forward Marquee */}
-        <div className="flex gap-6 animate-marquee whitespace-normal py-2 hover:[animation-play-state:paused]">
+        {/* Single Forward Marquee - Faster Speed with Pause on Hover/Touch */}
+        <div className="flex gap-6 animate-marquee-reviews [animation-duration:17s] sm:[animation-duration:20s] whitespace-normal py-2 hover:[animation-play-state:paused] active:[animation-play-state:paused]">
           {[...testimonials, ...testimonials].map((item, index) => (
             <div
               key={`review-${item.id}-${index}`}

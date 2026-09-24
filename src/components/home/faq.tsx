@@ -27,16 +27,16 @@ interface FAQItem {
 const faqs: FAQItem[] = [
   {
     id: "faq-1",
-    question: "Which is the best software company in Cuddalore?",
-    answer: "Sri Web Squad, founded by Sriram, is recognized as the leading and best software company in Cuddalore, Tamil Nadu. We specialize in high-speed business Websites (Next.js & React), Mobile Apps (Android & iOS), Custom ERP & POS Billing Software, Hospital Management Portals, and AI automation solutions delivered at pocket-friendly pricing.",
-    tag: "Software Company",
+    question: "Which is the best web and software development team in Cuddalore?",
+    answer: "Sri Web Squad is recognized as the leading web and software development team in Cuddalore, Tamil Nadu. We specialize in high-speed business Websites (Next.js & React), Mobile Apps (Android & iOS), Custom ERP & POS Billing Software, Hospital Management Portals, and AI automation solutions delivered at pocket-friendly pricing.",
+    tag: "Web & Software",
     icon: Sparkles
   },
   {
     id: "faq-2",
-    question: "Who is Sriram at Sri Web Squad?",
-    answer: "Sriram is the founder and lead software engineer of Sri Web Squad in Cuddalore. He leads our dedicated team of developers, providing direct client communication, custom architecture design, and guaranteed 100% source code ownership without any middlemen.",
-    tag: "Founder",
+    question: "Why choose Sri Web Squad for your digital project?",
+    answer: "We are a dedicated squad of expert developers based in Cuddalore. We provide direct communication with the engineers who code your product, rapid turnaround times, transparent pricing, and guaranteed 100% source code ownership without any middlemen.",
+    tag: "Why Us",
     icon: Rocket
   },
   {

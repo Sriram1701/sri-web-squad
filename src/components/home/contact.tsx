@@ -83,7 +83,7 @@ export function Contact() {
 
         <div className="grid lg:grid-cols-5 gap-8 lg:gap-10 mt-6 sm:mt-8 md:mt-10 max-w-6xl mx-auto">
           {/* Left Column: Contact Information */}
-          <div className="lg:col-span-2 space-y-6">
+          <div className="lg:col-span-2 grid md:grid-cols-2 lg:grid-cols-1 gap-6">
             <motion.div
               initial={{ opacity: 0, x: -20 }}
               whileInView={{ opacity: 1, x: 0 }}

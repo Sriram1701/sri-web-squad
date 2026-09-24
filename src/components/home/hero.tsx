@@ -1,90 +1,91 @@
 "use client"
 
 import { motion } from "framer-motion"
-import { ArrowRight, Globe, TrendingUp, Sparkles, Lock, Code2 } from "lucide-react"
+import { ArrowRight, Globe, TrendingUp, Sparkles, Lock, Code2, FolderKanban, ArrowUpRight } from "lucide-react"
 import { SwipeButton } from "@/components/ui/swipe-button"
 import { AnimatedCounter } from "@/components/ui/animated-counter"
+import { FiberOpticBackground } from "@/components/home/fiber-optic-background"
 import Link from "next/link"
 
 export function Hero() {
   return (
-    <section className="relative min-h-[85vh] flex flex-col items-center justify-center overflow-hidden pt-20 sm:pt-24 lg:pt-28 pb-12 bg-black text-white">
-      {/* Background ambient glow */}
-      <div className="absolute top-1/3 left-1/4 w-[500px] h-[500px] bg-blue-600/10 rounded-full mix-blend-screen filter blur-[120px] pointer-events-none" />
-      <div className="absolute bottom-0 right-1/4 w-[400px] h-[400px] bg-blue-900/20 rounded-full mix-blend-screen filter blur-[100px] pointer-events-none" />
+    <section className="relative min-h-[85vh] flex flex-col items-center justify-center overflow-hidden pt-28 sm:pt-32 lg:pt-24 pb-16 sm:pb-24 lg:pb-16 bg-[#080b14] text-white">
+      {/* Dynamic Animated Fiber Optic Light Beams & Photons */}
+      <FiberOpticBackground />
 
-      <div className="container relative z-10 mx-auto px-4 sm:px-6 lg:px-8 flex-1 flex flex-col lg:flex-row items-center pt-3 sm:pt-6 lg:pt-8">
+      {/* Cyber Network Grid Lines Background */}
+      <div className="absolute inset-0 bg-[linear-gradient(to_right,#38bdf808_1px,transparent_1px),linear-gradient(to_bottom,#38bdf808_1px,transparent_1px)] bg-[size:3.5rem_3.5rem] [mask-image:radial-gradient(ellipse_60%_50%_at_50%_30%,#000_70%,transparent_100%)] pointer-events-none" />
+
+      {/* Background ambient glows */}
+      <div className="absolute top-1/3 left-1/4 w-[500px] h-[500px] bg-blue-600/15 rounded-full mix-blend-screen filter blur-[130px] pointer-events-none" />
+      <div className="absolute bottom-0 right-1/4 w-[450px] h-[450px] bg-cyan-600/10 rounded-full mix-blend-screen filter blur-[120px] pointer-events-none" />
+
+      <div className="container relative z-10 mx-auto px-4 sm:px-6 lg:px-8 flex-1 flex flex-col lg:flex-row items-center pt-4 sm:pt-6 lg:pt-2">
         
         {/* Left Content */}
-        <div className="w-full lg:w-1/2 flex flex-col justify-center mb-10 lg:mb-0 px-0 sm:pl-6 lg:pl-10">
+        <div className="w-full lg:w-1/2 flex flex-col justify-center mb-10 lg:mb-0 px-0 lg:pl-4">
           <motion.div
             initial={{ opacity: 0, x: -10 }}
             animate={{ opacity: 1, x: 0 }}
             transition={{ duration: 0.6 }}
           >
-            {/* Tech Status Badge */}
-            <div className="flex justify-start mb-4">
-              <div className="inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-full bg-gradient-to-r from-blue-500/15 via-cyan-500/10 to-blue-500/15 border border-blue-500/30 backdrop-blur-xl text-[10px] sm:text-xs font-semibold tracking-wider text-cyan-300 shadow-[0_0_15px_rgba(6,182,212,0.12)]">
-                <Sparkles className="w-3 h-3 text-cyan-400 shrink-0" />
-                <span>SOFTWARE COMPANY IN CUDDALORE</span>
-                <span className="text-cyan-400/40">•</span>
-                <span>AI-POWERED</span>
-                <span className="text-cyan-400/40">•</span>
-                <span>RELIABLE</span>
-              </div>
-            </div>
-            
             {/* Main Headline */}
-            <h1 className="text-3xl sm:text-4xl md:text-5xl lg:text-[3.1rem] font-black leading-[1.14] mb-4 tracking-tight text-white">
-              AI-Powered Software<br className="hidden sm:inline" /> Development &{" "}
-              <span className="bg-clip-text text-transparent bg-gradient-to-r from-blue-400 via-cyan-400 to-primary-400 drop-shadow-[0_0_25px_rgba(59,130,246,0.3)]">
+            <h1 className="text-3xl sm:text-4xl md:text-5xl lg:text-[3.2rem] font-black leading-[1.12] mb-4 tracking-tight text-white text-center lg:text-left">
+              AI-Powered Software Development &{" "}
+              <span className="bg-clip-text text-transparent bg-gradient-to-r from-blue-400 via-cyan-400 to-primary-400 drop-shadow-[0_0_25px_rgba(59,130,246,0.35)] block lg:inline mt-1 lg:mt-0">
                 Digital Solutions
               </span>
             </h1>
 
-            {/* Stylish Brand Divider without container box or dot */}
-            <div className="flex items-center gap-4 my-5 max-w-xl">
-              <div className="h-[1px] flex-1 bg-gradient-to-r from-transparent via-blue-500/40 to-cyan-400/70" />
-              <span className="font-extrabold tracking-[0.28em] text-xs sm:text-sm uppercase bg-clip-text text-transparent bg-gradient-to-r from-blue-400 via-cyan-300 to-primary-400 drop-shadow-[0_0_16px_rgba(56,189,248,0.45)] select-none shrink-0 font-mono">
+            {/* Stylish Brand Divider */}
+            <div className="flex items-center justify-center lg:justify-start gap-4 my-5 max-w-xl lg:max-w-2xl mx-auto lg:mx-0">
+              <div className="h-[1.5px] flex-1 bg-gradient-to-r from-transparent via-blue-500/60 to-cyan-400/90" />
+              <span className="font-black tracking-[0.32em] lg:tracking-[0.38em] text-sm sm:text-base md:text-lg lg:text-xl uppercase bg-clip-text text-transparent bg-gradient-to-r from-blue-400 via-cyan-300 to-indigo-300 drop-shadow-[0_0_20px_rgba(56,189,248,0.55)] select-none shrink-0 font-mono">
                 SRI WEB SQUAD
               </span>
-              <div className="h-[1px] flex-1 bg-gradient-to-l from-transparent via-blue-500/40 to-cyan-400/70" />
+              <div className="h-[1.5px] flex-1 bg-gradient-to-l from-transparent via-blue-500/60 to-cyan-400/90" />
             </div>
 
-            {/* Paragraph with Highlighted Keyword Accents */}
-            <p className="text-sm sm:text-base md:text-lg text-slate-300/90 mb-8 max-w-xl leading-relaxed font-normal">
-              A passionate squad of developers in <strong className="text-white font-semibold">Cuddalore</strong> led by <strong className="text-white font-semibold">Sriram</strong>, crafting high-performance{" "}
-              <span className="text-white font-semibold">
-                Websites
-              </span>
-              ,{" "}
-              <span className="text-white font-semibold">
-                Mobile Apps
-              </span>
-              , and{" "}
-              <span className="text-white font-semibold">
-                Custom Software
-              </span>{" "}
-              at budget-friendly pricing — delivering premium quality and the best output to grow your business.
+            {/* Description Text with Rich Details on Laptop */}
+            <p className="text-sm sm:text-base md:text-lg text-slate-300/90 mb-7 max-w-xl lg:max-w-2xl leading-relaxed font-normal text-center lg:text-left mx-auto lg:mx-0">
+              Building High-Performance{" "}
+              <span className="text-white font-semibold">Websites</span>,{" "}
+              <span className="text-white font-semibold">Mobile Apps</span>, and{" "}
+              <span className="text-white font-semibold">Software Solutions</span> in{" "}
+              <strong className="text-white font-semibold">Cuddalore</strong>
+              <span className="hidden lg:inline">
+                {" "}— delivering scalable cloud architecture, intuitive modern UI/UX, and AI-driven systems engineered to accelerate your business growth
+              </span>.
             </p>
 
+            {/* Action CTAs: Matching Interactive Swipe Buttons */}
             <motion.div
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.6, delay: 0.3 }}
-              className="pt-2"
+              className="pt-2 flex flex-col items-center lg:items-start gap-3.5"
             >
+              {/* Top: See Our Projects Interactive Button */}
+              <SwipeButton 
+                text="SEE OUR PROJECTS" 
+                completedText="VIEWING PROJECTS... 🚀" 
+                href="#portfolio"
+                variant="cyan"
+              />
+
+              {/* Bottom: Let's Grow Together Interactive Button */}
               <SwipeButton 
                 text="LET'S GROW TOGETHER" 
                 completedText="CONNECTING... 🚀" 
-                href="#contact" 
+                href="#contact"
+                variant="blue"
               />
             </motion.div>
           </motion.div>
         </div>
 
         {/* Right Content - Ultra-Modern Animated UI Mockup */}
-        <div className="w-full lg:w-1/2 flex justify-center lg:justify-end relative">
+        <div className="w-full lg:w-1/2 flex justify-center lg:justify-end relative mb-8 sm:mb-12 lg:mb-0">
           <motion.div
             initial={{ opacity: 0, scale: 0.95, y: 20 }}
             animate={{ opacity: 1, scale: 1, y: 0 }}
@@ -237,7 +238,7 @@ export function Hero() {
                     <div className="text-[8px] text-slate-400 uppercase font-semibold">Projects</div>
                   </div>
                   <div className="text-center">
-                    <AnimatedCounter from={0} to={99} suffix="%" duration={2.2} className="text-emerald-400 font-black text-sm block" />
+                    <AnimatedCounter from={0} to={100} suffix="%" duration={2.2} className="text-emerald-400 font-black text-sm block" />
                     <div className="text-[8px] text-slate-400 uppercase font-semibold">Satisfaction</div>
                   </div>
                 </div>

@@ -245,13 +245,14 @@ export function Footer() {
           </div>
 
           {/* Column 5: GET IN TOUCH (col-span-3) */}
-          <div className="lg:col-span-3">
+          <div className="md:col-span-2 lg:col-span-3">
             <div className="inline-block pb-1.5 border-b-2 border-primary-500 mb-4">
               <h4 className="text-sm font-black text-primary-400 tracking-wider uppercase">
                 GET IN TOUCH
               </h4>
             </div>
-            <div className="space-y-3 text-xs sm:text-sm">
+            <div className="grid md:grid-cols-2 lg:grid-cols-1 gap-4 md:gap-6 lg:gap-3 text-xs sm:text-sm">
+              <div className="space-y-3">
               {/* Address */}
               <div className="flex items-start gap-3">
                 <div className="w-7 h-7 rounded-full bg-primary-600/20 flex items-center justify-center text-primary-400 shrink-0 mt-0.5">
@@ -296,10 +297,11 @@ export function Footer() {
                   Mon–Sat : 9 AM – 7 PM
                 </div>
               </div>
+            </div>
 
-              {/* Google Maps Mini Preview Card Widget */}
-              <div className="pt-1.5">
-                <a
+            {/* Google Maps Mini Preview Card Widget */}
+            <div className="pt-0 md:pt-1.5 flex flex-col justify-center">
+              <a
                   href={GOOGLE_MAPS_URL}
                   target="_blank"
                   rel="noopener noreferrer"

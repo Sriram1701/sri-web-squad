@@ -857,55 +857,59 @@ export default function AdminDashboardPage() {
       </div>
 
       {/* Grid: All Projects & Quick Operations */}
-      <div className="grid lg:grid-cols-3 gap-5">
+      <div className="grid lg:grid-cols-3 gap-5 min-w-0 max-w-full">
         {/* All Projects Overview List */}
-        <div className="p-5 rounded-2xl bg-[#0c1426] border border-slate-800 shadow-md lg:col-span-2 space-y-4">
+        <div className="p-4 sm:p-5 rounded-2xl bg-[#0c1426] border border-slate-800 shadow-md lg:col-span-2 space-y-4 min-w-0 max-w-full overflow-hidden">
           <div className="flex items-center justify-between">
-            <h3 className="font-bold text-base text-white">Client Portfolio</h3>
-            <Link href="/admin/projects" className="text-xs font-bold text-blue-400 hover:text-blue-300 hover:underline">
+            <div>
+              <h3 className="font-bold text-base text-white">Client Portfolio</h3>
+              <p className="text-[11px] text-slate-400 sm:hidden">Swipe horizontally to browse clients</p>
+            </div>
+            <Link href="/admin/projects" className="text-xs font-bold text-blue-400 hover:text-blue-300 hover:underline shrink-0">
               View All ({totalProjects}) →
             </Link>
           </div>
 
-          <div className="space-y-3">
-            {projects.slice(0, 5).map((project) => {
+          {/* Slideable List: Horizontal on Mobile, Vertical Stack on Desktop */}
+          <div className="flex sm:flex-col gap-3 overflow-x-auto sm:overflow-x-visible pb-2.5 sm:pb-0 snap-x snap-mandatory no-scrollbar scroll-smooth touch-pan-x w-full max-w-full min-w-0">
+            {projects.slice(0, 6).map((project) => {
               return (
                 <div
                   key={project.id}
-                  className="p-3.5 rounded-xl bg-[#0f1930] border border-slate-800 hover:border-blue-500/50 transition-all flex items-center justify-between gap-3 shadow-sm"
+                  className="w-[85vw] max-w-[320px] sm:w-full sm:max-w-none shrink-0 sm:shrink snap-start p-3.5 rounded-xl bg-[#0f1930] border border-slate-800 hover:border-blue-500/50 transition-all flex items-center justify-between gap-3 shadow-sm"
                 >
-                  <div className="flex items-center gap-3.5 min-w-0">
+                  <div className="flex items-center gap-3 min-w-0 flex-1">
                     <div className="w-9 h-9 rounded-full bg-gradient-to-tr from-blue-600 to-indigo-600 flex items-center justify-center font-black text-xs text-white shrink-0 shadow-sm">
                       {getInitials(project.clientName)}
                     </div>
-                    <div className="min-w-0">
-                      <div className="flex items-center gap-2">
-                        <h4 className="font-bold text-sm text-white truncate">{project.projectName}</h4>
-                        <span className="text-[10px] font-bold px-2 py-0.5 rounded bg-slate-800 text-slate-200 border border-slate-750">
+                    <div className="min-w-0 flex-1">
+                      <div className="flex items-center gap-1.5 flex-wrap">
+                        <h4 className="font-bold text-sm text-white truncate max-w-[130px] sm:max-w-none">{project.projectName}</h4>
+                        <span className="text-[10px] font-bold px-1.5 py-0.2 rounded bg-slate-800 text-slate-200 border border-slate-750 shrink-0">
                           {project.category}
                         </span>
                         {project.agreementPdfUrl && (
-                          <span className="text-[10px] text-cyan-400 flex items-center gap-0.5 font-semibold bg-cyan-500/10 px-1.5 py-0.2 rounded border border-cyan-500/20">
+                          <span className="text-[10px] text-cyan-400 flex items-center gap-0.5 font-semibold bg-cyan-500/10 px-1.5 py-0.2 rounded border border-cyan-500/20 shrink-0">
                             <Paperclip className="w-2.5 h-2.5" /> PDF
                           </span>
                         )}
                       </div>
-                      <div className="text-xs text-slate-300 flex items-center gap-2 mt-1">
-                        <span className="font-medium text-slate-200">{project.clientName}</span>
-                        <span>•</span>
+                      <div className="text-xs text-slate-300 flex items-center gap-1.5 mt-1 truncate">
+                        <span className="font-medium text-slate-200 truncate max-w-[90px] sm:max-w-none">{project.clientName}</span>
+                        <span className="shrink-0">•</span>
                         {project.domainName ? (
                           <a
                             href={getDirectUrl(project.liveUrl || project.domainName)}
                             target="_blank"
                             rel="noopener noreferrer"
-                            className="text-blue-300 hover:text-white hover:underline font-mono inline-flex items-center gap-1 font-semibold"
+                            className="text-blue-300 hover:text-white hover:underline font-mono inline-flex items-center gap-1 font-semibold truncate max-w-[120px] sm:max-w-none"
                             title={`Open https://${project.domainName}`}
                           >
-                            <span>{project.domainName}</span>
-                            <ExternalLink className="w-3 h-3 text-blue-400" />
+                            <span className="truncate">{project.domainName}</span>
+                            <ExternalLink className="w-3 h-3 text-blue-400 shrink-0" />
                           </a>
                         ) : (
-                          <span className="text-slate-500 font-mono">—</span>
+                          <span className="text-slate-500 font-mono shrink-0">—</span>
                         )}
                       </div>
                     </div>
@@ -1133,20 +1137,10 @@ export default function AdminDashboardPage() {
             className="w-full max-w-2xl bg-[#0d1629] border-2 border-slate-750 rounded-2xl shadow-2xl p-6 sm:p-7 my-8 relative max-h-[90vh] overflow-y-auto"
           >
             <div className="flex items-center justify-between pb-3.5 border-b border-slate-750 mb-5">
-              <div>
-                <div className="flex items-center gap-2">
-                  <h3 className="font-black text-lg text-white">Add New Client Project</h3>
-                  <span className="px-2 py-0.5 rounded-md bg-blue-500/20 text-blue-300 border border-blue-500/40 text-[11px] font-bold">
-                    {newProjectData.category}
-                  </span>
-                </div>
-                <p className="text-xs text-slate-300 mt-0.5">
-                  Save project requirements, deployment architecture, servers, and renewal lifecycle.
-                </p>
-              </div>
+              <h3 className="font-black text-lg text-white">Add New Client Project</h3>
               <button
                 onClick={() => setIsAddModalOpen(false)}
-                className="text-slate-400 hover:text-white p-1 rounded-lg hover:bg-slate-800"
+                className="text-slate-400 hover:text-white p-1.5 rounded-lg hover:bg-slate-800"
               >
                 <X className="w-5 h-5" />
               </button>
@@ -1162,15 +1156,6 @@ export default function AdminDashboardPage() {
                   <div className="space-y-1">
                     <label className="text-xs font-bold text-slate-200">Project / App Name *</label>
                     <Input
-                      placeholder={
-                        newProjectData.category === "Mobile App" 
-                          ? "e.g. Doctor Quick Patient App" 
-                          : newProjectData.category === "ERP & Billing"
-                          ? "e.g. Sri Textiles Billing ERP"
-                          : newProjectData.category === "E-Commerce"
-                          ? "e.g. Aura Luxe Online Store"
-                          : "e.g. VKP Enterprises Website"
-                      }
                       value={newProjectData.projectName}
                       onChange={(e) => setNewProjectData({ ...newProjectData, projectName: e.target.value })}
                       className="bg-[#070d1a] border-slate-700 text-xs text-white"
@@ -1181,7 +1166,6 @@ export default function AdminDashboardPage() {
                   <div className="space-y-1">
                     <label className="text-xs font-bold text-slate-200">Client Contact Person *</label>
                     <Input
-                      placeholder="e.g. S. Murugesan"
                       value={newProjectData.clientName}
                       onChange={(e) => setNewProjectData({ ...newProjectData, clientName: e.target.value })}
                       className="bg-[#070d1a] border-slate-700 text-xs text-white"
@@ -1192,7 +1176,6 @@ export default function AdminDashboardPage() {
                   <div className="space-y-1">
                     <label className="text-xs font-bold text-slate-200">Primary Phone / WhatsApp *</label>
                     <Input
-                      placeholder="+91 98401 23456"
                       value={newProjectData.clientPhone}
                       onChange={(e) => setNewProjectData({ ...newProjectData, clientPhone: e.target.value })}
                       className="bg-[#070d1a] border-slate-700 text-xs text-white font-mono"
@@ -1231,7 +1214,6 @@ export default function AdminDashboardPage() {
                       <div className="space-y-1 sm:col-span-2">
                         <label className="text-xs font-bold text-slate-200">Google Play Store URL</label>
                         <Input
-                          placeholder="https://play.google.com/store/apps/details?id=com..."
                           value={newProjectData.playStoreUrl || ""}
                           onChange={(e) => setNewProjectData({ ...newProjectData, playStoreUrl: e.target.value })}
                           className="bg-[#070d1a] border-slate-700 text-xs text-white font-mono"
@@ -1255,7 +1237,6 @@ export default function AdminDashboardPage() {
                       <div className="space-y-1">
                         <label className="text-xs font-bold text-slate-200">Apple App Store URL</label>
                         <Input
-                          placeholder="https://apps.apple.com/app/..."
                           value={newProjectData.appStoreUrl || ""}
                           onChange={(e) => setNewProjectData({ ...newProjectData, appStoreUrl: e.target.value })}
                           className="bg-[#070d1a] border-slate-700 text-xs text-white font-mono"
@@ -1276,7 +1257,6 @@ export default function AdminDashboardPage() {
                         <label className="text-xs font-bold text-slate-200">Apple Dev Fee (₹ / $99)</label>
                         <Input
                           type="number"
-                          placeholder="8900"
                           value={newProjectData.appleDevRenewalAmount === 0 ? "" : newProjectData.appleDevRenewalAmount}
                           onChange={(e) => setNewProjectData({ ...newProjectData, appleDevRenewalAmount: e.target.value === "" ? 0 : Number(e.target.value) })}
                           className="bg-[#070d1a] border-slate-700 text-xs text-white font-mono"
@@ -1294,7 +1274,6 @@ export default function AdminDashboardPage() {
                       <div className="space-y-1">
                         <label className="text-xs font-bold text-slate-200">Backend Server Provider</label>
                         <Input
-                          placeholder="Node.js on AWS / Firebase / Supabase"
                           list="dashboard-backend-providers-list"
                           value={newProjectData.backendProvider || ""}
                           onChange={(e) => setNewProjectData({ ...newProjectData, backendProvider: e.target.value, hostingProvider: e.target.value })}
@@ -1305,7 +1284,6 @@ export default function AdminDashboardPage() {
                       <div className="space-y-1">
                         <label className="text-xs font-bold text-slate-200">Database Engine / Provider</label>
                         <Input
-                          placeholder="Supabase PostgreSQL / MongoDB Atlas"
                           list="dashboard-database-providers-list"
                           value={newProjectData.databaseProvider || ""}
                           onChange={(e) => setNewProjectData({ ...newProjectData, databaseProvider: e.target.value })}
@@ -1327,7 +1305,6 @@ export default function AdminDashboardPage() {
                         <label className="text-xs font-bold text-slate-200">Backend Server Renewal Fee (₹)</label>
                         <Input
                           type="number"
-                          placeholder="4500"
                           value={newProjectData.backendRenewalAmount || newProjectData.hostingRenewalAmount || ""}
                           onChange={(e) => {
                             const val = e.target.value === "" ? 0 : Number(e.target.value)
@@ -1348,7 +1325,6 @@ export default function AdminDashboardPage() {
                       <div className="space-y-1">
                         <label className="text-xs font-bold text-slate-200">DLT / Bulk SMS Provider</label>
                         <Input
-                          placeholder="Fast2SMS / Jio DLT / Textlocal"
                           list="dashboard-dlt-providers-list"
                           value={newProjectData.dltProvider || ""}
                           onChange={(e) => setNewProjectData({ ...newProjectData, dltProvider: e.target.value })}
@@ -1359,7 +1335,6 @@ export default function AdminDashboardPage() {
                       <div className="space-y-1">
                         <label className="text-xs font-bold text-slate-200">WhatsApp Notification API</label>
                         <Input
-                          placeholder="Meta Cloud API / Interakt / AiSensy"
                           list="dashboard-whatsapp-providers-list"
                           value={newProjectData.whatsappApiProvider || ""}
                           onChange={(e) => setNewProjectData({ ...newProjectData, whatsappApiProvider: e.target.value })}
@@ -1381,7 +1356,6 @@ export default function AdminDashboardPage() {
                         <label className="text-xs font-bold text-slate-200">DLT / SMS Annual Fee (₹)</label>
                         <Input
                           type="number"
-                          placeholder="0"
                           value={newProjectData.dltRenewalAmount === 0 ? "" : newProjectData.dltRenewalAmount}
                           onChange={(e) => setNewProjectData({ ...newProjectData, dltRenewalAmount: e.target.value === "" ? 0 : Number(e.target.value) })}
                           className="bg-[#070d1a] border-slate-700 text-xs text-white font-mono"
@@ -1399,7 +1373,6 @@ export default function AdminDashboardPage() {
                       <div className="space-y-1">
                         <label className="text-xs font-bold text-slate-200">API / App Domain Name</label>
                         <Input
-                          placeholder="e.g. api.doctorquick.in"
                           value={newProjectData.domainName}
                           onChange={(e) => setNewProjectData({ ...newProjectData, domainName: e.target.value })}
                           className="bg-[#070d1a] border-slate-700 text-xs text-white font-mono"
@@ -1409,7 +1382,6 @@ export default function AdminDashboardPage() {
                       <div className="space-y-1">
                         <label className="text-xs font-bold text-slate-200">Domain Registrar</label>
                         <Input
-                          placeholder="GoDaddy / Hostinger / Namecheap"
                           list="domain-registrars-list"
                           value={newProjectData.domainRegistrar}
                           onChange={(e) => setNewProjectData({ ...newProjectData, domainRegistrar: e.target.value })}
@@ -1431,7 +1403,6 @@ export default function AdminDashboardPage() {
                         <label className="text-xs font-bold text-slate-200">Domain Renewal Fee (₹)</label>
                         <Input
                           type="number"
-                          placeholder="1199"
                           value={newProjectData.domainRenewalAmount === 0 ? "" : newProjectData.domainRenewalAmount}
                           onChange={(e) => setNewProjectData({ ...newProjectData, domainRenewalAmount: e.target.value === "" ? 0 : Number(e.target.value) })}
                           className="bg-[#070d1a] border-slate-700 text-xs text-white font-mono"
@@ -1454,7 +1425,6 @@ export default function AdminDashboardPage() {
                       <div className="space-y-1">
                         <label className="text-xs font-bold text-slate-200">Deployment Architecture</label>
                         <Input
-                          placeholder="Cloud Web ERP / Desktop + Cloud Sync / On-Premise"
                           list="dashboard-deployment-types-list"
                           value={newProjectData.softwareType || ""}
                           onChange={(e) => setNewProjectData({ ...newProjectData, softwareType: e.target.value })}
@@ -1465,7 +1435,6 @@ export default function AdminDashboardPage() {
                       <div className="space-y-1">
                         <label className="text-xs font-bold text-slate-200">Software License Model</label>
                         <Input
-                          placeholder="Annual Subscription / Perpetual + AMC"
                           value={newProjectData.licenseType || ""}
                           onChange={(e) => setNewProjectData({ ...newProjectData, licenseType: e.target.value })}
                           className="bg-[#070d1a] border-slate-700 text-xs text-white"
@@ -1483,7 +1452,6 @@ export default function AdminDashboardPage() {
                       <div className="space-y-1">
                         <label className="text-xs font-bold text-slate-200">Server / VPS Host</label>
                         <Input
-                          placeholder="AWS Lightsail / Hostinger VPS / Ubuntu Server"
                           list="hosting-providers-list"
                           value={newProjectData.hostingProvider}
                           onChange={(e) => setNewProjectData({ ...newProjectData, hostingProvider: e.target.value })}
@@ -1494,7 +1462,6 @@ export default function AdminDashboardPage() {
                       <div className="space-y-1">
                         <label className="text-xs font-bold text-slate-200">Auto-Backup & Storage Cloud</label>
                         <Input
-                          placeholder="AWS S3 Cloud Auto-Backup / Google Drive Sync"
                           list="dashboard-backup-providers-list"
                           value={newProjectData.backupProvider || ""}
                           onChange={(e) => setNewProjectData({ ...newProjectData, backupProvider: e.target.value })}
@@ -1516,7 +1483,6 @@ export default function AdminDashboardPage() {
                         <label className="text-xs font-bold text-slate-200">Server Hosting Fee (₹)</label>
                         <Input
                           type="number"
-                          placeholder="5999"
                           value={newProjectData.hostingRenewalAmount === 0 ? "" : newProjectData.hostingRenewalAmount}
                           onChange={(e) => setNewProjectData({ ...newProjectData, hostingRenewalAmount: e.target.value === "" ? 0 : Number(e.target.value) })}
                           className="bg-[#070d1a] border-slate-700 text-xs text-white font-mono"
@@ -1534,7 +1500,6 @@ export default function AdminDashboardPage() {
                       <div className="space-y-1">
                         <label className="text-xs font-bold text-slate-200">DLT / SMS Gateway</label>
                         <Input
-                          placeholder="Fast2SMS / Jio DLT"
                           list="dashboard-dlt-providers-list"
                           value={newProjectData.dltProvider || ""}
                           onChange={(e) => setNewProjectData({ ...newProjectData, dltProvider: e.target.value })}
@@ -1545,7 +1510,6 @@ export default function AdminDashboardPage() {
                       <div className="space-y-1">
                         <label className="text-xs font-bold text-slate-200">WhatsApp Notification API</label>
                         <Input
-                          placeholder="Meta Cloud API / UltraMsg"
                           list="dashboard-whatsapp-providers-list"
                           value={newProjectData.whatsappApiProvider || ""}
                           onChange={(e) => setNewProjectData({ ...newProjectData, whatsappApiProvider: e.target.value })}
@@ -1564,7 +1528,6 @@ export default function AdminDashboardPage() {
                       <div className="space-y-1">
                         <label className="text-xs font-bold text-slate-200">Portal Domain / Subdomain</label>
                         <Input
-                          placeholder="e.g. app.sritextiles.com"
                           value={newProjectData.domainName}
                           onChange={(e) => setNewProjectData({ ...newProjectData, domainName: e.target.value })}
                           className="bg-[#070d1a] border-slate-700 text-xs text-white font-mono"
@@ -1585,7 +1548,6 @@ export default function AdminDashboardPage() {
                         <label className="text-xs font-bold text-slate-200">Domain Renewal Fee (₹)</label>
                         <Input
                           type="number"
-                          placeholder="1499"
                           value={newProjectData.domainRenewalAmount === 0 ? "" : newProjectData.domainRenewalAmount}
                           onChange={(e) => setNewProjectData({ ...newProjectData, domainRenewalAmount: e.target.value === "" ? 0 : Number(e.target.value) })}
                           className="bg-[#070d1a] border-slate-700 text-xs text-white font-mono"
@@ -1596,7 +1558,6 @@ export default function AdminDashboardPage() {
                         <label className="text-xs font-bold text-slate-200">AMC Maintenance & Support (₹)</label>
                         <Input
                           type="number"
-                          placeholder="3500"
                           value={newProjectData.amcAmount === 0 ? "" : newProjectData.amcAmount}
                           onChange={(e) => setNewProjectData({ ...newProjectData, amcAmount: e.target.value === "" ? 0 : Number(e.target.value) })}
                           className="bg-[#070d1a] border-slate-700 text-xs text-white font-mono font-bold text-emerald-400"
@@ -1619,7 +1580,6 @@ export default function AdminDashboardPage() {
                       <div className="space-y-1">
                         <label className="text-xs font-bold text-slate-200">Online Store Domain *</label>
                         <Input
-                          placeholder="e.g. auraluxe.shop"
                           value={newProjectData.domainName}
                           onChange={(e) => setNewProjectData({ ...newProjectData, domainName: e.target.value })}
                           className="bg-[#070d1a] border-slate-700 text-xs text-white font-mono"
@@ -1630,7 +1590,6 @@ export default function AdminDashboardPage() {
                       <div className="space-y-1">
                         <label className="text-xs font-bold text-slate-200">Domain Registrar</label>
                         <Input
-                          placeholder="GoDaddy / Namecheap"
                           list="domain-registrars-list"
                           value={newProjectData.domainRegistrar}
                           onChange={(e) => setNewProjectData({ ...newProjectData, domainRegistrar: e.target.value })}
@@ -1653,7 +1612,6 @@ export default function AdminDashboardPage() {
                         <label className="text-xs font-bold text-slate-200">Domain Renewal Fee (₹)</label>
                         <Input
                           type="number"
-                          placeholder="1599"
                           value={newProjectData.domainRenewalAmount === 0 ? "" : newProjectData.domainRenewalAmount}
                           onChange={(e) => setNewProjectData({ ...newProjectData, domainRenewalAmount: e.target.value === "" ? 0 : Number(e.target.value) })}
                           className="bg-[#070d1a] border-slate-700 text-xs text-white font-mono"
@@ -1671,7 +1629,6 @@ export default function AdminDashboardPage() {
                       <div className="space-y-1">
                         <label className="text-xs font-bold text-slate-200">Platform / Cloud Host</label>
                         <Input
-                          placeholder="Shopify / WooCommerce VPS / Next.js Store"
                           list="hosting-providers-list"
                           value={newProjectData.hostingProvider}
                           onChange={(e) => setNewProjectData({ ...newProjectData, hostingProvider: e.target.value })}
@@ -1694,7 +1651,6 @@ export default function AdminDashboardPage() {
                         <label className="text-xs font-bold text-slate-200">Hosting Renewal Fee (₹)</label>
                         <Input
                           type="number"
-                          placeholder="4200"
                           value={newProjectData.hostingRenewalAmount === 0 ? "" : newProjectData.hostingRenewalAmount}
                           onChange={(e) => setNewProjectData({ ...newProjectData, hostingRenewalAmount: e.target.value === "" ? 0 : Number(e.target.value) })}
                           className="bg-[#070d1a] border-slate-700 text-xs text-white font-mono"
@@ -1704,7 +1660,6 @@ export default function AdminDashboardPage() {
                       <div className="space-y-1">
                         <label className="text-xs font-bold text-slate-200">Payment Gateway</label>
                         <Input
-                          placeholder="Razorpay PG / PhonePe PG / Cashfree"
                           list="dashboard-payment-gateways-list"
                           value={newProjectData.paymentGateway || ""}
                           onChange={(e) => setNewProjectData({ ...newProjectData, paymentGateway: e.target.value })}
@@ -1715,7 +1670,6 @@ export default function AdminDashboardPage() {
                       <div className="space-y-1">
                         <label className="text-xs font-bold text-slate-200">WhatsApp Order Alerts</label>
                         <Input
-                          placeholder="AiSensy / Meta Cloud API"
                           list="dashboard-whatsapp-providers-list"
                           value={newProjectData.whatsappApiProvider || ""}
                           onChange={(e) => setNewProjectData({ ...newProjectData, whatsappApiProvider: e.target.value })}
@@ -1727,7 +1681,6 @@ export default function AdminDashboardPage() {
                         <label className="text-xs font-bold text-slate-200">AMC Maintenance Fee (₹)</label>
                         <Input
                           type="number"
-                          placeholder="2500"
                           value={newProjectData.amcAmount === 0 ? "" : newProjectData.amcAmount}
                           onChange={(e) => setNewProjectData({ ...newProjectData, amcAmount: e.target.value === "" ? 0 : Number(e.target.value) })}
                           className="bg-[#070d1a] border-slate-700 text-xs text-white font-mono"
@@ -1750,7 +1703,6 @@ export default function AdminDashboardPage() {
                       <div className="space-y-1 sm:col-span-2">
                         <label className="text-xs font-bold text-slate-200">Services Included</label>
                         <Input
-                          placeholder="SEO Ranking + Google Ads + Meta / Instagram Ads + Content"
                           value={newProjectData.marketingServices || ""}
                           onChange={(e) => setNewProjectData({ ...newProjectData, marketingServices: e.target.value })}
                           className="bg-[#070d1a] border-slate-700 text-xs text-white"
@@ -1775,7 +1727,6 @@ export default function AdminDashboardPage() {
                         <label className="text-xs font-bold text-slate-200">Retainer Fee per Cycle (₹)</label>
                         <Input
                           type="number"
-                          placeholder="15000"
                           value={newProjectData.hostingRenewalAmount === 0 ? "" : newProjectData.hostingRenewalAmount}
                           onChange={(e) => setNewProjectData({ ...newProjectData, hostingRenewalAmount: e.target.value === "" ? 0 : Number(e.target.value) })}
                           className="bg-[#070d1a] border-slate-700 text-xs text-white font-mono font-bold text-emerald-400"
@@ -1796,7 +1747,6 @@ export default function AdminDashboardPage() {
                       <div className="space-y-1">
                         <label className="text-xs font-bold text-slate-200">Google Ads / Meta CID / ID</label>
                         <Input
-                          placeholder="e.g. 123-456-7890 (Google Ads)"
                           value={newProjectData.adAccountId || ""}
                           onChange={(e) => setNewProjectData({ ...newProjectData, adAccountId: e.target.value })}
                           className="bg-[#070d1a] border-slate-700 text-xs text-white font-mono"
@@ -1819,7 +1769,6 @@ export default function AdminDashboardPage() {
                       <div className="space-y-1">
                         <label className="text-xs font-bold text-slate-200">Domain Name *</label>
                         <Input
-                          placeholder="e.g. vkpenterprises.in"
                           value={newProjectData.domainName}
                           onChange={(e) => setNewProjectData({ ...newProjectData, domainName: e.target.value })}
                           className="bg-[#070d1a] border-slate-700 text-xs text-white font-mono"
@@ -1830,7 +1779,6 @@ export default function AdminDashboardPage() {
                       <div className="space-y-1">
                         <label className="text-xs font-bold text-slate-200">Domain Registrar</label>
                         <Input
-                          placeholder="GoDaddy / Hostinger / Namecheap"
                           list="domain-registrars-list"
                           value={newProjectData.domainRegistrar}
                           onChange={(e) => setNewProjectData({ ...newProjectData, domainRegistrar: e.target.value })}
@@ -1853,7 +1801,6 @@ export default function AdminDashboardPage() {
                         <label className="text-xs font-bold text-slate-200">Domain Renewal Fee (₹)</label>
                         <Input
                           type="number"
-                          placeholder="1199"
                           value={newProjectData.domainRenewalAmount === 0 ? "" : newProjectData.domainRenewalAmount}
                           onChange={(e) => setNewProjectData({ ...newProjectData, domainRenewalAmount: e.target.value === "" ? 0 : Number(e.target.value) })}
                           className="bg-[#070d1a] border-slate-700 text-xs text-white font-mono"
@@ -1871,7 +1818,6 @@ export default function AdminDashboardPage() {
                       <div className="space-y-1">
                         <label className="text-xs font-bold text-slate-200">Hosting Provider</label>
                         <Input
-                          placeholder="Hostinger Cloud / Netlify / Vercel / AWS"
                           list="hosting-providers-list"
                           value={newProjectData.hostingProvider}
                           onChange={(e) => setNewProjectData({ ...newProjectData, hostingProvider: e.target.value })}
@@ -1894,7 +1840,6 @@ export default function AdminDashboardPage() {
                         <label className="text-xs font-bold text-slate-200">Hosting Renewal Fee (₹)</label>
                         <Input
                           type="number"
-                          placeholder="3499"
                           value={newProjectData.hostingRenewalAmount === 0 ? "" : newProjectData.hostingRenewalAmount}
                           onChange={(e) => setNewProjectData({ ...newProjectData, hostingRenewalAmount: e.target.value === "" ? 0 : Number(e.target.value) })}
                           className="bg-[#070d1a] border-slate-700 text-xs text-white font-mono"
@@ -1905,7 +1850,6 @@ export default function AdminDashboardPage() {
                         <label className="text-xs font-bold text-slate-200">AMC Maintenance Fee (₹)</label>
                         <Input
                           type="number"
-                          placeholder="0"
                           value={newProjectData.amcAmount === 0 ? "" : newProjectData.amcAmount}
                           onChange={(e) => setNewProjectData({ ...newProjectData, amcAmount: e.target.value === "" ? 0 : Number(e.target.value) })}
                           className="bg-[#070d1a] border-slate-700 text-xs text-white font-mono"
@@ -1975,7 +1919,6 @@ export default function AdminDashboardPage() {
                 <label className="text-xs font-bold text-slate-200">Notes / Client Remarks</label>
                 <Textarea
                   rows={2}
-                  placeholder="Additional server credentials, staging links, or client preferences..."
                   value={newProjectData.notes}
                   onChange={(e) => setNewProjectData({ ...newProjectData, notes: e.target.value })}
                   className="bg-[#070d1a] border-slate-700 text-xs text-white"

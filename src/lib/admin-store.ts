@@ -80,6 +80,8 @@ export interface AdminSettings {
   notifyDaysBefore: number
   supabaseUrl?: string
   supabaseAnonKey?: string
+  telegramBotToken?: string
+  telegramChatId?: string
 }
 
 const STORAGE_KEY_PROJECTS = "sws_admin_projects_v1"
@@ -130,6 +132,7 @@ For any queries, Call/WhatsApp: {companyPhone}
 Thank you!
 _Sri Web Squad - Web & Software Solutions_`,
   notifyDaysBefore: 30,
+  telegramBotToken: "8856589946:AAEANh9kQXJLOAJERo0KR7EVIaF_mm9C9eg",
 }
 
 export const SEED_PROJECTS: ProjectRecord[] = [
@@ -611,6 +614,8 @@ export async function syncSettingsToSupabase(settings: AdminSettings): Promise<b
       company_upi_id: settings.companyUpiId,
       whatsapp_template: settings.whatsappTemplate,
       notify_days_before: settings.notifyDaysBefore || 30,
+      telegram_bot_token: settings.telegramBotToken || null,
+      telegram_chat_id: settings.telegramChatId || null,
       updated_at: new Date().toISOString()
     }
     const { error } = await supabase.from("settings").upsert([row], { onConflict: "id" })
@@ -642,6 +647,8 @@ export async function fetchSettingsFromSupabase(): Promise<AdminSettings | null>
       companyUpiId: data.company_upi_id || DEFAULT_SETTINGS.companyUpiId,
       whatsappTemplate: data.whatsapp_template || DEFAULT_SETTINGS.whatsappTemplate,
       notifyDaysBefore: data.notify_days_before || 30,
+      telegramBotToken: data.telegram_bot_token || "",
+      telegramChatId: data.telegram_chat_id || "",
       supabaseUrl: typeof window !== "undefined" ? localStorage.getItem("sws_supabase_url") || "" : "",
       supabaseAnonKey: typeof window !== "undefined" ? localStorage.getItem("sws_supabase_anon_key") || "" : "",
     }

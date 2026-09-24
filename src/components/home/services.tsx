@@ -51,7 +51,7 @@ export function Services() {
           subtitle="Comprehensive digital solutions tailored to elevate your business in the modern landscape."
         />
 
-        <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6 sm:gap-8 mt-6 sm:mt-8 md:mt-10">
+        <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-5 sm:gap-6 lg:gap-8 mt-6 sm:mt-8 md:mt-10">
           {services.map((service, index) => (
             <motion.div
               key={service.title}
