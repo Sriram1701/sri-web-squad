@@ -79,10 +79,10 @@ const techPills = [
 export function About() {
   return (
     <section id="about" className="py-10 sm:py-16 md:py-20 bg-[#030712] border-t border-slate-900/80 relative overflow-hidden text-white">
-      {/* Ambient background glows */}
-      <div className="absolute top-1/3 -left-32 w-96 h-96 bg-blue-600/10 rounded-full blur-3xl pointer-events-none" />
-      <div className="absolute bottom-10 -right-32 w-96 h-96 bg-cyan-500/10 rounded-full blur-3xl pointer-events-none" />
-      <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-full max-w-4xl h-96 bg-primary-600/5 rounded-full blur-[140px] pointer-events-none" />
+      {/* Ambient background glows using fast CSS radial gradients */}
+      <div className="absolute top-1/3 -left-32 w-96 h-96 bg-[radial-gradient(circle,rgba(37,99,235,0.1)_0%,transparent_70%)] pointer-events-none" />
+      <div className="absolute bottom-10 -right-32 w-96 h-96 bg-[radial-gradient(circle,rgba(6,182,212,0.08)_0%,transparent_70%)] pointer-events-none" />
+      <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-full max-w-4xl h-96 bg-[radial-gradient(ellipse_at_center,rgba(59,130,246,0.05)_0%,transparent_70%)] pointer-events-none" />
 
       <div className="container relative z-10 mx-auto px-4 sm:px-6 lg:px-8">
         <SectionHeader 

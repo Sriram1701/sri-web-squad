@@ -135,7 +135,8 @@ export function SwipeButton({
           triggerCompletion()
         }
       }}
-      className={`relative select-none h-14 w-full max-w-[340px] rounded-full bg-[#0d1527]/40 backdrop-blur-2xl border border-white/20 shadow-[inset_0_1px_1px_rgba(255,255,255,0.3),0_8px_32px_rgba(0,0,0,0.6)] p-1 flex items-center overflow-hidden cursor-pointer transition-all duration-300 group ${style.border} ${className}`}
+      style={{ touchAction: "pan-y" }}
+      className={`relative select-none h-14 w-full max-w-[340px] rounded-full bg-[#0d1527] border border-white/20 shadow-lg p-1 flex items-center overflow-hidden cursor-pointer transition-all duration-300 group ${style.border} ${className}`}
     >
       {/* Top Glass Bevel Reflection */}
       <div className="absolute inset-x-6 top-0 h-[1px] bg-gradient-to-r from-transparent via-white/35 to-transparent pointer-events-none" />
@@ -168,7 +169,7 @@ export function SwipeButton({
         dragConstraints={{ left: 0, right: maxDrag }}
         dragElastic={0.06}
         dragMomentum={false}
-        style={{ x }}
+        style={{ x, touchAction: "none" }}
         onDragEnd={handleDragEnd}
         onKeyDown={handleKeyDown}
         whileTap={{ scale: 1.05 }}

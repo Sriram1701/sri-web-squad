@@ -37,53 +37,58 @@ export function FiberOpticBackground() {
   React.useEffect(() => {
     const canvas = canvasRef.current
     if (!canvas) return
-    const ctx = canvas.getContext("2d")
+    const ctx = canvas.getContext("2d", { alpha: true })
     if (!ctx) return
 
     let animationFrameId: number
     let width = 0
     let height = 0
+    let isVisible = true
+    let isMobile = false
 
-    // Set canvas dimensions
+    // Set canvas dimensions with optimized mobile DPI
     const resizeCanvas = () => {
       const parent = canvas.parentElement
       if (!parent) return
       width = parent.clientWidth
       height = parent.clientHeight
-      const dpr = Math.min(window.devicePixelRatio || 1, 2)
-      canvas.width = width * dpr
-      canvas.height = height * dpr
-      ctx.scale(dpr, dpr)
+      isMobile = width < 768
+      
+      // On mobile, cap DPR at 1 to save 4x GPU fill-rate bandwidth
+      const dpr = isMobile ? 1 : Math.min(window.devicePixelRatio || 1, 1.5)
+      canvas.width = Math.floor(width * dpr)
+      canvas.height = Math.floor(height * dpr)
+      ctx.setTransform(dpr, 0, 0, dpr, 0, 0)
     }
 
     resizeCanvas()
-    window.addEventListener("resize", resizeCanvas)
+    window.addEventListener("resize", resizeCanvas, { passive: true })
 
-    // Generate Fiber Optic Paths
+    // Generate Fiber Optic Paths with adaptive count
     const createFiberBeams = (): FiberBeam[] => {
       const colors = [
-        { stroke: "rgba(56, 189, 248, 0.9)", glow: "rgba(56, 189, 248, 0.45)" }, // Cyan
-        { stroke: "rgba(96, 165, 250, 0.9)", glow: "rgba(59, 130, 246, 0.4)" },  // Electric Blue
-        { stroke: "rgba(168, 85, 247, 0.9)", glow: "rgba(147, 51, 234, 0.35)" }, // Violet
-        { stroke: "rgba(45, 212, 191, 0.9)", glow: "rgba(20, 184, 166, 0.4)" }   // Teal
+        { stroke: "#38bdf8", glow: "rgba(56, 189, 248, 0.25)" }, // Cyan
+        { stroke: "#60a5fa", glow: "rgba(59, 130, 246, 0.2)" },  // Electric Blue
+        { stroke: "#a855f7", glow: "rgba(147, 51, 234, 0.2)" },  // Violet
+        { stroke: "#2dd4bf", glow: "rgba(20, 184, 166, 0.2)" }   // Teal
       ]
 
       const beams: FiberBeam[] = []
-      const beamCount = Math.min(Math.floor(width / 120) + 6, 12)
+      const beamCount = isMobile ? 3 : Math.min(Math.floor(width / 140) + 4, 8)
 
       for (let i = 0; i < beamCount; i++) {
         const c = colors[i % colors.length]
         const fromLeft = Math.random() > 0.4
 
-        const startX = fromLeft ? -50 : Math.random() * width * 0.4
+        const startX = fromLeft ? -40 : Math.random() * width * 0.3
         const startY = Math.random() * height
-        const endX = fromLeft ? width + 50 : width * (0.6 + Math.random() * 0.4)
+        const endX = fromLeft ? width + 40 : width * (0.6 + Math.random() * 0.4)
         const endY = Math.random() * height
 
         const cp1X = startX + (endX - startX) * (0.2 + Math.random() * 0.3)
-        const cp1Y = startY + (Math.random() - 0.5) * height * 0.8
+        const cp1Y = startY + (Math.random() - 0.5) * height * 0.7
         const cp2X = startX + (endX - startX) * (0.6 + Math.random() * 0.3)
-        const cp2Y = endY + (Math.random() - 0.5) * height * 0.8
+        const cp2Y = endY + (Math.random() - 0.5) * height * 0.7
 
         beams.push({
           startX,
@@ -95,11 +100,11 @@ export function FiberOpticBackground() {
           endX,
           endY,
           progress: Math.random(),
-          speed: 0.0018 + Math.random() * 0.0028,
-          length: 0.12 + Math.random() * 0.16,
+          speed: 0.0016 + Math.random() * 0.0022,
+          length: 0.12 + Math.random() * 0.14,
           color: c.stroke,
           glowColor: c.glow,
-          width: 1.5 + Math.random() * 1.5
+          width: isMobile ? 1.2 : 1.5 + Math.random() * 1.2
         })
       }
       return beams
@@ -115,20 +120,20 @@ export function FiberOpticBackground() {
       ]
 
       const particles: Particle[] = []
-      const count = Math.min(Math.floor((width * height) / 18000), 45)
+      const count = isMobile ? 12 : Math.min(Math.floor((width * height) / 25000), 28)
 
       for (let i = 0; i < count; i++) {
-        const maxA = 0.25 + Math.random() * 0.65
+        const maxA = 0.25 + Math.random() * 0.55
         particles.push({
           x: Math.random() * width,
           y: Math.random() * height,
-          radius: 1 + Math.random() * 2.2,
+          radius: isMobile ? 1 + Math.random() * 1.5 : 1 + Math.random() * 2,
           color: particleColors[Math.floor(Math.random() * particleColors.length)],
-          vx: (Math.random() - 0.5) * 0.35,
-          vy: -0.15 - Math.random() * 0.35,
+          vx: (Math.random() - 0.5) * 0.3,
+          vy: -0.15 - Math.random() * 0.3,
           alpha: Math.random() * maxA,
           maxAlpha: maxA,
-          pulseSpeed: 0.015 + Math.random() * 0.02
+          pulseSpeed: 0.012 + Math.random() * 0.018
         })
       }
       return particles
@@ -137,7 +142,7 @@ export function FiberOpticBackground() {
     let fiberBeams = createFiberBeams()
     let particles = createParticles()
 
-    // Helper: calculate point on cubic bezier
+    // Cubic bezier calculation
     const getBezierPoint = (
       t: number,
       p0: number,
@@ -154,12 +159,20 @@ export function FiberOpticBackground() {
       )
     }
 
-    // Render loop
+    // Hardware-efficient Render loop without shadowBlur
     const render = () => {
+      if (!isVisible) {
+        animationFrameId = requestAnimationFrame(render)
+        return
+      }
+
       ctx.clearRect(0, 0, width, height)
 
-      // 1. Draw Static / Subtle Fiber Guide Tracks
-      for (const beam of fiberBeams) {
+      // 1. Draw Subtle Fiber Guide Tracks
+      ctx.strokeStyle = "rgba(56, 189, 248, 0.035)"
+      ctx.lineWidth = 1
+      for (let i = 0; i < fiberBeams.length; i++) {
+        const beam = fiberBeams[i]
         ctx.beginPath()
         ctx.moveTo(beam.startX, beam.startY)
         ctx.bezierCurveTo(
@@ -170,13 +183,13 @@ export function FiberOpticBackground() {
           beam.endX,
           beam.endY
         )
-        ctx.strokeStyle = "rgba(56, 189, 248, 0.04)"
-        ctx.lineWidth = 1
         ctx.stroke()
       }
 
       // 2. Draw Moving Fiber Light Pulses
-      for (const beam of fiberBeams) {
+      const samples = isMobile ? 8 : 12
+      for (let i = 0; i < fiberBeams.length; i++) {
+        const beam = fiberBeams[i]
         beam.progress += beam.speed
         if (beam.progress > 1.2) {
           beam.progress = -beam.length
@@ -186,10 +199,7 @@ export function FiberOpticBackground() {
         const tailT = Math.min(Math.max(beam.progress - beam.length, 0), 1)
 
         if (headT > 0 && tailT < 1 && headT !== tailT) {
-          // Draw pulsing light segment
-          const samples = 14
           ctx.beginPath()
-
           for (let s = 0; s <= samples; s++) {
             const curT = tailT + ((headT - tailT) * s) / samples
             const px = getBezierPoint(
@@ -214,16 +224,18 @@ export function FiberOpticBackground() {
             }
           }
 
-          // Glowing laser line
+          // Pass 1: Outer soft glow line (hardware-accelerated 0-overhead replacement for shadowBlur)
+          ctx.strokeStyle = beam.glowColor
+          ctx.lineWidth = beam.width * 3
+          ctx.lineCap = "round"
+          ctx.stroke()
+
+          // Pass 2: Sharp core beam line
           ctx.strokeStyle = beam.color
           ctx.lineWidth = beam.width
-          ctx.lineCap = "round"
-          ctx.shadowColor = beam.glowColor
-          ctx.shadowBlur = 12
           ctx.stroke()
-          ctx.shadowBlur = 0 // reset shadow
 
-          // Glowing leading photon head
+          // Photon head
           const headX = getBezierPoint(
             headT,
             beam.startX,
@@ -245,7 +257,7 @@ export function FiberOpticBackground() {
             0,
             headX,
             headY,
-            7
+            isMobile ? 5 : 7
           )
           glowGrad.addColorStop(0, "#ffffff")
           glowGrad.addColorStop(0.4, beam.color)
@@ -253,51 +265,68 @@ export function FiberOpticBackground() {
 
           ctx.fillStyle = glowGrad
           ctx.beginPath()
-          ctx.arc(headX, headY, 7, 0, Math.PI * 2)
+          ctx.arc(headX, headY, isMobile ? 5 : 7, 0, Math.PI * 2)
           ctx.fill()
         }
       }
 
-      // 3. Draw Floating Light Sparks & Photons
-      for (const p of particles) {
+      // 3. Floating Light Sparks
+      for (let i = 0; i < particles.length; i++) {
+        const p = particles[i]
         p.x += p.vx
         p.y += p.vy
         p.alpha += p.pulseSpeed
 
-        // Wrap around borders
         if (p.x < -10) p.x = width + 10
         if (p.x > width + 10) p.x = -10
         if (p.y < -10) p.y = height + 10
         if (p.y > height + 10) p.y = -10
 
-        const currentOpacity =
-          Math.abs(Math.sin(p.alpha)) * p.maxAlpha
+        const currentOpacity = Math.abs(Math.sin(p.alpha)) * p.maxAlpha
 
         ctx.fillStyle = `${p.color}${currentOpacity})`
         ctx.beginPath()
         ctx.arc(p.x, p.y, p.radius, 0, Math.PI * 2)
-        ctx.shadowColor = "rgba(56, 189, 248, 0.7)"
-        ctx.shadowBlur = 6
         ctx.fill()
-        ctx.shadowBlur = 0
       }
 
       animationFrameId = requestAnimationFrame(render)
     }
 
-    render()
+    // Pause rendering when Hero is scrolled out of viewport to save 100% mobile battery & CPU
+    const observer = new IntersectionObserver(
+      (entries) => {
+        isVisible = entries[0].isIntersecting
+      },
+      { threshold: 0.05 }
+    )
+
+    if (canvas.parentElement) {
+      observer.observe(canvas.parentElement)
+    }
+
+    // Pause on background tab
+    const handleVisibilityChange = () => {
+      isVisible = document.visibilityState === "visible"
+    }
+    document.addEventListener("visibilitychange", handleVisibilityChange)
+
+    animationFrameId = requestAnimationFrame(render)
 
     return () => {
       cancelAnimationFrame(animationFrameId)
       window.removeEventListener("resize", resizeCanvas)
+      document.removeEventListener("visibilitychange", handleVisibilityChange)
+      observer.disconnect()
     }
   }, [])
 
   return (
     <canvas
       ref={canvasRef}
-      className="absolute inset-0 w-full h-full pointer-events-none z-[1]"
-      style={{ opacity: 0.85 }}
+      className="absolute inset-0 w-full h-full pointer-events-none z-[1] transform-gpu"
+      style={{ opacity: 0.85, willChange: "transform", contain: "strict" }}
     />
   )
 }
+

@@ -41,9 +41,9 @@ const services = [
 export function Services() {
   return (
     <section id="services" className="py-8 sm:py-14 md:py-18 bg-slate-50 dark:bg-slate-950 relative overflow-hidden">
-      {/* Background decoration */}
-      <div className="absolute top-0 right-0 -mt-20 -mr-20 w-80 h-80 bg-primary-400/10 rounded-full blur-3xl pointer-events-none" />
-      <div className="absolute bottom-0 left-0 -mb-20 -ml-20 w-80 h-80 bg-blue-400/10 rounded-full blur-3xl pointer-events-none" />
+      {/* Background decoration using fast CSS radial gradients */}
+      <div className="absolute top-0 right-0 -mt-20 -mr-20 w-80 h-80 bg-[radial-gradient(circle,rgba(59,130,246,0.08)_0%,transparent_70%)] pointer-events-none" />
+      <div className="absolute bottom-0 left-0 -mb-20 -ml-20 w-80 h-80 bg-[radial-gradient(circle,rgba(37,99,235,0.08)_0%,transparent_70%)] pointer-events-none" />
 
       <div className="container relative mx-auto px-4 sm:px-6 lg:px-8">
         <SectionHeader 

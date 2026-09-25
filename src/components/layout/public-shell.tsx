@@ -18,12 +18,13 @@ export function PublicShell({ children }: { children: React.ReactNode }) {
 
   return (
     <>
-      {/* Global Logo Watermark Background (Only on Public Site) */}
-      <div className="fixed inset-0 pointer-events-none z-0 opacity-[0.08] dark:opacity-[0.12] overflow-hidden">
+      {/* Global Logo Watermark Background (Optimized for Mobile GPU Compositing) */}
+      <div className="fixed inset-0 pointer-events-none z-0 opacity-[0.04] dark:opacity-[0.06] overflow-hidden transform-gpu [contain:paint]">
         <Image 
           src={logoImg} 
           alt="" 
           fill 
+          sizes="100vw"
           className="object-cover object-center" 
           priority 
         />

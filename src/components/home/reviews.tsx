@@ -109,9 +109,9 @@ function GoogleIcon({ className = "w-5 h-5" }: { className?: string }) {
 export function Reviews() {
   return (
     <section id="reviews" className="py-8 sm:py-14 md:py-18 bg-[#030712] border-t border-slate-900 overflow-hidden relative text-white">
-      {/* Background ambient lighting */}
-      <div className="absolute top-1/3 right-1/4 w-[450px] h-[450px] bg-blue-600/10 rounded-full mix-blend-screen filter blur-[120px] pointer-events-none" />
-      <div className="absolute bottom-10 left-1/4 w-[400px] h-[400px] bg-primary-500/10 rounded-full mix-blend-screen filter blur-[100px] pointer-events-none" />
+      {/* Background ambient lighting using fast CSS radial gradients */}
+      <div className="absolute top-1/3 right-1/4 w-[450px] h-[450px] bg-[radial-gradient(circle,rgba(59,130,246,0.1)_0%,transparent_70%)] pointer-events-none" />
+      <div className="absolute bottom-10 left-1/4 w-[400px] h-[400px] bg-[radial-gradient(circle,rgba(37,99,235,0.08)_0%,transparent_70%)] pointer-events-none" />
 
       <div className="container relative z-10 mx-auto px-4 sm:px-6 lg:px-8 mb-4 sm:mb-6 md:mb-8">
         <SectionHeader 
@@ -150,12 +150,12 @@ export function Reviews() {
         <div className="absolute left-0 top-0 bottom-0 w-24 sm:w-48 bg-gradient-to-r from-[#030712] via-[#030712]/90 to-transparent z-10 pointer-events-none" />
         <div className="absolute right-0 top-0 bottom-0 w-24 sm:w-48 bg-gradient-to-l from-[#030712] via-[#030712]/90 to-transparent z-10 pointer-events-none" />
 
-        {/* Single Forward Marquee - Faster Speed with Pause on Hover/Touch */}
-        <div className="flex gap-6 animate-marquee-reviews [animation-duration:17s] sm:[animation-duration:20s] whitespace-normal py-2 hover:[animation-play-state:paused] active:[animation-play-state:paused]">
+        {/* Single Forward Marquee - Hardware Accelerated */}
+        <div className="flex gap-6 animate-marquee-reviews transform-gpu [animation-duration:17s] sm:[animation-duration:20s] whitespace-normal py-2 hover:[animation-play-state:paused] active:[animation-play-state:paused]">
           {[...testimonials, ...testimonials].map((item, index) => (
             <div
               key={`review-${item.id}-${index}`}
-              className="w-[340px] sm:w-[420px] shrink-0 rounded-3xl bg-gradient-to-b from-[#0c1224] via-[#080d1a] to-[#04070f] border border-slate-800/90 shadow-[0_15px_35px_rgba(0,0,0,0.7)] backdrop-blur-xl p-6 sm:p-7 flex flex-col justify-between hover:border-primary-500/70 hover:shadow-[0_0_30px_rgba(37,99,235,0.25)] transition-all duration-300 group"
+              className="w-[340px] sm:w-[420px] shrink-0 rounded-3xl bg-gradient-to-b from-[#0c1224] via-[#080d1a] to-[#04070f] border border-slate-800/90 shadow-xl p-6 sm:p-7 flex flex-col justify-between hover:border-primary-500/70 hover:shadow-[0_0_30px_rgba(37,99,235,0.25)] transition-all duration-300 group"
             >
               <div>
                 {/* Card Top: Stars + Verified Google Badge */}

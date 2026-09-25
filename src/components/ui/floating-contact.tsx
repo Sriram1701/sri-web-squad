@@ -8,7 +8,7 @@ export function FloatingContact() {
   const [isOpen, setIsOpen] = React.useState(false)
 
   return (
-    <div className="fixed bottom-5 right-5 sm:bottom-6 sm:right-6 z-50 flex flex-col items-end">
+    <div className="fixed bottom-5 right-5 sm:bottom-6 sm:right-6 z-50 flex flex-col items-end transform-gpu">
       <AnimatePresence>
         {isOpen && (
           <motion.div
@@ -20,7 +20,7 @@ export function FloatingContact() {
           >
             <a
               href="mailto:sriwebsquad@gmail.com"
-              className="flex items-center justify-between gap-3 bg-[#0c1426]/95 text-slate-100 px-4 py-2.5 rounded-full shadow-2xl border border-slate-750 hover:border-blue-500/60 hover:bg-[#111c38] transition-all backdrop-blur-xl"
+              className="flex items-center justify-between gap-3 bg-[#0c1426] text-slate-100 px-4 py-2.5 rounded-full shadow-2xl border border-slate-700 hover:border-blue-500/60 hover:bg-[#111c38] transition-all"
             >
               <span className="font-bold text-xs">Email Us</span>
               <div className="w-7 h-7 rounded-full bg-rose-500/20 text-rose-400 border border-rose-500/30 flex items-center justify-center">
@@ -30,7 +30,7 @@ export function FloatingContact() {
             
             <a
               href="tel:+917845391712"
-              className="flex items-center justify-between gap-3 bg-[#0c1426]/95 text-slate-100 px-4 py-2.5 rounded-full shadow-2xl border border-slate-750 hover:border-blue-500/60 hover:bg-[#111c38] transition-all backdrop-blur-xl"
+              className="flex items-center justify-between gap-3 bg-[#0c1426] text-slate-100 px-4 py-2.5 rounded-full shadow-2xl border border-slate-700 hover:border-blue-500/60 hover:bg-[#111c38] transition-all"
             >
               <span className="font-bold text-xs">Call Now</span>
               <div className="w-7 h-7 rounded-full bg-blue-500/20 text-blue-400 border border-blue-500/30 flex items-center justify-center">
@@ -42,7 +42,7 @@ export function FloatingContact() {
               href="https://wa.me/917845391712"
               target="_blank"
               rel="noreferrer"
-              className="flex items-center justify-between gap-3 bg-[#0c1426]/95 text-slate-100 px-4 py-2.5 rounded-full shadow-2xl border border-slate-750 hover:border-emerald-500/60 hover:bg-[#111c38] transition-all backdrop-blur-xl"
+              className="flex items-center justify-between gap-3 bg-[#0c1426] text-slate-100 px-4 py-2.5 rounded-full shadow-2xl border border-slate-700 hover:border-emerald-500/60 hover:bg-[#111c38] transition-all"
             >
               <span className="font-bold text-xs">WhatsApp</span>
               <div className="w-7 h-7 rounded-full bg-emerald-500/20 text-emerald-400 border border-emerald-500/30 flex items-center justify-center">

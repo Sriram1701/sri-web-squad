@@ -16,9 +16,9 @@ export function Hero() {
       {/* Cyber Network Grid Lines Background */}
       <div className="absolute inset-0 bg-[linear-gradient(to_right,#38bdf808_1px,transparent_1px),linear-gradient(to_bottom,#38bdf808_1px,transparent_1px)] bg-[size:3.5rem_3.5rem] [mask-image:radial-gradient(ellipse_60%_50%_at_50%_30%,#000_70%,transparent_100%)] pointer-events-none" />
 
-      {/* Background ambient glows */}
-      <div className="absolute top-1/3 left-1/4 w-[500px] h-[500px] bg-blue-600/15 rounded-full mix-blend-screen filter blur-[130px] pointer-events-none" />
-      <div className="absolute bottom-0 right-1/4 w-[450px] h-[450px] bg-cyan-600/10 rounded-full mix-blend-screen filter blur-[120px] pointer-events-none" />
+      {/* Background ambient glows using fast CSS radial gradients */}
+      <div className="absolute top-1/3 left-1/4 w-[500px] h-[500px] bg-[radial-gradient(circle,rgba(59,130,246,0.12)_0%,transparent_70%)] pointer-events-none" />
+      <div className="absolute bottom-0 right-1/4 w-[450px] h-[450px] bg-[radial-gradient(circle,rgba(6,182,212,0.08)_0%,transparent_70%)] pointer-events-none" />
 
       <div className="container relative z-10 mx-auto px-4 sm:px-6 lg:px-8 flex-1 flex flex-col lg:flex-row items-center pt-4 sm:pt-6 lg:pt-2">
         
@@ -93,7 +93,7 @@ export function Hero() {
             className="relative w-full max-w-xl"
           >
             {/* Desktop Console Mockup Card */}
-            <div className="relative rounded-2xl bg-gradient-to-br from-[#0c1222] via-[#090d16] to-[#04070e] border border-slate-700/80 shadow-[0_20px_60px_rgba(0,0,0,0.85)] backdrop-blur-xl overflow-hidden p-5 sm:p-7">
+            <div className="relative rounded-2xl bg-gradient-to-br from-[#0c1222] via-[#090d16] to-[#04070e] border border-slate-700/80 shadow-2xl overflow-hidden p-5 sm:p-7">
               
               {/* Fake Browser Header */}
               <div className="flex items-center justify-between pb-4 mb-5 border-b border-slate-800/80">
@@ -192,13 +192,11 @@ export function Hero() {
               </div>
             </div>
 
-
-
             {/* Mobile Phone Mockup Overlay with Levitating Motion */}
             <motion.div
-              animate={{ y: [0, -12, 0] }}
+              animate={{ y: [0, -10, 0] }}
               transition={{ repeat: Infinity, duration: 5, ease: "easeInOut", delay: 0.5 }}
-              className="absolute -bottom-10 -right-4 sm:right-6 w-44 sm:w-52 bg-[#0a0f1d] border-4 border-slate-700/80 rounded-[2.2rem] shadow-[0_25px_60px_rgba(0,0,0,0.9)] aspect-[9/18.5] overflow-hidden z-20 backdrop-blur-xl"
+              className="absolute -bottom-10 -right-4 sm:right-6 w-44 sm:w-52 bg-[#0a0f1d] border-4 border-slate-700/80 rounded-[2.2rem] shadow-[0_20px_45px_rgba(0,0,0,0.85)] aspect-[9/18.5] overflow-hidden z-20 transform-gpu"
             >
               {/* Phone Speaker Notch */}
               <div className="absolute top-0 inset-x-0 h-5 bg-slate-800 rounded-b-xl w-24 mx-auto z-30" />

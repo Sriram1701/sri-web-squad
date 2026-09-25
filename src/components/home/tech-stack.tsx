@@ -172,11 +172,11 @@ export function TechStack() {
         <div className="absolute right-0 top-0 bottom-0 w-24 sm:w-48 bg-gradient-to-l from-[#030712] via-[#030712]/80 to-transparent z-10 pointer-events-none" />
 
         {/* Row 1: Forward Marquee */}
-        <div className="flex gap-4 sm:gap-6 animate-marquee whitespace-nowrap py-1 hover:[animation-play-state:paused]">
+        <div className="flex gap-4 sm:gap-6 animate-marquee transform-gpu whitespace-nowrap py-1 hover:[animation-play-state:paused]">
           {[...techStackRow1, ...techStackRow1].map((tech, index) => (
             <div
               key={`${tech.name}-${index}`}
-              className="inline-flex items-center gap-3.5 px-5 sm:px-6 py-2.5 sm:py-3 rounded-full bg-[#0a0f1d] border border-slate-700/80 shadow-lg backdrop-blur-md hover:border-primary-500/70 hover:bg-[#0f172a] hover:scale-105 transition-all duration-300 cursor-pointer shrink-0 group"
+              className="inline-flex items-center gap-3.5 px-5 sm:px-6 py-2.5 sm:py-3 rounded-full bg-[#0a0f1d] border border-slate-700/80 shadow-md hover:border-primary-500/70 hover:bg-[#0f172a] hover:scale-105 transition-all duration-300 cursor-pointer shrink-0 group"
             >
               <div className={`w-8 h-8 rounded-full flex items-center justify-center border shrink-0 transition-transform group-hover:scale-110 ${tech.iconBg} ${tech.iconColor}`}>
                 {tech.svg}
@@ -189,11 +189,11 @@ export function TechStack() {
         </div>
 
         {/* Row 2: Reverse Marquee */}
-        <div className="flex gap-4 sm:gap-6 animate-marquee-reverse whitespace-nowrap py-1 hover:[animation-play-state:paused]">
+        <div className="flex gap-4 sm:gap-6 animate-marquee-reverse transform-gpu whitespace-nowrap py-1 hover:[animation-play-state:paused]">
           {[...techStackRow1.slice().reverse(), ...techStackRow1.slice().reverse()].map((tech, index) => (
             <div
               key={`rev-${tech.name}-${index}`}
-              className="inline-flex items-center gap-3.5 px-5 sm:px-6 py-2.5 sm:py-3 rounded-full bg-[#0a0f1d] border border-slate-700/80 shadow-lg backdrop-blur-md hover:border-primary-500/70 hover:bg-[#0f172a] hover:scale-105 transition-all duration-300 cursor-pointer shrink-0 group"
+              className="inline-flex items-center gap-3.5 px-5 sm:px-6 py-2.5 sm:py-3 rounded-full bg-[#0a0f1d] border border-slate-700/80 shadow-md hover:border-primary-500/70 hover:bg-[#0f172a] hover:scale-105 transition-all duration-300 cursor-pointer shrink-0 group"
             >
               <div className={`w-8 h-8 rounded-full flex items-center justify-center border shrink-0 transition-transform group-hover:scale-110 ${tech.iconBg} ${tech.iconColor}`}>
                 {tech.svg}

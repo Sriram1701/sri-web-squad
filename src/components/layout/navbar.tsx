@@ -65,10 +65,10 @@ export function Navbar() {
 
   return (
     <header
-      className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${
+      className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 transform-gpu ${
         isScrolled 
-          ? "bg-[#060a14]/80 backdrop-blur-2xl shadow-[0_4px_30px_rgba(0,0,0,0.8),inset_0_1px_0_rgba(255,255,255,0.12)] border-b border-white/15 py-3" 
-          : "bg-[#060a14]/40 backdrop-blur-xl border-b border-white/10 shadow-[0_4px_20px_rgba(0,0,0,0.4)] py-4"
+          ? "bg-[#060a14]/90 backdrop-blur-md shadow-[0_4px_25px_rgba(0,0,0,0.8)] border-b border-white/10 py-3" 
+          : "bg-[#060a14]/60 backdrop-blur-sm border-b border-white/10 shadow-[0_4px_16px_rgba(0,0,0,0.3)] py-4"
       }`}
     >
       <div className="container mx-auto px-4 sm:px-6 lg:px-8 relative">

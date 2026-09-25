@@ -58,9 +58,9 @@ const LinkedinIcon = (props: React.SVGProps<SVGSVGElement>) => (
 export function Footer() {
   return (
     <footer className="bg-[#02050c] text-slate-300 pt-10 sm:pt-14 pb-6 sm:pb-8 border-t border-slate-900 relative z-20 overflow-hidden">
-      {/* Ambient background glow */}
-      <div className="absolute top-0 left-1/4 w-[400px] h-[300px] bg-primary-600/5 rounded-full filter blur-[120px] pointer-events-none" />
-      <div className="absolute bottom-0 right-1/4 w-[350px] h-[300px] bg-blue-500/5 rounded-full filter blur-[100px] pointer-events-none" />
+      {/* Ambient background glow using fast CSS radial gradients */}
+      <div className="absolute top-0 left-1/4 w-[400px] h-[300px] bg-[radial-gradient(ellipse_at_center,rgba(37,99,235,0.05)_0%,transparent_70%)] pointer-events-none" />
+      <div className="absolute bottom-0 right-1/4 w-[350px] h-[300px] bg-[radial-gradient(ellipse_at_center,rgba(59,130,246,0.04)_0%,transparent_70%)] pointer-events-none" />
 
       <div className="container relative z-10 mx-auto px-4 sm:px-6 lg:px-8">
         
