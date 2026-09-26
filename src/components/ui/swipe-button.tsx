@@ -163,8 +163,9 @@ export function SwipeButton({
       </motion.div>
 
       {/* Draggable Thumb */}
-      <motion.button
-        type="button"
+      <motion.div
+        role="button"
+        tabIndex={0}
         drag="x"
         dragConstraints={{ left: 0, right: maxDrag }}
         dragElastic={0.06}
@@ -173,7 +174,6 @@ export function SwipeButton({
         onDragEnd={handleDragEnd}
         onKeyDown={handleKeyDown}
         whileTap={{ scale: 1.05 }}
-        role="slider"
         aria-label={text}
         aria-valuemin={0}
         aria-valuemax={100}
@@ -182,22 +182,24 @@ export function SwipeButton({
         className={`relative z-10 w-12 h-12 rounded-full ${style.thumbBg} flex items-center justify-center cursor-grab active:cursor-grabbing focus:outline-none focus:ring-2 transition-transform shrink-0`}
       >
         {isCompleted ? (
-          <motion.div
+          <motion.span
             initial={{ scale: 0 }}
             animate={{ scale: 1 }}
             transition={{ type: "spring", stiffness: 500 }}
+            className="inline-flex items-center justify-center"
           >
             <Check className="w-5 h-5" />
-          </motion.div>
+          </motion.span>
         ) : (
-          <motion.div
+          <motion.span
             animate={{ x: [0, 3, 0] }}
             transition={{ repeat: Infinity, duration: 1.5, ease: "easeInOut" }}
+            className="inline-flex items-center justify-center"
           >
             {icon ? icon : <ArrowRight className={`w-5 h-5 ${style.iconColor} stroke-[2.5]`} />}
-          </motion.div>
+          </motion.span>
         )}
-      </motion.button>
+      </motion.div>
     </div>
   )
 }

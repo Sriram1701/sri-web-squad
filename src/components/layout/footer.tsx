@@ -94,9 +94,9 @@ export function Footer() {
 
               {/* Social Follow Us */}
               <div>
-                <h5 className="text-xs font-bold text-slate-200 tracking-widest uppercase mb-3">
+                <h3 className="text-xs font-bold text-slate-200 tracking-widest uppercase mb-3">
                   FOLLOW US
-                </h5>
+                </h3>
                 <div className="flex items-center gap-2.5 flex-wrap">
                   <a 
                     href="https://www.facebook.com/profile.php?id=61594401073325" 
@@ -154,9 +154,9 @@ export function Footer() {
           {/* Column 2: COMPANY (col-span-2) */}
           <div className="lg:col-span-2">
             <div className="inline-block pb-1.5 border-b-2 border-primary-500 mb-4">
-              <h4 className="text-sm font-black text-primary-400 tracking-wider uppercase">
+              <h3 className="text-sm font-black text-primary-400 tracking-wider uppercase">
                 COMPANY
-              </h4>
+              </h3>
             </div>
             <ul className="space-y-2 text-xs sm:text-sm">
               {[
@@ -185,9 +185,9 @@ export function Footer() {
           {/* Column 3: OUR SERVICES (col-span-2) */}
           <div className="lg:col-span-2">
             <div className="inline-block pb-1.5 border-b-2 border-primary-500 mb-4">
-              <h4 className="text-sm font-black text-primary-400 tracking-wider uppercase">
+              <h3 className="text-sm font-black text-primary-400 tracking-wider uppercase">
                 OUR SERVICES
-              </h4>
+              </h3>
             </div>
             <ul className="space-y-2 text-xs sm:text-sm">
               {[
@@ -216,9 +216,9 @@ export function Footer() {
           {/* Column 4: OUR PRODUCTS (col-span-2) */}
           <div className="lg:col-span-2">
             <div className="inline-block pb-1.5 border-b-2 border-primary-500 mb-4">
-              <h4 className="text-sm font-black text-primary-400 tracking-wider uppercase">
+              <h3 className="text-sm font-black text-primary-400 tracking-wider uppercase">
                 OUR PRODUCTS
-              </h4>
+              </h3>
             </div>
             <ul className="space-y-2 text-xs sm:text-sm">
               {[
@@ -247,9 +247,9 @@ export function Footer() {
           {/* Column 5: GET IN TOUCH (col-span-3) */}
           <div className="md:col-span-2 lg:col-span-3">
             <div className="inline-block pb-1.5 border-b-2 border-primary-500 mb-4">
-              <h4 className="text-sm font-black text-primary-400 tracking-wider uppercase">
+              <h3 className="text-sm font-black text-primary-400 tracking-wider uppercase">
                 GET IN TOUCH
-              </h4>
+              </h3>
             </div>
             <div className="grid md:grid-cols-2 lg:grid-cols-1 gap-4 md:gap-6 lg:gap-3 text-xs sm:text-sm">
               <div className="space-y-3">

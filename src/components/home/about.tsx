@@ -183,9 +183,9 @@ export function About() {
                     {value.tag}
                   </span>
 
-                  <h4 className="text-base sm:text-lg font-bold text-white mb-2 leading-snug group-hover:text-cyan-300 transition-colors">
+                  <h3 className="text-base sm:text-lg font-bold text-white mb-2 leading-snug group-hover:text-cyan-300 transition-colors">
                     {value.title}
-                  </h4>
+                  </h3>
                   
                   <p className="text-xs sm:text-sm text-slate-300/90 leading-relaxed">
                     {value.desc}
@@ -211,10 +211,10 @@ export function About() {
               <span>Available for New Projects</span>
             </div>
             
-            <h4 className="text-xl sm:text-2xl md:text-3xl font-bold text-white mb-2 flex items-center justify-center md:justify-start gap-2">
+            <h3 className="text-xl sm:text-2xl md:text-3xl font-bold text-white mb-2 flex items-center justify-center md:justify-start gap-2">
               <Rocket className="w-6 h-6 text-cyan-400" />
               <span>Ready to transform your business digitally?</span>
-            </h4>
+            </h3>
             <p className="text-xs sm:text-sm text-slate-300 leading-relaxed">
               Partner directly with our core engineering squad. High performance websites, custom software, and mobile apps delivered with speed and zero headaches.
             </p>

@@ -8,6 +8,7 @@ import { AnimatedCounter } from "@/components/ui/animated-counter"
 export function StatsRow() {
   return (
     <section className="bg-black py-4 sm:py-6 md:py-8 relative z-20">
+      <h2 className="sr-only">Key Statistics & Performance Highlights</h2>
       <div className="container mx-auto px-3 sm:px-6 lg:px-8">
         <motion.div 
           initial={{ opacity: 0, y: 20 }}

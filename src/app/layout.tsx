@@ -174,6 +174,12 @@ export const metadata: Metadata = {
     "geo.placename": "Cuddalore, Tamil Nadu, India",
     "geo.position": "11.7040456;79.7671579",
     "ICBM": "11.7040456, 79.7671579",
+    "city": "Cuddalore",
+    "state": "Tamil Nadu",
+    "country": "India",
+    "target": "all",
+    "audience": "all",
+    "coverage": "Worldwide",
     "rating": "General",
     "revisit-after": "3 days",
     "distribution": "Global",
@@ -411,27 +417,6 @@ export default function RootLayout({
           type="application/ld+json"
           dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
         />
-        {/* Favicon & Web Application Manifest Links for Search Engines */}
-        <link rel="icon" href="/favicon.ico" sizes="any" />
-        <link rel="icon" href="/icon.png" type="image/png" sizes="512x512" />
-        <link rel="apple-touch-icon" href="/logo.png" />
-
-        {/* OpenGraph & Facebook Specific Tags */}
-        <meta property="og:site_name" content="Sri Web Squad" />
-        <meta property="og:type" content="website" />
-        <meta property="og:locale" content="en_IN" />
-        
-        {/* Geo Meta Tags for High Local Ranking in Cuddalore & Tamil Nadu */}
-        <meta name="geo.region" content="IN-TN" />
-        <meta name="geo.placename" content="Cuddalore, Tamil Nadu, India" />
-        <meta name="geo.position" content="11.7040456;79.7671579" />
-        <meta name="ICBM" content="11.7040456, 79.7671579" />
-        <meta name="city" content="Cuddalore" />
-        <meta name="state" content="Tamil Nadu" />
-        <meta name="country" content="India" />
-        <meta name="target" content="all" />
-        <meta name="audience" content="all" />
-        <meta name="coverage" content="Worldwide" />
       </head>
       <body className="min-h-full flex flex-col relative bg-[#070b14]">
         <ThemeProvider

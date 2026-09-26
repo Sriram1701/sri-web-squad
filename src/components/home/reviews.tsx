@@ -183,9 +183,9 @@ export function Reviews() {
               <div className="pt-4 border-t border-slate-800/80">
                 <div className="flex items-center justify-between">
                   <div>
-                    <h4 className="text-sm sm:text-base font-bold text-white group-hover:text-primary-400 transition-colors">
+                    <h3 className="text-sm sm:text-base font-bold text-white group-hover:text-primary-400 transition-colors">
                       {item.name}
-                    </h4>
+                    </h3>
                     <p className="text-xs text-primary-400 font-semibold mt-0.5">
                       {item.company}
                     </p>

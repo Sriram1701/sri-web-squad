@@ -123,12 +123,12 @@ export function Hero() {
                   <span>High-Converting Digital Agency</span>
                 </div>
 
-                <h3 className="text-2xl sm:text-3xl font-black text-white mb-2 leading-tight">
+                <h2 className="text-2xl sm:text-3xl font-black text-white mb-2 leading-tight">
                   WE BUILD BRANDS THAT<br />
                   <span className="bg-gradient-to-r from-blue-400 via-indigo-300 to-cyan-400 bg-clip-text text-transparent">
                     LEAD & INSPIRE
                   </span>
-                </h3>
+                </h2>
 
                 <p className="text-xs sm:text-sm text-slate-400 mb-5 leading-relaxed">
                   Creative strategies. High-speed performance. Custom digital systems engineered for growth.
@@ -214,10 +214,10 @@ export function Hero() {
                   <span className="text-[9px] text-blue-200 font-medium leading-tight">Fast delivery & low price</span>
                 </motion.div>
 
-                <h4 className="text-xs font-black text-slate-200 leading-snug">
+                <p className="text-xs font-black text-slate-200 leading-snug">
                   WE GROW<br />YOUR BUSINESS
-                </h4>
-                <h4 className="text-xs font-black text-primary-500 mb-2">ONLINE</h4>
+                </p>
+                <p className="text-xs font-black text-primary-500 mb-2">ONLINE</p>
                 
                 <p className="text-[10px] text-slate-400 mb-4 leading-relaxed">
                   Turning ideas into digital success with modern tools.

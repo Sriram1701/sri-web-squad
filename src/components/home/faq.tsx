@@ -119,17 +119,17 @@ export function FAQ() {
                   className="w-full text-left p-4.5 sm:p-5 md:p-6 flex items-center justify-between gap-3 sm:gap-4 focus:outline-none cursor-pointer"
                   aria-expanded={isOpen}
                 >
-                  <div className="flex items-center gap-3 sm:gap-4 min-w-0">
-                    <div className={`w-9 h-9 sm:w-10 sm:h-10 rounded-xl flex items-center justify-center shrink-0 transition-all duration-300 ${
+                  <span className="flex items-center gap-3 sm:gap-4 min-w-0">
+                    <span className={`w-9 h-9 sm:w-10 sm:h-10 rounded-xl flex items-center justify-center shrink-0 transition-all duration-300 ${
                       isOpen 
                         ? "bg-gradient-to-br from-blue-500 to-cyan-500 text-white shadow-md shadow-blue-500/30 scale-105" 
                         : "bg-slate-800/60 text-slate-400 border border-slate-700/50"
                     }`}>
                       <IconComponent className="w-4 h-4 sm:w-5 sm:h-5" />
-                    </div>
+                    </span>
                     
-                    <div className="min-w-0">
-                      <div className="flex items-center gap-2 mb-1">
+                    <span className="min-w-0 block">
+                      <span className="flex items-center gap-2 mb-1">
                         <span className={`text-[10px] sm:text-[11px] font-mono font-bold uppercase tracking-wider px-2 py-0.5 rounded-md ${
                           isOpen 
                             ? "bg-blue-500/20 text-blue-300 border border-blue-500/30" 
@@ -137,21 +137,21 @@ export function FAQ() {
                         }`}>
                           {faq.tag}
                         </span>
-                      </div>
+                      </span>
                       
-                      <h3 className="text-sm sm:text-base md:text-lg font-bold text-white leading-snug">
+                      <span className="block text-sm sm:text-base md:text-lg font-bold text-white leading-snug">
                         {faq.question}
-                      </h3>
-                    </div>
-                  </div>
+                      </span>
+                    </span>
+                  </span>
 
-                  <div className={`w-8 h-8 sm:w-9 sm:h-9 rounded-xl flex items-center justify-center shrink-0 border transition-all duration-300 ${
+                  <span className={`w-8 h-8 sm:w-9 sm:h-9 rounded-xl flex items-center justify-center shrink-0 border transition-all duration-300 ${
                     isOpen 
                       ? "rotate-180 bg-blue-500/20 text-cyan-300 border-blue-500/40" 
                       : "bg-[#090f20] text-slate-400 border-slate-800"
                   }`}>
                     <ChevronDown className="w-4 h-4" />
-                  </div>
+                  </span>
                 </button>
 
                 <AnimatePresence initial={false}>
@@ -178,10 +178,10 @@ export function FAQ() {
         {/* FAQ Quick CTA Card with Extra Mobile Clearance */}
         <div className="max-w-3xl mx-auto mt-4 p-5 sm:p-6 rounded-2xl bg-gradient-to-r from-[#090f22] via-[#070c1a] to-[#0a1226] border border-slate-800/80 text-center flex flex-col sm:flex-row items-center justify-between gap-4 shadow-xl mb-6">
           <div className="text-left">
-            <h4 className="text-sm sm:text-base font-bold text-white flex items-center gap-2">
+            <h3 className="text-sm sm:text-base font-bold text-white flex items-center gap-2">
               <Sparkles className="w-4 h-4 text-cyan-400" />
               <span>Have a specific question not listed here?</span>
-            </h4>
+            </h3>
             <p className="text-xs text-slate-400 mt-0.5">
               Talk directly to a senior engineer. We reply on WhatsApp in under 15 minutes.
             </p>

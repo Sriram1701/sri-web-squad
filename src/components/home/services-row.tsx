@@ -17,6 +17,7 @@ const services = [
 export function ServicesRow() {
   return (
     <section className="bg-[#050505] py-6 sm:py-10 md:py-12 border-t border-slate-900 overflow-hidden relative z-20">
+      <h2 className="sr-only">Our Core Services & Capabilities</h2>
       <div className="container mx-auto px-4 sm:px-6 lg:px-8">
         <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-5 sm:gap-6 lg:gap-4 max-w-6xl mx-auto justify-items-center">
           {services.map((item, index) => (
