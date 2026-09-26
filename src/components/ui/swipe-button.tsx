@@ -175,10 +175,6 @@ export function SwipeButton({
         onKeyDown={handleKeyDown}
         whileTap={{ scale: 1.05 }}
         aria-label={text}
-        aria-valuemin={0}
-        aria-valuemax={100}
-        aria-valuenow={isCompleted ? 100 : 0}
-        aria-valuetext={isCompleted ? completedText : text}
         className={`relative z-10 w-12 h-12 rounded-full ${style.thumbBg} flex items-center justify-center cursor-grab active:cursor-grabbing focus:outline-none focus:ring-2 transition-transform shrink-0`}
       >
         {isCompleted ? (
