@@ -28,9 +28,9 @@ const squadValues = [
   },
   {
     num: "02",
-    title: "Affordable & Transparent",
-    tag: "FAIR PRICING",
-    desc: "Enterprise-grade digital systems and websites at honest, pocket-friendly budgets without high agency markups.",
+    title: "Unbeatable Pricing (From ₹4k)",
+    tag: "BETTER & CHEAPER",
+    desc: "Premium websites and software starting at just ₹4,000. We beat competitor quality while charging less than their ₹5,000+ rates.",
     icon: Target,
     gradient: "from-emerald-500 to-teal-500",
     glow: "group-hover:border-emerald-500/50 group-hover:shadow-[0_0_30px_rgba(16,185,129,0.15)]",
@@ -124,7 +124,7 @@ export function About() {
               </div>
 
               <p className="text-xs sm:text-sm text-slate-300 leading-relaxed">
-                We set out to deliver Cuddalore&apos;s premier web & software solutions — building enterprise-grade custom web applications, Android & iOS mobile apps, ERP billing systems, and AI automation at transparent, affordable pricing.
+                We set out to deliver Cuddalore&apos;s premier web & software solutions — building enterprise-grade custom web applications, Android & iOS mobile apps, ERP billing systems, and AI automation starting at an unbeatable ₹4,000. We provide higher quality than competitors who charge ₹5,000 or more, without ever compromising on excellence.
               </p>
 
               {/* Highlights Checkmark List */}

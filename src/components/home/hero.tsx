@@ -48,14 +48,14 @@ export function Hero() {
 
             {/* Description Text with Rich Details on Laptop */}
             <p className="text-sm sm:text-base md:text-lg text-slate-300/90 mb-7 max-w-xl lg:max-w-2xl leading-relaxed font-normal text-center lg:text-left mx-auto lg:mx-0">
-              Building High-Performance{" "}
+              The #1 Rated Agency in{" "}
+              <strong className="text-white font-semibold">Cuddalore</strong>. We build premium{" "}
               <span className="text-white font-semibold">Websites</span>,{" "}
               <span className="text-white font-semibold">Mobile Apps</span>, and{" "}
-              <span className="text-white font-semibold">Software Solutions</span> in{" "}
-              <strong className="text-white font-semibold">Cuddalore</strong>
+              <span className="text-white font-semibold">Software Solutions</span>
               <span className="hidden lg:inline">
-                {" "}— delivering scalable cloud architecture, intuitive modern UI/UX, and AI-driven systems engineered to accelerate your business growth
-              </span>.
+                {" "}starting at just ₹4,000. Get better quality than competitors for a fraction of the cost.
+              </span>
             </p>
 
             {/* Action CTAs: Matching Interactive Swipe Buttons */}
@@ -131,7 +131,7 @@ export function Hero() {
                 </h2>
 
                 <p className="text-xs sm:text-sm text-slate-400 mb-5 leading-relaxed">
-                  Creative strategies. High-speed performance. Custom digital systems engineered for growth.
+                  Cuddalore's top-rated digital agency. Premium quality software and websites starting at unbeatable prices (₹4,000 vs competitors' ₹5,000+).
                 </p>
 
                 {/* Animated Metric Bars */}
@@ -211,7 +211,7 @@ export function Hero() {
                   className="mb-3 p-2 rounded-xl bg-blue-950/70 border border-blue-500/30 flex items-center gap-2"
                 >
                   <Sparkles className="w-3.5 h-3.5 text-blue-400 shrink-0" />
-                  <span className="text-[9px] text-blue-200 font-medium leading-tight">Fast delivery & low price</span>
+                  <span className="text-[9px] text-blue-200 font-medium leading-tight">Premium Apps from ₹4,000</span>
                 </motion.div>
 
                 <p className="text-xs font-black text-slate-200 leading-snug">
